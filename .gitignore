@@ -1,5 +1,6 @@
 Library/
-prefabs/
+Temp/
+*.unitypackage
 *.csproj
 *.unityproj
 *.sln
