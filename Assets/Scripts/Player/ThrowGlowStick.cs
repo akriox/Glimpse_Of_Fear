@@ -5,7 +5,7 @@ using System.Collections;
 public class ThrowGlowStick : MonoBehaviour {
 	
 	private GazePointDataComponent _gazePointDataComponent;
-	private string prefab = "Prefabs/GlowStick";
+	private string prefab = "Prefabs/Items/GlowStick";
 	private GameObject glowStick;
 	private float force = 2000.0f;
 	private Vector3 trajectory;

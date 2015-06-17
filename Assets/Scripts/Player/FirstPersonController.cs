@@ -68,13 +68,13 @@ public class FirstPersonController : MonoBehaviour
 		if(Input.GetButton("Duck")){
 			m_Duck = true;
 			if(m_CharacterController.height > m_DuckingHeight){
-				m_CharacterController.height -= 0.1f;
+				m_CharacterController.height -= m_StickToGroundForce * Time.deltaTime;
 			}
 		}
 		else{
 			m_Duck = false;
 			if(m_CharacterController.height < m_StandingHeight){
-				m_CharacterController.height += 0.1f;
+				m_CharacterController.height +=  m_StickToGroundForce * Time.deltaTime;
 			}
 		}
 	
@@ -91,7 +91,7 @@ public class FirstPersonController : MonoBehaviour
         if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
         {
             StartCoroutine(m_JumpBob.DoBobCycle());
-            PlayLandingSound();
+            //PlayLandingSound();
             m_MoveDir.y = 0f;
             //m_Jumping = false;
         }
