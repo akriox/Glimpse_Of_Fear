@@ -18,6 +18,8 @@ public class Flashlight : MonoBehaviour {
 	public AudioClip[] buttonSound;
 	private AudioSource audioSource;
 
+	public GameObject lightCone;
+
 	public void Awake(){
 		Instance = this;
 	}
@@ -33,6 +35,7 @@ public class Flashlight : MonoBehaviour {
 
 	public void Update() {
 		lum.enabled = _userPresenceComponent.IsUserPresent;
+		lightCone.SetActive(lum.enabled);
 		if(lum.isActiveAndEnabled){
 			if(_state == State.OFF){
 				audioSource.clip = buttonSound[0];
@@ -62,5 +65,9 @@ public class Flashlight : MonoBehaviour {
 			lum.intensity -= _power;
 			_timer = 0.0f;
 		}
+	}
+
+	private void charge(){
+		lum.intensity = _maxIntensity;
 	}
 }
