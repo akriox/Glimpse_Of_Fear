@@ -77,7 +77,6 @@ public class FollowPath : MonoBehaviour {
 	}
 
 	public void resetFirstRoom(){
-		print ("coucou");
 		index = 1;
 		currentTarget = listPaths [index-1];
 		transform.position = new Vector3 (currentTarget.transform.position.x, currentTarget.transform.position.y, currentTarget.transform.position.z);
