@@ -7,7 +7,7 @@ public class RoomTrigger: MonoBehaviour {
 	[SerializeField][Range(0, 5)]public int numRoom = 1;
 	
 	public void OnTriggerEnter(Collider other) {
-		if (other.gameObject.tag == "Player") {
+		if (other.gameObject.name == "NewPlayer") {
 			changeFog.Instance.setMaxFogEndDistance();
 			switch (numRoom) {
 			case 0:
