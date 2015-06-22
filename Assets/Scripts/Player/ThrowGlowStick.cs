@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using XInputDotNetPure;
 
 [RequireComponent (typeof(GazePointDataComponent))]
 public class ThrowGlowStick : MonoBehaviour {
@@ -22,6 +23,8 @@ public class ThrowGlowStick : MonoBehaviour {
 
 			if(Input.GetButtonDown("Throw") && Inventory.Instance.glowStickStash > 0){
 
+				StartCoroutine(Vibration());
+
 				glowStick = Instantiate(Resources.Load (prefab), transform.position, Quaternion.identity) as GameObject;
 				glowStick.name = "Glowstick";
 
@@ -43,5 +46,11 @@ public class ThrowGlowStick : MonoBehaviour {
 			glowStick.GetComponent<Rigidbody>().AddForce(trajectory * force * Time.fixedDeltaTime);
 			glowStick = null;
 		}
+	}
+
+	private IEnumerator Vibration(){
+		GamePad.SetVibration(0, 0.5f, 0.5f);
+		yield return new WaitForSeconds(0.5f);
+		GamePad.SetVibration(0, 0.0f, 0.0f);
 	}
 }

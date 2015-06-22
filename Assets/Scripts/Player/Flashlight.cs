@@ -18,7 +18,9 @@ public class Flashlight : MonoBehaviour {
 	public AudioClip[] buttonSound;
 	private AudioSource audioSource;
 
-	public GameObject lightCone;
+	private Material defaultMat;
+	private Material batteryMat;
+	public GameObject batteryLevel;
 
 	public void Awake(){
 		Instance = this;
@@ -26,16 +28,19 @@ public class Flashlight : MonoBehaviour {
 
 	public void Start() {
 		_userPresenceComponent = GetComponent<UserPresenceComponent>();
-		lum = GetComponent<Light>();
+		lum = GetComponentInChildren<Light>();
 		audioSource = GetComponent<AudioSource>();
+
+		defaultMat = batteryLevel.GetComponent<Renderer>().material;
+		batteryMat = defaultMat;
+
 		_state = State.OFF;
 		_maxIntensity = lum.intensity;
 		_power = _maxIntensity / _lifespan;
 	}
 
 	public void Update() {
-		lum.enabled = _userPresenceComponent.IsUserPresent;
-		lightCone.SetActive(lum.enabled);
+		lum.gameObject.SetActive(_userPresenceComponent.IsUserPresent);
 		if(lum.isActiveAndEnabled){
 			if(_state == State.OFF){
 				audioSource.clip = buttonSound[0];
@@ -53,7 +58,10 @@ public class Flashlight : MonoBehaviour {
 
 
 		switch(_state){
-			case State.ON: discharge(); break;
+			case State.ON:	discharge(); 
+							updateBatteryLevel();
+							break;
+
 			case State.OFF: break;
 		}
 	}	
@@ -61,13 +69,30 @@ public class Flashlight : MonoBehaviour {
 	private void discharge(){
 		/* Decrease light intensity of _power per second */
 		_timer += Time.deltaTime;
-		if(lum.intensity > 0 && _timer >= 1.0f){
-			lum.intensity -= _power;
-			_timer = 0.0f;
+		if(lum.intensity > 0.0f){ 
+			if(_timer >= 1.0f){
+				lum.intensity -= _power;
+				_timer = 0.0f;
+			}
+		}
+		/* No batteries left */
+		else{
+			lum.gameObject.SetActive(false);
 		}
 	}
 
 	private void charge(){
 		lum.intensity = _maxIntensity;
+	}
+
+	private void updateBatteryLevel(){
+		Color c = defaultMat.color;
+		if(lum.intensity < _maxIntensity/2.0f){
+			c.r = 1.0f;
+		}
+		if(lum.intensity < _maxIntensity/4.0f){
+			c.g = 0.0f;
+		}
+		batteryMat.color = c;
 	}
 }
