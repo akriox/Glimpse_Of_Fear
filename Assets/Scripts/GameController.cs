@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MainController : MonoBehaviour {
+public class GameController : MonoBehaviour {
 
 	public GameObject inGameMenu;
-	public GameObject loadingScreen;
 
 	public void Start(){
 		Cursor.visible = false;
@@ -22,7 +21,7 @@ public class MainController : MonoBehaviour {
 	}
 	
 	public void Restart(){
-		loadingScreen.SetActive(true);
+		LoadingScreen.Instance.DisplayLoadingScreen(true);
 		StartCoroutine(LoadingScreen.Instance.loadScene(Application.loadedLevel));
 	}
 }

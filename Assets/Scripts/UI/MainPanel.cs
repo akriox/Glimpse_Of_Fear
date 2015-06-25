@@ -5,13 +5,13 @@ using System.Collections;
 
 public class MainPanel: MonoBehaviour {
 
+	public GameObject mainCanvas;
 	public GameObject optionsPanel;
-	public GameObject loadingScreen;
 	public EventSystem eventSystem;
-	
+
 	public void Play(){
-		loadingScreen.SetActive(true);
 		StartCoroutine(LoadingScreen.Instance.loadScene(1));
+		mainCanvas.SetActive(false);
 	}
 	
 	public void OpenOptions(){
