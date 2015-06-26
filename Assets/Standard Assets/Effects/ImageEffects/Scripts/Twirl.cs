@@ -8,7 +8,7 @@ namespace UnityStandardAssets.ImageEffects
     public class Twirl : ImageEffectBase
     {
         public Vector2 radius = new Vector2(0.3F,0.3F);
-        public float angle = 50;
+        public static float angle = 50;
         public Vector2 center = new Vector2 (0.5F, 0.5F);
 
 
