@@ -6,6 +6,7 @@ using UnityStandardAssets.Utility;
 
 [RequireComponent(typeof (CharacterController))]
 [RequireComponent(typeof (AudioSource))]
+[RequireComponent(typeof (UserPresenceComponent))]
 public class FirstPersonController : MonoBehaviour
 {
     [SerializeField] private bool m_IsWalking;
@@ -15,7 +16,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float m_JumpSpeed;
     [SerializeField] private float m_StickToGroundForce;
     [SerializeField] private float m_GravityMultiplier;
-    //[SerializeField] private MouseLook m_MouseLook;
+    [SerializeField] private MouseLook m_MouseLook;
     [SerializeField] private bool m_UseFovKick;
     [SerializeField] private FOVKick m_FovKick = new FOVKick();
     [SerializeField] private bool m_UseHeadBob;
@@ -25,7 +26,9 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
     [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
     [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
-	
+
+	public bool MouseLookEnabled = false;
+	private UserPresenceComponent _userPresenceComponent;
     private Camera m_Camera;
     //private bool m_Jump;
     private float m_YRotation;
@@ -46,6 +49,7 @@ public class FirstPersonController : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
+		_userPresenceComponent = GetComponentInChildren<UserPresenceComponent>();
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -55,15 +59,15 @@ public class FirstPersonController : MonoBehaviour
         m_NextStep = m_StepCycle/2f;
         //m_Jumping = false;
         m_AudioSource = GetComponent<AudioSource>();
-		//m_MouseLook.Init(transform , m_Camera.transform);
+		m_MouseLook.Init(transform , m_Camera.transform);
 		m_StandingHeight = m_CharacterController.height;
 		m_DuckingHeight = m_StandingHeight/2.0f;
     }
 
-
     // Update is called once per frame
     private void Update()
     {
+		if(_userPresenceComponent.IsUserPresent == false && MouseLookEnabled) RotateView();
 
 		if(Input.GetButton("Duck")){
 			m_Duck = true;
@@ -78,8 +82,6 @@ public class FirstPersonController : MonoBehaviour
 			}
 		}
 	
-		//RotateView();
-
 		/*
         // the jump state needs to read here to make sure it is not missed
         if (!m_Jump)
@@ -259,12 +261,10 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-	/*
     private void RotateView()
     {
     	m_MouseLook.LookRotation (transform, m_Camera.transform);
     }
-    */
 	
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {

@@ -22,6 +22,8 @@ public class Flashlight : MonoBehaviour {
 	private Material batteryMat;
 	public GameObject batteryLevel;
 
+	public bool EyeTracking = true;
+
 	public void Awake(){
 		Instance = this;
 	}
@@ -40,7 +42,10 @@ public class Flashlight : MonoBehaviour {
 	}
 
 	public void Update() {
-		lum.gameObject.SetActive(_userPresenceComponent.IsUserPresent);
+		bool b;
+		b = EyeTracking ? _userPresenceComponent.IsUserPresent : true;
+		lum.gameObject.SetActive(b);
+
 		if(lum.isActiveAndEnabled){
 			if(_state == State.OFF){
 				audioSource.clip = buttonSound[0];
