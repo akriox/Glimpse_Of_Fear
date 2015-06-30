@@ -19,7 +19,8 @@ namespace UnityStandardAssets.ImageEffects
 		private Transform currentTarget;
 		private GameObject player;
 		private GazeAwareComponent _gazeAwareComponent;
-		private AudioSource song;
+		public AudioSource song;
+		public AudioSource song2;
 		private bool ready;
 		
 		private float _angleTwirl = 0;
@@ -35,7 +36,6 @@ namespace UnityStandardAssets.ImageEffects
 			ready = false;
 			player = GameObject.FindGameObjectWithTag("Player");
 			_gazeAwareComponent = GetComponent<GazeAwareComponent>();
-			song = GetComponent<AudioSource> ();
 			if(pathToFollow == null){
 				Debug.LogError("Un GameObject 'Path' doit etre renseigné dans le script 'FollowPath.cs'.");
 			} 
@@ -48,13 +48,13 @@ namespace UnityStandardAssets.ImageEffects
 		
 		void Update () {
 			if (_gazeAwareComponent.HasGaze && ready) {
-				if (!song.isPlaying)
-					song.Play ();
+				if (!song.isPlaying&&!song2.isPlaying)
+					playASong();
 				resetImageEffect();
 			} 
 			else {
 				if(ready){
-					song.Stop ();
+					pauseASong();
 					if(_angleTwirl < 20.0f)
 						_angleTwirl +=0.1f;
 					if(_saturationColorCorrection >0f)
@@ -98,13 +98,33 @@ namespace UnityStandardAssets.ImageEffects
 		float CheckDistance(){
 			return Vector3.Distance(transform.position, currentTarget.position);
 		}
-		
+
+		private void playASong(){
+			if (UnityEngine.Random.value > 0.5f) {
+				song.Play ();
+			}
+			else {
+				song2.Play ();
+			}
+		}
+
+		private void pauseASong(){
+			if (song.isPlaying) {
+				song.Pause ();
+			}
+			else {
+				song2.Pause ();
+			}
+		}
+
 		public void isReady(){
 			ready = true;
 		}
 		
 		public void isFinish(){
 			ready = false;
+			song.Stop ();
+			song2.Stop ();
 		}
 		public void resetImageEffect(){
 			_angleTwirl = 0f;
