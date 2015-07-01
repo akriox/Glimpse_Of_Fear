@@ -19,8 +19,8 @@ namespace UnityStandardAssets.ImageEffects
 		private Transform currentTarget;
 		private GameObject player;
 		private GazeAwareComponent _gazeAwareComponent;
-		public AudioSource song;
-		public AudioSource song2;
+		private AudioSource audioSource;
+		public AudioClip[] audioClip;
 		private bool ready;
 		
 		private float _angleTwirl = 0;
@@ -34,6 +34,7 @@ namespace UnityStandardAssets.ImageEffects
 		
 		void Start () {
 			ready = false;
+			audioSource = GetComponent<AudioSource>();
 			player = GameObject.FindGameObjectWithTag("Player");
 			_gazeAwareComponent = GetComponent<GazeAwareComponent>();
 			if(pathToFollow == null){
@@ -48,8 +49,7 @@ namespace UnityStandardAssets.ImageEffects
 		
 		void Update () {
 			if (_gazeAwareComponent.HasGaze && ready) {
-				if (!song.isPlaying&&!song2.isPlaying)
-					playASong();
+				if(!audioSource.isPlaying) playASong(); 
 				resetImageEffect();
 			} 
 			else {
@@ -101,20 +101,17 @@ namespace UnityStandardAssets.ImageEffects
 
 		private void playASong(){
 			if (UnityEngine.Random.value > 0.5f) {
-				song.Play ();
+				audioSource.clip = audioClip[0];
+				audioSource.Play();
 			}
 			else {
-				song2.Play ();
+				audioSource.clip = audioClip[1];
+				audioSource.Play();
 			}
 		}
 
 		private void pauseASong(){
-			if (song.isPlaying) {
-				song.Pause ();
-			}
-			else {
-				song2.Pause ();
-			}
+			audioSource.Pause();
 		}
 
 		public void isReady(){
@@ -123,8 +120,7 @@ namespace UnityStandardAssets.ImageEffects
 		
 		public void isFinish(){
 			ready = false;
-			song.Stop ();
-			song2.Stop ();
+			audioSource.Stop();
 		}
 		public void resetImageEffect(){
 			_angleTwirl = 0f;
