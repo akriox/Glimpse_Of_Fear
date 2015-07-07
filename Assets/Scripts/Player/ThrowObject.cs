@@ -1,23 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
-using XInputDotNetPure;
 
 [RequireComponent (typeof(GazePointDataComponent))]
 public class ThrowObject : MonoBehaviour {
-	
+
+	private GazeAwareComponent _gazeAwareComponent;
 	private GazePointDataComponent _gazePointDataComponent;
 	private string GlowStickPrefab = "Prefabs/Items/GlowStick";
 	private static GameObject objectToThrow;
 	private float force = 2000.0f;
 	private Vector3 trajectory;
 	private bool throwing;
-	
+
 	public void Start(){
 		_gazePointDataComponent = GetComponent<GazePointDataComponent>();
 	}
 	
 	public void Update(){
-		
+
 		var gazePoint = _gazePointDataComponent.LastGazePoint;
 		
 		if(gazePoint.IsValid && gazePoint.IsWithinScreenBounds){
@@ -45,7 +45,7 @@ public class ThrowObject : MonoBehaviour {
 	
 	public void FixedUpdate(){
 		if(objectToThrow && throwing){
-			StartCoroutine(Vibration());
+			StartCoroutine(GameController.Instance.timedVibration(0.3f, 0.3f, 0.5f));
 			Rigidbody rb = objectToThrow.GetComponent<Rigidbody>();
 			if(rb.isKinematic) rb.isKinematic = false;
 			rb.AddForce(trajectory * force * Time.fixedDeltaTime);
@@ -54,13 +54,11 @@ public class ThrowObject : MonoBehaviour {
 		}
 	}
 
-	public static void setObjectToThrow(GameObject go){
-		objectToThrow = go;
-	}
-	
-	private IEnumerator Vibration(){
-		GamePad.SetVibration(0, 0.5f, 0.5f);
-		yield return new WaitForSeconds(0.5f);
-		GamePad.SetVibration(0, 0.0f, 0.0f);
+	public static bool setObjectToThrow(GameObject go){
+		if(objectToThrow == null){
+			objectToThrow = go;
+			return true;
+		}
+		return false;	
 	}
 }

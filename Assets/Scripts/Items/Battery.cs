@@ -3,8 +3,10 @@ using System.Collections;
 
 public class Battery : Collectible {
 
-	public void Update(){
-		if(pickUp && Input.GetButtonDown("Submit")){
+	public new void Update(){
+		base.Update();
+		if(pickedUp){
+			Flashlight.Instance.charge();
 			Destroy(this.gameObject);
 		}
 	}

@@ -18,8 +18,7 @@ public class Flashlight : MonoBehaviour {
 	public AudioClip[] buttonSound;
 	private AudioSource audioSource;
 
-	private Material defaultMat;
-	private Material batteryMat;
+	private Color defaultColor;
 	public GameObject batteryLevel;
 
 	public bool EyeTracking = true;
@@ -33,8 +32,7 @@ public class Flashlight : MonoBehaviour {
 		lum = GetComponentInChildren<Light>();
 		audioSource = GetComponent<AudioSource>();
 
-		defaultMat = batteryLevel.GetComponent<Renderer>().material;
-		batteryMat = defaultMat;
+		defaultColor = batteryLevel.GetComponent<Renderer>().material.color;
 
 		_state = State.OFF;
 		_maxIntensity = lum.intensity;
@@ -42,9 +40,10 @@ public class Flashlight : MonoBehaviour {
 	}
 
 	public void Update() {
-		bool b;
-		b = EyeTracking ? _userPresenceComponent.IsUserPresent : true;
+		bool b = EyeTracking ? _userPresenceComponent.IsUserPresent : true;
 		lum.gameObject.SetActive(b);
+
+		if(Input.GetKeyDown(KeyCode.R)) charge();
 
 		if(lum.isActiveAndEnabled){
 			if(_state == State.OFF){
@@ -86,18 +85,19 @@ public class Flashlight : MonoBehaviour {
 		}
 	}
 
-	private void charge(){
+	public void charge(){
 		lum.intensity = _maxIntensity;
+		batteryLevel.GetComponent<Renderer>().material.color = defaultColor;
 	}
 
 	private void updateBatteryLevel(){
-		Color c = defaultMat.color;
+		Color c  = defaultColor;
 		if(lum.intensity < _maxIntensity/2.0f){
 			c.r = 1.0f;
 		}
 		if(lum.intensity < _maxIntensity/4.0f){
 			c.g = 0.0f;
 		}
-		batteryMat.color = c;
+		batteryLevel.GetComponent<Renderer>().material.color = c;
 	}
 }
