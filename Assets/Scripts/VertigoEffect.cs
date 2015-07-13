@@ -11,22 +11,22 @@ public class VertigoEffect : MonoBehaviour {
 	private float initHeightAtDist;
 	
 	// Calculate the frustum height at a given distance from the camera.
-	float FrustumHeightAtDistance(float distance) {
+	private float FrustumHeightAtDistance(float distance) {
 		return 2.0f * distance * Mathf.Tan(Camera.main.fieldOfView * 0.5f * Mathf.Deg2Rad);
 	}
 	
 	// Calculate the FOV needed to get a given frustum height at a given distance.
-	float FOVForHeightAndDistance(float height, float distance) {
+	private float FOVForHeightAndDistance(float height, float distance) {
 		return 2.0f * Mathf.Atan(height * 0.5f / distance) * Mathf.Rad2Deg;
 	}
 
-	void StartVertigo() {
+	public void StartVertigo() {
 		var distance = Vector3.Distance(transform.position, target.position);
 		initHeightAtDist = FrustumHeightAtDistance(distance);
 		vertigoEnabled = true;
 	}
 
-	void StopVertigo() {
+	public void StopVertigo() {
 		Camera.main.fieldOfView = initFOV;
 		Camera.main.transform.position = initPos;
 		vertigoEnabled = false;

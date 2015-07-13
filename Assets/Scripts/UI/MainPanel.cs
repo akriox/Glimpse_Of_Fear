@@ -27,4 +27,8 @@ public class MainPanel: MonoBehaviour {
 	public void ExitToDesktop(){
 		Application.Quit();
 	}
+
+	public void Update(){
+		if(Input.GetButtonDown("Cancel") && optionsPanel.activeSelf) CloseOptions();
+	}
 }
