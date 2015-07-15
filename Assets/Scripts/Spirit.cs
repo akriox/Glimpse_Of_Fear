@@ -23,6 +23,7 @@ public class Spirit : MonoBehaviour {
 			GameController.Instance.startVibration(0.8f, 0.8f);
 			if(activ == false){
 				StartCoroutine(CameraController.Instance.Shake(2.0f, 0.05f, 10.0f));
+				StartCoroutine(Flashlight.Instance.Flicker());
 				activ = true;
 			}
 		}

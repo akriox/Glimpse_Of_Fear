@@ -23,9 +23,12 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
     [SerializeField] private float m_StepInterval;
-    [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
-    [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
-    [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
+    private AudioClip[] m_FootstepSounds;    // default array of footstep sounds that will be randomly selected from
+	[SerializeField] private AudioClip[] m_FootstepWood;	  // an array of footstep sounds to play when walking on a wooden surface
+	[SerializeField] private AudioClip[] m_FootstepSand;	  // an array of footstep sounds to play when walking on sand
+	[SerializeField] private AudioClip[] m_FootstepRock;	  // an array of footstep sounds to play when walking on rocks
+    [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground
+    [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground
 
 	public bool MouseLookEnabled = false;
 	private UserPresenceComponent _userPresenceComponent;
@@ -46,6 +49,9 @@ public class FirstPersonController : MonoBehaviour
 	private float m_StandingHeight;
 	private float m_DuckingHeight;
 
+	private enum GroundType {ROCK, SAND, WOOD};
+	private GroundType groundType;
+
     // Use this for initialization
     private void Start()
     {
@@ -62,6 +68,7 @@ public class FirstPersonController : MonoBehaviour
 		m_MouseLook.Init(transform , m_Camera.transform);
 		m_StandingHeight = m_CharacterController.height;
 		m_DuckingHeight = m_StandingHeight/2.0f;
+		groundType = GroundType.SAND;
     }
 
     // Update is called once per frame
@@ -175,6 +182,10 @@ public class FirstPersonController : MonoBehaviour
         if (m_CharacterController.velocity.sqrMagnitude > 0 && (m_Input.x != 0 || m_Input.y != 0))
         {
             m_StepCycle += (m_CharacterController.velocity.magnitude + (speed*(m_IsWalking ? 1f : m_RunstepLenghten)))* Time.fixedDeltaTime;
+			if(groundType == GroundType.WOOD){
+				StartCoroutine(GameController.Instance.timedVibration(0.08f, 0.08f, 0.3f));
+				StartCoroutine(CameraController.Instance.Shake(0.3f, 0.02f, 1.0f));
+			}
         }
 
         if (!(m_StepCycle > m_NextStep))
@@ -194,6 +205,12 @@ public class FirstPersonController : MonoBehaviour
         {
             return;
         }
+
+		switch(groundType){
+			case GroundType.SAND: m_FootstepSounds = m_FootstepSand; break;
+			case GroundType.ROCK: m_FootstepSounds = m_FootstepRock; break;
+			case GroundType.WOOD: m_FootstepSounds = m_FootstepWood; break;
+		}
         // pick & play a random footstep sound from the array,
         // excluding sound at index 0
         int n = Random.Range(1, m_FootstepSounds.Length);
@@ -268,6 +285,13 @@ public class FirstPersonController : MonoBehaviour
 	
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+		if(hit.gameObject.tag == "Bridge"){
+			groundType = GroundType.WOOD;
+		}
+		else{
+			groundType = GroundType.SAND;
+		}
+
         Rigidbody body = hit.collider.attachedRigidbody;
         //dont move the rigidbody if the character is on top of it
         if (m_CollisionFlags == CollisionFlags.Below)

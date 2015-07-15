@@ -8,7 +8,7 @@ public class Flashlight : MonoBehaviour {
 	
 	private UserPresenceComponent _userPresenceComponent;
 	public Light lum {get; private set;}
-	private enum State{ON, OFF};
+	private enum State{ON, OFF, FLICKER};
 	private State _state;
 	private float _lifespan = 300.0f; // 5 minutes
 	private float _maxIntensity;
@@ -60,13 +60,13 @@ public class Flashlight : MonoBehaviour {
 			_state = State.OFF;
 		}
 
-
 		switch(_state){
 			case State.ON:	discharge(); 
 							updateBatteryLevel();
 							break;
 
 			case State.OFF: break;
+			case State.FLICKER: break;
 		}
 	}	
 	
@@ -99,5 +99,18 @@ public class Flashlight : MonoBehaviour {
 			c.g = 0.0f;
 		}
 		batteryLevel.GetComponent<Renderer>().material.color = c;
+	}
+
+	public IEnumerator Flicker(){
+		float initIntensity = lum.intensity;
+
+		_state = State.FLICKER;
+
+		lum.intensity -= Random.value * _maxIntensity;
+		yield return new WaitForSeconds(0.15f);
+		lum.intensity = initIntensity;
+		yield return null;
+
+		_state = State.ON;
 	}
 }

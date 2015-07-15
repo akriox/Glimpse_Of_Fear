@@ -22,6 +22,7 @@ public class CameraController : MonoBehaviour {
 
 	public void Awake(){
 		Instance = this;
+		DontDestroyOnLoad(this.gameObject);
 	}
 
 	public void Start(){
