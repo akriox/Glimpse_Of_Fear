@@ -12,7 +12,7 @@ namespace UnityStandardAssets.ImageEffects
 		public Transform pathToFollow;
 		[SerializeField][Range(2F, 10.0F)] public float speed;
 		[SerializeField][Range(2F, 5.0F)] public float DistanceMinForMove;
-		
+		private MovementTypes type = MovementTypes.Follow;
 		
 		private List<Transform> listPaths = new List<Transform>();
 		private int index = 1;
@@ -22,11 +22,6 @@ namespace UnityStandardAssets.ImageEffects
 		private AudioSource audioSource;
 		public AudioClip[] audioClip;
 		private bool ready;
-		
-		private float _angleTwirl = 0;
-		private float _saturationColorCorrection = 1f;
-		private Color _selectiveFromColorCorrection = Color.white;
-		private Color _selectiveToColorCorrection = Color.white;
 		
 		public void Awake(){
 			Instance = this;
@@ -49,25 +44,16 @@ namespace UnityStandardAssets.ImageEffects
 		
 		void Update () {
 			if (_gazeAwareComponent.HasGaze && ready) {
-				if(!audioSource.isPlaying) playASong(); 
-				resetImageEffect();
+				if(audioSource.isPlaying) pauseASong(); 
+				CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
 			} 
 			else {
 				if(ready){
-					pauseASong();
-					if(_angleTwirl < 20.0f)
-						_angleTwirl +=0.1f;
-					if(_saturationColorCorrection >0f)
-						_saturationColorCorrection -= 0.005f;
-					_selectiveFromColorCorrection = new Color(152f,152f,152f,255f);
-					_selectiveToColorCorrection = new Color(83f,83f,83f,255f);
+					if(!audioSource.isPlaying) playASong(); 
+					CameraController.Instance.setVortexState (CameraController.VortexState.INC);
 				}
 			}
 			Walk();
-			Twirl.angle = _angleTwirl;
-			ColorCorrectionCurves.ccMaterial.SetFloat ("_Saturation", _saturationColorCorrection);
-			ColorCorrectionCurves.selectiveCcMaterial.SetColor ("selColor", _selectiveFromColorCorrection);
-			ColorCorrectionCurves.selectiveCcMaterial.SetColor ("targetColor", _selectiveToColorCorrection);
 		}
 		
 		void GetPaths(){
@@ -77,8 +63,16 @@ namespace UnityStandardAssets.ImageEffects
 		}
 		
 		void GetNewPosition(){
-			currentTarget = listPaths.Single(p => p.name == "Path" + index);
-			index = (index < listPaths.Count) ? index +1 : 1;
+			switch (type) {
+				case MovementTypes.Follow:
+					currentTarget = listPaths.Single (p => p.name == "Path" + index);
+					index = (index < listPaths.Count) ? index + 1 : 1;
+				break;
+				case MovementTypes.Reverse:
+					currentTarget = listPaths.Single (p => p.name == "Path" + index);
+					index = (index > 1) ? index - 1 : listPaths.Count;
+				break;
+			}
 		}
 		
 		
@@ -114,25 +108,35 @@ namespace UnityStandardAssets.ImageEffects
 			audioSource.Pause();
 		}
 
-		public void isReady(){
+		public void setReady(){
 			ready = true;
 		}
-		
-		public void isFinish(){
+
+		public bool isReday(){
+			return ready;
+		}
+
+		public void setFinish(){
 			ready = false;
 			audioSource.Stop();
 		}
 		public void resetImageEffect(){
-			_angleTwirl = 0f;
-			_saturationColorCorrection = 1f;
-			_selectiveFromColorCorrection = Color.white;
-			_selectiveToColorCorrection = Color.white;
+			CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
 		}
 
 		public void resetBeginningRoom(){
+			type = MovementTypes.Follow;
 			index = 1;
+			currentTarget = listPaths [index-1];
+			transform.position = new Vector3 (currentTarget.transform.position.x, currentTarget.transform.position.y, currentTarget.transform.position.z);
+		}
+		public void resetEndRoom(){
+			type = MovementTypes.Reverse;
+			index = listPaths.Count-1;
 			currentTarget = listPaths [index-1];
 			transform.position = new Vector3 (currentTarget.transform.position.x, currentTarget.transform.position.y, currentTarget.transform.position.z);
 		}
 	}
 }
+
+public enum MovementTypes { Follow, Reverse }
