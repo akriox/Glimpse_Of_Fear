@@ -261,10 +261,6 @@ public class FirstPersonController : MonoBehaviour
 #endif
         // set the desired speed to be walking or running
         speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
-
-		// cannot run on the wooden bridge
-		if(groundType == GroundType.WOOD) speed = m_WalkSpeed;
-
         m_Input = new Vector2(horizontal, vertical);
 
         // normalize input if it exceeds 1 in combined length:

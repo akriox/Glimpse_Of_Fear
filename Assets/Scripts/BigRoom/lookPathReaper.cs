@@ -7,7 +7,7 @@ public class lookPathReaper : MonoBehaviour {
 	private GazeAwareComponent _gazeAwareComponent;
 	[SerializeField] private Transform positionStart;
 	[SerializeField] private Transform PositionEnd;
-	[SerializeField]private GameObject OtherTrigger;
+	[SerializeField]private GameObject triggerToDesactive;
 
 	private bool alreadyCall = false;
 
@@ -20,8 +20,8 @@ public class lookPathReaper : MonoBehaviour {
 		if (_gazeAwareComponent.HasGaze && !alreadyCall) {
 			moveReaperBigRoom.Instance.setPosition (positionStart.position, PositionEnd.position);
 			alreadyCall = true;
-			if(OtherTrigger != null)
-				OtherTrigger.SetActive(false);
+			if(triggerToDesactive != null)
+				triggerToDesactive.SetActive(false);
 		}
 	}
 }

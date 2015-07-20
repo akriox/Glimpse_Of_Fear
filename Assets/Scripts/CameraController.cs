@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour {
 
 	private Vortex _vortexScript;
 	//private VertigoEffect _vertigoScript;
+	private ColorCorrectionCurves _colorCorrectionCurvesScript;
 	private NoiseAndScratches _noiseAndScratches;
 	
 	private bool _vertigo;
@@ -28,6 +29,7 @@ public class CameraController : MonoBehaviour {
 		_camera = Camera.main;
 		_vortexScript = _camera.GetComponent<Vortex>();
 		//_vertigoScript = _camera.GetComponent<VertigoEffect>();
+		_colorCorrectionCurvesScript = _camera.GetComponent<ColorCorrectionCurves>();
 		_noiseAndScratches = _camera.GetComponent<NoiseAndScratches>();
 	}
 
@@ -37,6 +39,10 @@ public class CameraController : MonoBehaviour {
 	
 	public void setVortexState(VortexState state){
 		_vortexState = state;
+	}
+
+	public void setColorCorrectionCurves(bool b){
+		_colorCorrectionCurvesScript.enabled = b;
 	}
 
 	public void setNoiseAndScratches(bool b){
