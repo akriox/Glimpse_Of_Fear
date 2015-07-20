@@ -55,7 +55,7 @@ public class FirstPersonController : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-		_userPresenceComponent = GetComponentInChildren<UserPresenceComponent>();
+		_userPresenceComponent = GetComponent<UserPresenceComponent>();
         m_CharacterController = GetComponent<CharacterController>();
         m_Camera = Camera.main;
         m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -261,6 +261,10 @@ public class FirstPersonController : MonoBehaviour
 #endif
         // set the desired speed to be walking or running
         speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
+
+		// cannot run on wooden bridge
+		if(groundType == GroundType.WOOD) speed = m_WalkSpeed;
+
         m_Input = new Vector2(horizontal, vertical);
 
         // normalize input if it exceeds 1 in combined length:
@@ -285,14 +289,10 @@ public class FirstPersonController : MonoBehaviour
 	
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-		if(hit.gameObject.tag == "Bridge"){
-			groundType = GroundType.WOOD;
-		}
-		else if(hit.gameObject.tag == "Rock"){
-			groundType = GroundType.ROCK;
-		}
-		else{
-			groundType = GroundType.SAND;
+		switch(hit.gameObject.tag){
+			case "Wood": groundType = GroundType.WOOD; break;
+			case "Rock": groundType = GroundType.ROCK; break;
+			case "Sand": groundType = GroundType.SAND; break;
 		}
 
         Rigidbody body = hit.collider.attachedRigidbody;

@@ -12,6 +12,8 @@ public class TriggerBridge : MonoBehaviour {
 
 	public void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
+			StopAllCoroutines();
+			StartCoroutine(CameraController.Instance.Shake(2.0f, 1.0f, 5.0f));
 			Collapse();
 		}
 	}

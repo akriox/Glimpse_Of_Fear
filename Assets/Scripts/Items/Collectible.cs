@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Collectible : GazeAwareComponent {
 
-	protected bool pickUp;
+	private bool pickUp;
 	protected bool pickedUp;
 	protected Sprite widgetSprite;
 
