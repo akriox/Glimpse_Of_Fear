@@ -3,14 +3,18 @@ using System.Collections;
 
 namespace UnityStandardAssets.ImageEffects
 {
-	public class RoomTrigger: MonoBehaviour {
+	public class FogRoomTrigger: MonoBehaviour {
 		
 		
-		[SerializeField][Range(0, 2)]public int numRoom = 1;
-		
+		[SerializeField][Range(0, 2)]public int _case = 1;
+		public GameObject Spirit;
+
 		public void OnTriggerEnter(Collider other) {
+
 			if (other.gameObject.tag == "Player") {
-				switch (numRoom) {
+				if (Spirit != null)
+					Spirit.SetActive(false);
+				switch (_case) {
 				case 0:
 					if(!FollowPath.Instance.isReday()){
 						FollowPath.Instance.setReady();

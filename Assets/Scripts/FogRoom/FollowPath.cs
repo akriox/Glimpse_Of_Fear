@@ -45,12 +45,14 @@ namespace UnityStandardAssets.ImageEffects
 		void Update () {
 			if (_gazeAwareComponent.HasGaze && ready) {
 				if(audioSource.isPlaying) pauseASong(); 
-				CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
+				CameraController.Instance.setVortexState(CameraController.VortexState.DEC);
+				CameraController.Instance.setNoiseAndScratches(false);
 			} 
 			else {
 				if(ready){
 					if(!audioSource.isPlaying) playASong(); 
-					CameraController.Instance.setVortexState (CameraController.VortexState.INC);
+					CameraController.Instance.setVortexState(CameraController.VortexState.INC);
+					CameraController.Instance.setNoiseAndScratches(true);
 				}
 			}
 			Walk();
