@@ -292,6 +292,9 @@ public class FirstPersonController : MonoBehaviour
 		if(hit.gameObject.tag == "Bridge"){
 			groundType = GroundType.WOOD;
 		}
+		else if(hit.gameObject.tag == "Rock"){
+			groundType = GroundType.ROCK;
+		}
 		else{
 			groundType = GroundType.SAND;
 		}
