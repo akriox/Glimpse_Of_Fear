@@ -67,6 +67,10 @@ public class LoadingScreen : MonoBehaviour {
 	public void OnLevelWasLoaded(int level){
 		fading = Fading.OUT;
 		levelLoaded = true;
+
+		if(level == 2){
+			FirstPersonController.enableRightHand(false);
+		}
 	}
 
 	private void fadeIn(){

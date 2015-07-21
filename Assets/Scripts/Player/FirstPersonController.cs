@@ -52,6 +52,12 @@ public class FirstPersonController : MonoBehaviour
 	private enum GroundType {ROCK, SAND, WOOD};
 	private GroundType groundType;
 
+	public static GameObject rightHand;
+
+	public void Awake(){
+		DontDestroyOnLoad(this.gameObject);
+	}
+
     // Use this for initialization
     private void Start()
     {
@@ -69,6 +75,9 @@ public class FirstPersonController : MonoBehaviour
 		m_StandingHeight = m_CharacterController.height;
 		m_DuckingHeight = m_StandingHeight/2.0f;
 		groundType = GroundType.SAND;
+
+		rightHand = GameObject.FindGameObjectWithTag("RightHand");
+		rightHand.SetActive(false);
     }
 
     // Update is called once per frame
@@ -308,4 +317,8 @@ public class FirstPersonController : MonoBehaviour
         }
         body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
     }
+
+	public static void enableRightHand(bool b){
+		rightHand.SetActive(b);
+	}
 }
