@@ -8,7 +8,8 @@ public class GameController : MonoBehaviour {
 	public static GameController Instance {get; private set;}
 	public GameObject inGameMenu;
 
-	private GameObject widget;
+	public GameObject keyboardWidget;
+	public GameObject gamepadWidget;
 
 	public void Awake(){
 		Instance = this;
@@ -17,7 +18,6 @@ public class GameController : MonoBehaviour {
 
 	public void Start(){
 		Cursor.visible = false;
-		widget = GameObject.FindGameObjectWithTag("Widget");
 	}
 
 	public void Update () {
@@ -50,11 +50,9 @@ public class GameController : MonoBehaviour {
 		GamePad.SetVibration(0, 0.0f, 0.0f);
 	}
 
-	public void setWidgetSprite(Sprite s){
-		widget.GetComponent<Image>().sprite = s;
-	}
-
 	public void displayWidget(bool b){
-		widget.GetComponent<Image>().enabled = b;
+		GamePadState state = GamePad.GetState(PlayerIndex.One);
+		if(state.IsConnected) gamepadWidget.GetComponent<Image>().enabled = b;
+		else keyboardWidget.GetComponent<Image>().enabled = b;
 	}
 }

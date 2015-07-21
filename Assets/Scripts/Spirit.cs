@@ -34,7 +34,7 @@ public class Spirit : MonoBehaviour {
 		followPlayer = false;
 		agent = GetComponent<NavMeshAgent> ();
 		if(PositionSpirit == null){
-			Debug.LogError("Un GameObject 'Path' doit etre renseigné dans le script 'FollowPath.cs'.");
+			Debug.Log("Spirit position null");
 		} else {
 			GetPaths();
 			if(listPosition.Count > 0) GetNewPosition();
