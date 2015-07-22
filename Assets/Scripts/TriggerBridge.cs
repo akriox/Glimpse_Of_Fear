@@ -23,5 +23,6 @@ public class TriggerBridge : MonoBehaviour {
 		for(i=0; i<plank.Length; i++){
 			plank[i].isKinematic = false;
 		}
+		weakspot.GetComponent<AudioSource>().Play();
 	}
 }

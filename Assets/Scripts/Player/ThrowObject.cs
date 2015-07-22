@@ -34,7 +34,7 @@ public class ThrowObject : MonoBehaviour {
 					Ray ray = Camera.main.ScreenPointToRay(gazePoint.Screen);
 					RaycastHit hit;
 					
-					if (Physics.Raycast (ray, out hit)){
+					if (Physics.Raycast (ray, out hit, 500.0f, 11)){
 						trajectory = hit.point - objectToThrow.transform.position;
 						trajectory.y += 3.0f;
 					}
