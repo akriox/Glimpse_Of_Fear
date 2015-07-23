@@ -20,7 +20,6 @@ namespace UnityStandardAssets.ImageEffects
 		private GameObject player;
 		private GazeAwareComponent _gazeAwareComponent;
 		private AudioSource audioSource;
-		public AudioClip[] audioClip;
 		private bool ready;
 		
 		public void Awake(){
@@ -96,14 +95,7 @@ namespace UnityStandardAssets.ImageEffects
 		}
 
 		private void playASong(){
-			if (UnityEngine.Random.value > 0.5f) {
-				audioSource.clip = audioClip[0];
-				audioSource.Play();
-			}
-			else {
-				audioSource.clip = audioClip[1];
-				audioSource.Play();
-			}
+			audioSource.Play();
 		}
 
 		private void pauseASong(){
