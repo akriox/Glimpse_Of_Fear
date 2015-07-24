@@ -54,10 +54,6 @@ public class FirstPersonController : MonoBehaviour
 
 	public static GameObject rightHand;
 
-	public void Awake(){
-		DontDestroyOnLoad(this.gameObject);
-	}
-
     // Use this for initialization
     private void Start()
     {

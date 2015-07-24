@@ -3,8 +3,7 @@ using System.Collections;
 
 [RequireComponent (typeof(GazePointDataComponent))]
 public class EyeLook : MonoBehaviour {
-	
-	[SerializeField][Range(1.0F, 3.0F)] public float sensitivity;
+
 	[SerializeField][Range(-60.0f, 60.0f)] public float minAngle;
 	[SerializeField][Range(-60.0f, 60.0f)] public float maxAngle;
 
@@ -15,6 +14,7 @@ public class EyeLook : MonoBehaviour {
 	private Quaternion targetRotation;
 	private Quaternion lastRotation;
 	private float velocity;
+	private float sensitivity;
 
 	private float w;
 	private float h;
@@ -23,6 +23,8 @@ public class EyeLook : MonoBehaviour {
 	private Rect[] r;
 
 	public void Start () {
+		sensitivity = Settings.EyeXSensitivity;
+
 		_gazePointDataComponent = GetComponent<GazePointDataComponent>();
 		player = GameObject.FindGameObjectWithTag("Player");
 
