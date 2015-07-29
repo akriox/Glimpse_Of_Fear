@@ -1,0 +1,167 @@
+fileFormatVersion: 2
+guid: 9e19da6ffd56d754c97762e650bf3e8f
+timeCreated: 1437741472
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Rock1Explode
+    100002: Rock1Explode01
+    100004: Rock1Explode02
+    100006: Rock2explode
+    100008: Rock2explode01
+    100010: Rock2explode02
+    100012: Rock3Explode
+    100014: Rock3Explode01
+    100016: Rock3Explode02
+    100018: Rock4Explode
+    100020: Rock4Explode01
+    100022: Rock4Explode02
+    100024: Rock4Explode03
+    100026: Rock5Explode
+    100028: Rock5Explode01
+    100030: Rock5Explode02
+    100032: Rock5Explode03
+    100034: Rock6Explode
+    100036: Rock7Explode
+    100038: Rock8Explode
+    100040: //RootNode
+    400000: Rock1Explode
+    400002: Rock1Explode01
+    400004: Rock1Explode02
+    400006: Rock2explode
+    400008: Rock2explode01
+    400010: Rock2explode02
+    400012: Rock3Explode
+    400014: Rock3Explode01
+    400016: Rock3Explode02
+    400018: Rock4Explode
+    400020: Rock4Explode01
+    400022: Rock4Explode02
+    400024: Rock4Explode03
+    400026: Rock5Explode
+    400028: Rock5Explode01
+    400030: Rock5Explode02
+    400032: Rock5Explode03
+    400034: Rock6Explode
+    400036: Rock7Explode
+    400038: Rock8Explode
+    400040: //RootNode
+    2300000: Rock1Explode
+    2300002: Rock1Explode01
+    2300004: Rock1Explode02
+    2300006: Rock2explode
+    2300008: Rock2explode01
+    2300010: Rock2explode02
+    2300012: Rock3Explode
+    2300014: Rock3Explode01
+    2300016: Rock3Explode02
+    2300018: Rock4Explode
+    2300020: Rock4Explode01
+    2300022: Rock4Explode02
+    2300024: Rock4Explode03
+    2300026: Rock5Explode
+    2300028: Rock5Explode01
+    2300030: Rock5Explode02
+    2300032: Rock5Explode03
+    2300034: Rock6Explode
+    2300036: Rock7Explode
+    2300038: Rock8Explode
+    3300000: Rock1Explode
+    3300002: Rock1Explode01
+    3300004: Rock1Explode02
+    3300006: Rock2explode
+    3300008: Rock2explode01
+    3300010: Rock2explode02
+    3300012: Rock3Explode
+    3300014: Rock3Explode01
+    3300016: Rock3Explode02
+    3300018: Rock4Explode
+    3300020: Rock4Explode01
+    3300022: Rock4Explode02
+    3300024: Rock4Explode03
+    3300026: Rock5Explode
+    3300028: Rock5Explode01
+    3300030: Rock5Explode02
+    3300032: Rock5Explode03
+    3300034: Rock6Explode
+    3300036: Rock7Explode
+    3300038: Rock8Explode
+    4300000: Rock8Explode
+    4300002: Rock3Explode
+    4300004: Rock3Explode02
+    4300006: Rock3Explode01
+    4300008: Rock6Explode
+    4300010: Rock1Explode
+    4300012: Rock1Explode02
+    4300014: Rock1Explode01
+    4300016: Rock7Explode
+    4300018: Rock2explode
+    4300020: Rock2explode02
+    4300022: Rock2explode01
+    4300024: Rock4Explode
+    4300026: Rock4Explode03
+    4300028: Rock4Explode02
+    4300030: Rock4Explode01
+    4300032: Rock5Explode
+    4300034: Rock5Explode02
+    4300036: Rock5Explode01
+    4300038: Rock5Explode03
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

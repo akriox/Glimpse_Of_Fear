@@ -1,0 +1,107 @@
+fileFormatVersion: 2
+guid: c2b6c2a89e33297488fcc9150358efd1
+timeCreated: 1437753721
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: MayanDoorEntranceTodawn
+    100004: MayanDoorFinish
+    100006: MayanDoorFirstBigAlley
+    100008: MayanDoorLinkTocave
+    100010: TombR_Center001
+    100012: TombWell_Ld
+    100014: TombWell_Ld001
+    400000: //RootNode
+    400002: MayanDoorEntranceTodawn
+    400004: MayanDoorFinish
+    400006: MayanDoorFirstBigAlley
+    400008: MayanDoorLinkTocave
+    400010: TombR_Center001
+    400012: TombWell_Ld
+    400014: TombWell_Ld001
+    2300000: MayanDoorEntranceTodawn
+    2300002: MayanDoorFinish
+    2300004: MayanDoorFirstBigAlley
+    2300006: MayanDoorLinkTocave
+    2300008: TombR_Center001
+    2300010: TombWell_Ld
+    2300012: TombWell_Ld001
+    2300014: //RootNode
+    3300000: MayanDoorEntranceTodawn
+    3300002: MayanDoorFinish
+    3300004: MayanDoorFirstBigAlley
+    3300006: MayanDoorLinkTocave
+    3300008: TombR_Center001
+    3300010: TombWell_Ld
+    3300012: TombWell_Ld001
+    3300014: //RootNode
+    4300000: MayanDoorEntranceTodawn
+    4300002: MayanDoorFirstBigAlley
+    4300004: TombWell_Ld
+    4300006: TombWell_Ld001
+    4300008: MayanDoorFinish
+    4300010: MayanDoorLinkTocave
+    4300012: TombR_Center001
+    4300014: CentralRoomSecondTime
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

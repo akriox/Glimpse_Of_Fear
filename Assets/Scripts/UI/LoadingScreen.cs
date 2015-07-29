@@ -67,9 +67,6 @@ public class LoadingScreen : MonoBehaviour {
 	public void OnLevelWasLoaded(int level){
 		fading = Fading.OUT;
 		levelLoaded = true;
-
-		// The loses his flashlight when the bridge collapses at the end of level 1
-		if(level == 2) FirstPersonController.enableRightHand(false);
 	}
 
 	private void fadeIn(){

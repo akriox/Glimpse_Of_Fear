@@ -73,12 +73,14 @@ public class FirstPersonController : MonoBehaviour
 		groundType = GroundType.SAND;
 
 		rightHand = GameObject.FindGameObjectWithTag("RightHand");
-		rightHand.SetActive(false);
     }
 
     // Update is called once per frame
     private void Update()
     {
+
+		if(Input.GetKeyDown(KeyCode.F)) rightHand.SetActive(!rightHand.activeSelf);
+
 		if(_userPresenceComponent.IsUserPresent == false && MouseLookEnabled) RotateView();
 
 		if(Input.GetButton("Duck")){
