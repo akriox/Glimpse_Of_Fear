@@ -8,8 +8,6 @@ public class spiritTrigger : MonoBehaviour {
 	
 	public void OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Player") {
-			if (Spirit != null)
-				Spirit.SetActive (false);
 			switch (_case) {
 			case 0:
 				if (Spirit != null)
