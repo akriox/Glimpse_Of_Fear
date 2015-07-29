@@ -3,17 +3,17 @@ using System.Collections;
 
 public class FPSHand : MonoBehaviour {
 
-	[SerializeField][Range(1.0F, 10.0F)] public float XSensitivity = 2.0f;
-	[SerializeField][Range(1.0F, 10.0F)]public float YSensitivity = 2.0f;
 	public bool smooth;
 	public float smoothTime = 5.0f;
-
+	private float XSensitivity;
+	private float YSensitivity;
 	private float min = -30.0f;
 	private float max = 30.0f;
 	private Quaternion targetRotation;
 	private float initRotZ;
 
 	public void Start(){
+		XSensitivity = YSensitivity = Settings.MousePadXYSensitivity;
 		targetRotation = transform.localRotation;
 		initRotZ = targetRotation.z;
 	}

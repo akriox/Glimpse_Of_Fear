@@ -13,7 +13,6 @@ public class GameController : MonoBehaviour {
 
 	public void Awake(){
 		Instance = this;
-		DontDestroyOnLoad(this.gameObject);
 	}
 
 	public void Start(){
