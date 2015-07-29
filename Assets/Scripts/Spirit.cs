@@ -10,34 +10,28 @@ public class Spirit : MonoBehaviour {
 	private GazeAwareComponent _gazeAwareComponent;
 	private AudioSource _audioSource;
 
-	private bool activ;
-	public Transform PositionSpirit;
-	
 	private List<Transform> listPosition = new List<Transform>();
 	private Transform currentTarget;
 	private NavMeshAgent agent;
-	private bool followPlayer;
-	private bool canSwitchPosition;
-	private bool activeTexture;
 	private GameObject targetPlayer;
 
 	private Vector3 direction;
 	private Quaternion rotation;
 
-	[SerializeField][Range(0.0F, 10.0F)] public float minWaitTime;
-	[SerializeField][Range(0.0F, 10.0F)] public float maxWaitTime;
-	[SerializeField][Range(8.0F, 12.0F)] public float timeForFollowPlayer;
-	[SerializeField][Range(0.5F, 1.5F)] public float timeAppear;
+	[SerializeField] private Transform PositionSpirit;
+	[SerializeField][Range(1.5F, 3.5F)] private float timeForFollowPlayer;
 	[SerializeField] private GameObject _texture;
 	[SerializeField] private GameObject _smoke;
 	private float timeFollowPlayer;
-	private float timeForSwitchAppear;
+	private float timeToNotAppear;
+
+	private enum State{NotAppear, Appear, FollowPlayer};
+	private State _state;
 
 	public void Start(){
 		_gazeAwareComponent = GetComponent<GazeAwareComponent>();
 		_audioSource = GetComponent<AudioSource>();
 		targetPlayer = GameObject.FindGameObjectWithTag("Player");
-		followPlayer = false;
 		agent = GetComponent<NavMeshAgent> ();
 		if(PositionSpirit == null){
 			Debug.Log("Spirit position null");
@@ -45,55 +39,46 @@ public class Spirit : MonoBehaviour {
 			GetPaths();
 			if(listPosition.Count > 0) GetNewPosition();
 		}
-		canSwitchPosition = true;
+		_state = State.Appear;
 	}
 
 	public void Update(){
-		if(_gazeAwareComponent.HasGaze){
-			if(!_audioSource.isPlaying)_audioSource.Play();
-			CameraController.Instance.setVortexState(CameraController.VortexState.INC);
-			CameraController.Instance.setNoiseAndScratches(true);
-			GameController.Instance.startVibration(0.8f, 0.8f);
-			faceTarget(targetPlayer.transform.position);
-			if(activ == false){
-				StartCoroutine(CameraController.Instance.Shake(2.0f, 0.05f, 10.0f));
-				StartCoroutine(Flashlight.Instance.Flicker());
-				activ = true;
-				followPlayer = true;
-				timeFollowPlayer = Time.time + timeForFollowPlayer;
-				timeForSwitchAppear = Time.time + timeAppear;
-				canSwitchPosition = false;
-				_smoke.SetActive(true);
-				activeTexture = true;
-				_texture.SetActive(activeTexture);
-
+		switch(_state){
+		case State.NotAppear:	
+			if (Time.time > timeToNotAppear)_state = State.Appear;
+			CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
+			CameraController.Instance.setNoiseAndScratches (false);
+			GameController.Instance.stopVibration ();
+			break;
+		case State.Appear:
+			if (_gazeAwareComponent.HasGaze) {
+				if (!_audioSource.isPlaying)_audioSource.Play ();
+				CameraController.Instance.setVortexState (CameraController.VortexState.INC);
+				CameraController.Instance.setNoiseAndScratches (true);
+				GameController.Instance.startVibration (0.8f, 0.8f);
+				faceTarget (targetPlayer.transform.position);
+				StartCoroutine (CameraController.Instance.Shake (2.0f, 0.05f, 10.0f));
+				StartCoroutine (Flashlight.Instance.Flicker ());
+				_state = State.FollowPlayer;
+				timeFollowPlayer = Time.time + Random.Range (timeForFollowPlayer - 0.5f, timeForFollowPlayer + 0.5f);
+				_smoke.SetActive (true);
+				_texture.SetActive (true);
+			} 
+			else {
+					WalkAround ();
 			}
-
-		}
-		else{
-			_texture.SetActive(activeTexture);
-			activ = false;
-			CameraController.Instance.setVortexState(CameraController.VortexState.DEC);
-			CameraController.Instance.setNoiseAndScratches(false);
-			GameController.Instance.stopVibration();
-			if(followPlayer){
-				StartWalk();
-				if(Time.time > timeForSwitchAppear){
-					timeForSwitchAppear = Time.time + Random.Range(timeAppear-0.5f, timeAppear+1.5f);
-					activeTexture = !activeTexture;
-				}
-				if(Time.time > timeFollowPlayer){
-					followPlayer = false;
-					canSwitchPosition = true;
-					GetNewPosition();
-					switchPosition();
-					_smoke.SetActive(false);
-					activeTexture = false;
-				}
+			break;
+		case State.FollowPlayer: 
+			StartWalk ();
+			if (Time.time > timeFollowPlayer) {
+				GetNewPosition ();
+				switchPosition ();
+				_smoke.SetActive (false);
+				_texture.SetActive (false);
+				timeToNotAppear = Time.time + Random.Range (4f, 6f);
+				_state = State.NotAppear;
 			}
-			else{
-				if(canSwitchPosition) WalkAround();
-			}
+			break;
 		}
 	}
 
@@ -103,20 +88,12 @@ public class Spirit : MonoBehaviour {
 		}
 	}
 	
-	IEnumerator Wait(){
-		float time = Random.Range(minWaitTime, maxWaitTime);
-		yield return new WaitForSeconds(time);
-		canSwitchPosition = true;
-	}
-	
 	void GetNewPosition(){
 		currentTarget = listPosition[Random.Range (0, listPosition.Count)];
-		StartCoroutine(Wait());
 	}
 
 	void switchPosition(){
 		transform.position = currentTarget.position;
-		canSwitchPosition = false;
 		GetNewPosition ();
 	}
 
@@ -124,7 +101,6 @@ public class Spirit : MonoBehaviour {
 		if(currentTarget != null){
 			agent.SetDestination(currentTarget.position);
 			if(CheckDistance(currentTarget.position) <= 2f){
-				canSwitchPosition = false;
 				GetNewPosition();
 			}
 		}
@@ -132,8 +108,8 @@ public class Spirit : MonoBehaviour {
 
 	void StartWalk(){
 		if(CheckDistance(targetPlayer.transform.position)>= 4f){
-				agent.SetDestination(targetPlayer.transform.position);
-			}
+			agent.SetDestination(targetPlayer.transform.position);
+		}
 	}
 
 	//face the target

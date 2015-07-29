@@ -116,6 +116,7 @@ namespace UnityStandardAssets.ImageEffects
 		}
 		public void resetImageEffect(){
 			CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
+			CameraController.Instance.setNoiseAndScratches(false);
 		}
 
 		public void resetBeginningRoom(){
