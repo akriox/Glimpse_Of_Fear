@@ -8,7 +8,7 @@ public class Inventory : MonoBehaviour {
 
 	public void Awake(){
 		Instance = this;
-		glowStickStash = 0;
+		glowStickStash = 500;
 	}
 
 	public void addGlowStick(int qty){
