@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GateAlley : MonoBehaviour {
+public class ActivateObject : MonoBehaviour {
+	
+	public GameObject target;
 
 	public void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
-			Destroy(this.gameObject.transform.parent.gameObject);
+			target.SetActive(true);
+			Destroy(this.gameObject);
 		}
 	}
 }

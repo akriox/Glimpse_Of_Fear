@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TriggerBridge : MonoBehaviour {
+public class CollapseBridge : MonoBehaviour {
 
 	public GameObject weakspot;
 	private Rigidbody[] plank;
