@@ -36,7 +36,7 @@ namespace UnityStandardAssets.ImageEffects
 			} 
 			else {
 				GetPaths();
-				index = 1;
+				index = 5;
 				if(listPaths.Count > 0) GetNewPosition();
 			}
 		}
@@ -106,7 +106,7 @@ namespace UnityStandardAssets.ImageEffects
 			ready = true;
 		}
 
-		public bool isReday(){
+		public bool isReady(){
 			return ready;
 		}
 
@@ -121,13 +121,15 @@ namespace UnityStandardAssets.ImageEffects
 
 		public void resetBeginningRoom(){
 			type = MovementTypes.Follow;
-			index = 1;
-			currentTarget = listPaths [index-1];
-			transform.position = new Vector3 (currentTarget.transform.position.x, currentTarget.transform.position.y, currentTarget.transform.position.z);
+			index = 5;
+			if (listPaths.Count >= index) {
+				currentTarget = listPaths [index - 1];
+				transform.position = new Vector3 (currentTarget.transform.position.x, currentTarget.transform.position.y, currentTarget.transform.position.z);
+			}
 		}
 		public void resetEndRoom(){
 			type = MovementTypes.Reverse;
-			index = listPaths.Count-1;
+			index = listPaths.Count-5;
 			currentTarget = listPaths [index-1];
 			transform.position = new Vector3 (currentTarget.transform.position.x, currentTarget.transform.position.y, currentTarget.transform.position.z);
 		}

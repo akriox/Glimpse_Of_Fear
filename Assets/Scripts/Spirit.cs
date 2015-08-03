@@ -19,9 +19,10 @@ public class Spirit : MonoBehaviour {
 	private Quaternion rotation;
 
 	[SerializeField] private Transform PositionSpirit;
-	[SerializeField][Range(1.5F, 3.5F)] private float timeForFollowPlayer;
+	[SerializeField][Range(1.5F, 3.5F)] private float timeForFollowPlayer = 2f;
 	[SerializeField] private GameObject _texture;
 	[SerializeField] private GameObject _smoke;
+	[SerializeField][Range(5f, 20f)] private float distDetection = 15f;
 	private float timeFollowPlayer;
 	private float timeToNotAppear;
 
@@ -51,7 +52,7 @@ public class Spirit : MonoBehaviour {
 			GameController.Instance.stopVibration ();
 			break;
 		case State.Appear:
-			if (_gazeAwareComponent.HasGaze) {
+			if (_gazeAwareComponent.HasGaze && nearPlayer(distDetection)) {
 				if (!_audioSource.isPlaying)_audioSource.Play ();
 				CameraController.Instance.setVortexState (CameraController.VortexState.INC);
 				CameraController.Instance.setNoiseAndScratches (true);
@@ -68,7 +69,8 @@ public class Spirit : MonoBehaviour {
 					WalkAround ();
 			}
 			break;
-		case State.FollowPlayer: 
+		case State.FollowPlayer:
+			faceTarget (targetPlayer.transform.position);
 			StartWalk ();
 			if (Time.time > timeFollowPlayer) {
 				GetNewPosition ();
@@ -107,7 +109,7 @@ public class Spirit : MonoBehaviour {
 	}
 
 	void StartWalk(){
-		if(CheckDistance(targetPlayer.transform.position)>= 4f){
+		if(!nearPlayer(4f)){
 			agent.SetDestination(targetPlayer.transform.position);
 		}
 	}
@@ -118,8 +120,12 @@ public class Spirit : MonoBehaviour {
 		rotation = Quaternion.LookRotation (new Vector3 (direction.x, 0, direction.z));
 		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, 1000 * Time.deltaTime);
 	}
+	private bool nearPlayer(float dist){
+		if (CheckDistance (targetPlayer.transform.position) < dist) return true;
+		return false;	
+	}
 
-	float CheckDistance(Vector3 v){
+	private float CheckDistance(Vector3 v){
 		return Vector3.Distance(transform.position, v);
 	}
 }
