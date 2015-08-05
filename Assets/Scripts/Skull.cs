@@ -5,10 +5,8 @@ using System.Collections;
 public class Skull : MonoBehaviour {
 
 	private GazeAwareComponent _gazeAwareComponent;
-
-	//private AudioSource audioSource;
-	//private bool facing;	
-
+	
+	private Light[] eye;
 	private GameObject player;
 	private Vector3 dir;
 	private Quaternion rotation;
@@ -17,30 +15,15 @@ public class Skull : MonoBehaviour {
 	
 	public void Start(){
 		_gazeAwareComponent = GetComponent<GazeAwareComponent>();
-
-		//audioSource = GetComponent<AudioSource>();
-
+		eye = GetComponentsInChildren<Light>();
 		angleOrigine = transform.eulerAngles.x;
 		player = GameObject.FindGameObjectWithTag("Player");
 	}
 
 	public void Update () {
-		if(_gazeAwareComponent.HasGaze){
+		if(_gazeAwareComponent.HasGaze && eye[0].enabled && eye[1].enabled){
 			faceTargetAt(player.transform.position);
-
-			/*
-			if(!audioSource.isPlaying && facing == false){
-				audioSource.Play();
-				facing = true;
-			}
-			*/
 		}
-		/*
-		else{
-			facing = false;
-			audioSource.Pause();
-		}
-		*/
 	}
 
 	private void faceTargetAt(Vector3 at){
