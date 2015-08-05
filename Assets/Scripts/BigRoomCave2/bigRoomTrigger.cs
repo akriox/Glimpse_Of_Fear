@@ -5,18 +5,32 @@ namespace UnityStandardAssets.ImageEffects
 {
 	public class bigRoomTrigger: MonoBehaviour {
 
-		[SerializeField]private GameObject Path;
+		[SerializeField]private GameObject[] Path;
 		void Start(){
-			Path.SetActive(false);
+			if (Path != null) {
+				foreach (GameObject path in Path) {
+					path.SetActive (false);
+				}
+			}
 		}
 		public void OnTriggerEnter(Collider other) {
 			if (other.gameObject.tag == "Player") {
-				Path.SetActive(true);
+				if (Path != null) {
+					foreach(GameObject path in Path)
+					{
+						path.SetActive(true);
+					}
+				}
 			}
 		}
 		public void OnTriggerExit(Collider other) {
 			if (other.gameObject.tag == "Player") {
-				Path.SetActive(false);
+				if (Path != null) {
+					foreach(GameObject path in Path)
+					{
+						path.SetActive(false);
+					}
+				}
 			}
 		}
 	}
