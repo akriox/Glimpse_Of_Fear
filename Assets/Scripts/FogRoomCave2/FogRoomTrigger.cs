@@ -28,9 +28,10 @@ namespace UnityStandardAssets.ImageEffects
 					}
 					break;
 				case 1:
+					CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
+					CameraController.Instance.setNoiseAndScratches(false);
+					FollowPath.Instance.setFinish();
 					if (desactivAnObject != null && desactivAnObject.activeSelf){
-						FollowPath.Instance.resetImageEffect();
-						FollowPath.Instance.setFinish();
 						desactivAnObject.SetActive(false);
 					}
 					break;
