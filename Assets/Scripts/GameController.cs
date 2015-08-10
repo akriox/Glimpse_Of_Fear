@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour {
 	public GameObject keyboardWidget;
 	public GameObject gamepadWidget;
 
+	public Text debugText;
+
 	public void Awake(){
 		Instance = this;
 	}
@@ -53,5 +55,11 @@ public class GameController : MonoBehaviour {
 		GamePadState state = GamePad.GetState(PlayerIndex.One);
 		if(state.IsConnected) gamepadWidget.GetComponent<Image>().enabled = b;
 		else keyboardWidget.GetComponent<Image>().enabled = b;
+	}
+
+	public IEnumerator displayDebug(string str, float s){
+		debugText.text = str;
+		yield return new WaitForSeconds(s);
+		debugText.text = "";
 	}
 }
