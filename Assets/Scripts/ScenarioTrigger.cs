@@ -8,12 +8,13 @@ public class ScenarioTrigger : MonoBehaviour {
 	
 	public void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
-			StartCoroutine(GameController.Instance.displayDebug(str, s));
+			GameController.Instance.displayDebug(str);
 		}
 	}
 	
 	public void OnTriggerExit(Collider other){
 		if(other.gameObject.tag == "Player"){
+			GameController.Instance.displayDebug("");
 			Destroy(this.gameObject);
 		}
 	}
