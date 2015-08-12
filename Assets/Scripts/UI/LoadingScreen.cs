@@ -13,7 +13,6 @@ public class LoadingScreen : MonoBehaviour {
 	private Image fade;
 	private RawImage background;
 	private Text display;
-	private int progress = 0;
 	private bool levelLoaded;
 	private int sceneTransition = 0;
 
@@ -53,13 +52,11 @@ public class LoadingScreen : MonoBehaviour {
 	public IEnumerator loadScene(int index){
 
 		fading = Fading.IN;
-		display.text = "LOADING " + progress + "%";
+		display.text = "LOADING...";
 		
 		AsyncOperation async = Application.LoadLevelAsync(index);
 		
 		while(!async.isDone){
-			progress = (int)(async.progress * 100);
-			display.text = "LOADING " + progress + "%";
 			yield return null;
 		}
 	}

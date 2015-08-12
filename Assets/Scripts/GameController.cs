@@ -57,9 +57,7 @@ public class GameController : MonoBehaviour {
 		else keyboardWidget.GetComponent<Image>().enabled = b;
 	}
 
-	public IEnumerator displayDebug(string str, float s){
+	public void displayDebug(string str){
 		debugText.text = str;
-		yield return new WaitForSeconds(s);
-		debugText.text = "";
 	}
 }

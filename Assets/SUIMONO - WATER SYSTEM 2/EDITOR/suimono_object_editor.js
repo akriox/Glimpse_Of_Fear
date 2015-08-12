@@ -1,4 +1,3 @@
-
 @script ExecuteInEditMode()
 @CustomEditor (SuimonoObject)
 

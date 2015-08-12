@@ -92,11 +92,7 @@ public class Suimono_reflectionMirror : MonoBehaviour
 		reflectionCamera.cullingMask = ~(1<<4) & m_ReflectLayers.value; // never render water layer
 		//reflectionCamera.cullingMask = ~(1<<2) & m_ReflectLayers.value; // never render transparent fx layer
         reflectionCamera.targetTexture = m_ReflectionTexture;
-		#if UNITY_5_0
 		GL.invertCulling = true;
-		#else
-        GL.SetRevertBackfacing (true);
-		#endif
 		reflectionCamera.transform.position = newpos;
         Vector3 euler = cam.transform.eulerAngles;
         reflectionCamera.transform.eulerAngles = new Vector3(0, euler.y, euler.z);
@@ -107,11 +103,7 @@ public class Suimono_reflectionMirror : MonoBehaviour
         reflectionCamera.Render();
 
         reflectionCamera.transform.position = oldpos;
-		#if UNITY_5_0
 		GL.invertCulling = false;
-		#else
-		GL.SetRevertBackfacing (false);
-		#endif
         //Material[] materials = renderer.sharedMaterials;
         //foreach( Material mat in materials ) {
         //    if( mat.HasProperty("_ReflectionTex") )

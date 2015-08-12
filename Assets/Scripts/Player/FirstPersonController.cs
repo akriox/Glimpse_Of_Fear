@@ -73,6 +73,7 @@ public class FirstPersonController : MonoBehaviour
 		groundType = GroundType.SAND;
 
 		rightHand = GameObject.FindGameObjectWithTag("RightHand");
+		rightHand.SetActive(false);
     }
 
     // Update is called once per frame
