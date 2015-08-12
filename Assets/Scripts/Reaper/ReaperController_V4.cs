@@ -6,7 +6,7 @@ using System.Linq;
 
 [RequireComponent(typeof(UserPresenceComponent))]
 [RequireComponent(typeof(GazeAwareComponent))]
-public class ReaperController_V3 : MonoBehaviour {
+public class ReaperController_V4 : MonoBehaviour {
 	
 	private GazeAwareComponent _gazeAwareComponent;
 	private UserPresenceComponent _userPresenceComponent;
@@ -26,16 +26,9 @@ public class ReaperController_V3 : MonoBehaviour {
 	private float timeToReset;
 	private int index = 1;
 	
-	private bool walk; 
-	private bool followPlayer;
-	private bool playerClose;
-	private bool haveJumpScare;
-	private bool canBeHaveSomething = true;
-	private bool playerHasBeenSeen;
-	
 	private Renderer myRenderer;
 	private float areaMinPlayerDetection = 3f;
-
+	
 	[SerializeField] private Transform pathToFollow;
 	[SerializeField][Range(0.1F, 5.0F)] private float lumThreshold;
 	[SerializeField][Range(1.0F, 10.0F)] private float initSpeedReaper;
@@ -51,9 +44,9 @@ public class ReaperController_V3 : MonoBehaviour {
 	[SerializeField] private AudioSource atmosphere;        
 	[SerializeField] private GameObject jumpScare;
 	[SerializeField] private bool randomMove;
-
-
-	private enum State{NotAppear, Appear, FollowPlayer};
+	
+	
+	private enum State{moveWraith, FollowPlayer, PlayerInArea, PlayerClose, AreNothing, WraithCatchPlayer};
 	private State _state;
 	
 	public void Start(){
@@ -65,7 +58,7 @@ public class ReaperController_V3 : MonoBehaviour {
 		//save reaper Y angle and his original position
 		angleYOrigine = transform.eulerAngles.y;
 		myRenderer = GetComponent<Renderer> ();
-
+		
 		
 		//test if the field is not empty
 		if(pathToFollow == null){
@@ -78,106 +71,114 @@ public class ReaperController_V3 : MonoBehaviour {
 	}
 	
 	public void Update(){
-		moveReaper ();
-		//the reaper caught the player
-		if (haveJumpScare) {
+		switch(_state){
+		case State.moveWraith:
+			//Initial state of the wraith (patrol)
+			if (_gazeAwareComponent.HasGaze) {
+				setPlayerPath ();
+				index = (index > 1 ) ? index - 1 : listPaths.Count;
+				currentTarget = targetPlayer.transform.position;
+				_state = State.FollowPlayer;
+			}
+			StartWalk (currentTarget);
+			if (isPlayerFound())_state = State.PlayerInArea;
+			break;
+
+		case State.FollowPlayer:
+			//State where the wraith is following the player
+			PlayLookSound ();
+			setNewPositionAroundPlayer (Vector3.Distance (transform.position, targetPlayer.transform.position));
+			if(Time.time > delayPlayer) {
+				setPlayerPath ();
+			}
+			StartWalk(currentTarget);
+			//the player close his eyes so the wraith don't continue to get the current position of the player
+			if (!_userPresenceComponent.IsUserPresent) {
+				setPlayerPath();
+				_state = State.moveWraith;
+			}
+			break;
+
+		case State.PlayerInArea:
+			//State where the player is in the wraith area detection
+			faceTarget (targetPlayer.transform.position);
+			PlayCloseSound ();
+			if (closeToTheTarget (areaMinPlayerDetection, targetPlayer.transform.position)) {
+				stayCloseToThePlayer = Time.time + timeStayCloseToThePlayer;
+				_state = State.PlayerClose;
+			} 
+			setPlayerPath ();
+			getPlayerPath ();
+			//the wraith is near of the target (here the player)
+			if (_userPresenceComponent.IsUserPresent && Flashlight.Instance.lum.intensity > lumThreshold) {
+				playJumpScare();
+			}
+			break;
+
+		case State.PlayerClose:
+			//the wraith has detected the player so he stop and stay close to him during a amount of time
+			faceTarget (targetPlayer.transform.position);
+			turnAround ();
+			//the wraith is near of the target (here the player)
+			if (_userPresenceComponent.IsUserPresent && Flashlight.Instance.lum.intensity > lumThreshold) {
+				playJumpScare();
+			}
+			if (Time.time > stayCloseToThePlayer) {
+				setInitialInformation ();
+				delayToHaveSomething = Time.time + 3.0f;
+				_state = State.AreNothing;
+			}
+			break;
+
+		case State.WraithCatchPlayer:
+			//the wraith caught the player so after a certain amount of time reset the position and state of the wraith
 			if(Time.time > timeToReset){
 				transform.position = (listPaths.Single (p => p.name == "Path" + index)).position;
 				transform.position = new Vector3(transform.position.x,0.0f,transform.position.z);
 				myRenderer.enabled = true;
-				canBeHaveSomething = false;
-				delayToHaveSomething = Time.time + 3.0f;
 				setInitialInformation();
+				_state = State.moveWraith;
 			}
-		}
-		if(!canBeHaveSomething && Time.time > delayToHaveSomething)
-			canBeHaveSomething = true;
-	}
+			break;
 
-	private void detectPlayer(){
-		//the player is near of the reaper. The reaper is moving towards the player
-		if (closeToTheTarget (areaMaxPlayerDetection, targetPlayer.transform.position) && canBeHaveSomething) {
-			if (closeToTheTarget (areaMinPlayerDetection, targetPlayer.transform.position)) {
-				if (!playerClose) {
-					playerClose = true;
-					stayCloseToThePlayer = Time.time + timeStayCloseToThePlayer;
-					walk = false;
-				}
-				moveAround ();
-				//the reaper has detected the player so he stop and stay close to him during a amount of time
-				if (playerClose && Time.time > stayCloseToThePlayer) {
-					setInitialInformation ();
-					canBeHaveSomething = false;
-					delayToHaveSomething = Time.time + 3.0f;
-				}
-			} 
-			else {
-				setPlayerPath ();
-				getPlayerPath ();
-				playerClose = false;
-				walk = true;
-			}
-			faceTarget (targetPlayer.transform.position);
-			PlayCloseSound ();
-			//the reaper is near of the target (here the player)
-			if (_userPresenceComponent.IsUserPresent && Flashlight.Instance.lum.intensity > lumThreshold && !haveJumpScare) {
-				jumpScare.SetActive (true);
-				haveJumpScare = true;
-				timeToReset = Time.time + 2.0f;
-				myRenderer.enabled = false;
-			}
+		case State.AreNothing:
+			//the wraith found nothing so he come back to his initial walk
+			StartWalk (currentTarget);
+			if(Time.time > delayToHaveSomething)
+				_state = State.moveWraith;
+			break;
 		}
 	}
 
-	private void moveReaper(){
-		//the player is looking the reaper
-		if (_gazeAwareComponent.HasGaze) {
-			PlayLookSound ();
-			setNewPositionAroundPlayer (Vector3.Distance (transform.position, targetPlayer.transform.position));
-			if(!playerHasBeenSeen){
-				playerHasBeenSeen = true;
-				followPlayer = true;
-				setPlayerPath ();
-				index = (index > 1 ) ? index - 1 : listPaths.Count;
-			}
-			currentTarget = targetPlayer.transform.position;
-		}
-		//follow the path save (playerPath and normalPath)
-		else {
-			if(followPlayer && Time.time > delayPlayer) {
-				setPlayerPath ();
-			}
-			if (walk) {
-				StartWalk (currentTarget);
-			}
-		}
-		detectPlayer ();
-		//the player close his eyes so the reaper don't continue to get the current position of the player
-		if (!_userPresenceComponent.IsUserPresent && followPlayer) {
-			followPlayer = false;
-			setPlayerPath();
-		}
+	private void playJumpScare(){
+		//launch the jumpscare
+		jumpScare.SetActive (true);
+		timeToReset = Time.time + 2.0f;
+		myRenderer.enabled = false;
+		_state = State.WraithCatchPlayer;
 	}
 
-	//the reaper is moving around the player
-	private void moveAround(){
+	private bool isPlayerFound(){
+		//return true if the player is in the big area detection of the wraith
+		if (closeToTheTarget (areaMaxPlayerDetection, targetPlayer.transform.position)) 
+			return true;   
+		return false;
+	}
+
+
+	private void turnAround(){
+		//the wraith is turning around the player
 		transform.RotateAround (targetPlayer.transform.position, Vector3.up, 30 * Time.deltaTime);
 	}
-
+	
 	//put initial information for the reaper
 	void setInitialInformation(){
 		jumpScare.SetActive(false);
-		haveJumpScare = false;
-		followPlayer = false;
-		playerClose = false;
-		playerHasBeenSeen = false;
-		walk = false;
 		moveSpeed = initSpeedReaper;
 		playerPath.Clear ();
 		GetNewPosition();
 		StopCloseSound();
 		StopLookSound();
-
 	}
 	
 	//the reaper save the current position of the player
@@ -185,7 +186,7 @@ public class ReaperController_V3 : MonoBehaviour {
 		playerPath.Add (targetPlayer.transform.position);
 		delayPlayer = Time.time + timeDropPathPlayer;
 	}
-
+	
 	//get the normal path of the reaper
 	void GetPaths(){
 		foreach(Transform temp in pathToFollow){
@@ -216,11 +217,8 @@ public class ReaperController_V3 : MonoBehaviour {
 	//walk forward the target
 	private void StartWalk(Vector3 targ){
 		moveTowardTarget(targ);
-		if(playerHasBeenSeen)
-			moveSpeed += increamentSpeedOfTheReaper;
 		//the target is met
 		if( closeToTheTarget(1f, targ)){
-			walk = false;
 			GetNewPosition();
 		}
 	}
@@ -229,7 +227,6 @@ public class ReaperController_V3 : MonoBehaviour {
 	IEnumerator Wait(){
 		float time = Random.Range(minWaitTime, maxWaitTime);
 		yield return new WaitForSeconds(time);
-		walk = true;
 	}
 	
 	//set the reaper to a new position around the player
@@ -240,12 +237,12 @@ public class ReaperController_V3 : MonoBehaviour {
 			z = -z;
 		transform.position = new Vector3 (x+targetPlayer.transform.position.x , transform.position.y,z+targetPlayer.transform.position.z);
 	}
-
+	
 	private void getPlayerPath(){
 		currentTarget = playerPath [0];
 		playerPath.RemoveAt (0);
 	}
-
+	
 	//get the next step of the path
 	private void GetNewPosition(){
 		//follow player path
