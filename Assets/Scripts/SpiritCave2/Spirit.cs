@@ -19,9 +19,9 @@ public class Spirit : MonoBehaviour {
 	private Quaternion rotation;
 
 	[SerializeField] private Transform PositionSpirit;
-	[SerializeField][Range(1.5F, 3.5F)] private float timeForFollowPlayer = 2f;
 	[SerializeField] private GameObject _texture;
 	[SerializeField] private GameObject _smoke;
+	[SerializeField][Range(1.5F, 3.5F)] private float timeForFollowPlayer = 2f;
 	[SerializeField][Range(5f, 20f)] private float distDetection = 15f;
 	private float timeFollowPlayer;
 	private float timeToNotAppear;
