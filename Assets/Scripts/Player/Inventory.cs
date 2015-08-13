@@ -9,7 +9,7 @@ public class Inventory : MonoBehaviour {
 
 	public void Awake(){
 		Instance = this;
-		glowStickStash = 3;
+		glowStickStash = 0;
 	}
 
 	public void addGlowStick(int qty){

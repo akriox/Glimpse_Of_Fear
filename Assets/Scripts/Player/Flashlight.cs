@@ -34,7 +34,7 @@ public class Flashlight : MonoBehaviour {
 
 		defaultColor = batteryLevel.GetComponent<Renderer>().material.color;
 
-		_state = State.OFF;
+		_state = State.ON;
 		_maxIntensity = lum.intensity;
 		_power = _maxIntensity / _lifespan;
 	}
