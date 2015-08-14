@@ -8,8 +8,21 @@ labels:
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
+    100000: //RootNode
+    100002: Table_Metal_Legs
+    100004: Table_Metal_Top
+    400000: //RootNode
+    400002: Table_Metal_Legs
+    400004: Table_Metal_Top
+    2300000: Table_Metal_Legs
+    2300002: Table_Metal_Top
+    3300000: Table_Metal_Legs
+    3300002: Table_Metal_Top
     4300000: Table_Metal_Legs
     4300002: Table_Metal_Top
+    6400000: Table_Metal_Legs
+    6400002: Table_Metal_Top
+    11100000: //RootNode
   materials:
     importMaterials: 1
     materialName: 3
