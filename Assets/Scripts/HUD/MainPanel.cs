@@ -16,7 +16,6 @@ public class MainPanel: MonoBehaviour {
 	
 	public void OpenOptions(){
 		optionsPanel.SetActive(!optionsPanel.activeSelf);
-		eventSystem.SetSelectedGameObject(optionsPanel.GetComponentInChildren<Button>().gameObject);
 	}
 
 	public void CloseOptions(){

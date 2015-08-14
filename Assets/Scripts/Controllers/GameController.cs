@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour {
 
 	public void Update () {
 		if(Input.GetButtonDown("Menu") && inGameMenu != null){
+			EyeLook.isActive = !EyeLook.isActive;
 			inGameMenu.SetActive(!inGameMenu.activeSelf);
 			Cursor.visible = !Cursor.visible;
 		}

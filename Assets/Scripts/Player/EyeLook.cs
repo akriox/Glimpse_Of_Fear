@@ -7,6 +7,8 @@ public class EyeLook : MonoBehaviour {
 	[SerializeField][Range(-60.0f, 60.0f)] public float minAngle;
 	[SerializeField][Range(-60.0f, 60.0f)] public float maxAngle;
 
+	public static bool isActive = true;
+
 	private GazePointDataComponent _gazePointDataComponent;
 	private GameObject player;
 	private Vector3 gazePointScreen;
@@ -14,7 +16,6 @@ public class EyeLook : MonoBehaviour {
 	private Quaternion targetRotation;
 	private Quaternion lastRotation;
 	private float velocity;
-	private float sensitivity;
 
 	private float w;
 	private float h;
@@ -23,8 +24,7 @@ public class EyeLook : MonoBehaviour {
 	private Rect[] r;
 
 	public void Start () {
-		sensitivity = Settings.EyeXSensitivity;
-
+	
 		_gazePointDataComponent = GetComponent<GazePointDataComponent>();
 		player = GameObject.FindGameObjectWithTag("Player");
 
@@ -44,10 +44,12 @@ public class EyeLook : MonoBehaviour {
 	}
 	
 	public void LateUpdate(){
-		player.transform.rotation = lastRotation;
-		var gazePoint = _gazePointDataComponent.LastGazePoint;
-		if(gazePoint.IsValid && gazePoint.IsWithinScreenBounds){
-			centerCamera(gazePoint.Screen);
+		if(isActive){
+			player.transform.rotation = lastRotation;
+			var gazePoint = _gazePointDataComponent.LastGazePoint;
+			if(gazePoint.IsValid && gazePoint.IsWithinScreenBounds){
+				centerCamera(gazePoint.Screen);
+			}
 		}
 	}
 
@@ -66,7 +68,7 @@ public class EyeLook : MonoBehaviour {
 			return getVelocity(point, n+1);
 		}
 		else{
-			return sensitivity - (n*0.1f);
+			return Settings.EyeXSensitivity - (n*0.1f);
 		}
 	}
 

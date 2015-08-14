@@ -5,26 +5,23 @@ public class FPSHand : MonoBehaviour {
 
 	public bool smooth;
 	public float smoothTime = 5.0f;
-	private float XSensitivity;
-	private float YSensitivity;
 	private float min = -30.0f;
 	private float max = 30.0f;
 	private Quaternion targetRotation;
 	private float initRotZ;
 
 	public void Start(){
-		XSensitivity = YSensitivity = Settings.MousePadXYSensitivity;
 		targetRotation = transform.localRotation;
 		initRotZ = targetRotation.z;
 	}
 
 	public void Update(){
-
+		
 		float yRot = Input.GetAxis("RStickH") + Input.GetAxis("RStickV") != 0.0f ? Input.GetAxis("RStickH") : Input.GetAxis("Mouse X");
 		float xRot = Input.GetAxis("RStickH") + Input.GetAxis("RStickV") != 0.0f ? -Input.GetAxis("RStickV") : Input.GetAxis("Mouse Y");
 
-		yRot *= XSensitivity;
-		xRot *= YSensitivity;
+		yRot *= Settings.MousePadXYSensitivity;
+		xRot *= Settings.MousePadXYSensitivity;
 		
 		targetRotation *= Quaternion.Euler (-yRot, -xRot, 0f);
 		targetRotation = ClampRotationXYAxis(targetRotation);
