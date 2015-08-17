@@ -9,6 +9,7 @@ public class WallExplode : MonoBehaviour {
 	
 	public void Start(){
 		rocks = wall.GetComponentsInChildren<Collider>();
+		Physics.IgnoreLayerCollision (12, 13);
 	}
 
 	public void OnTriggerEnter(Collider other){
