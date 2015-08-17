@@ -31,4 +31,5 @@ public class Skull : MonoBehaviour {
 		rotation = Quaternion.LookRotation (new Vector3 (dir.x, angleOrigine, dir.z));
 		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, rotationSpeed * Time.deltaTime);
 	}
+
 }
