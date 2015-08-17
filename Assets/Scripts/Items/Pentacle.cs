@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class Pentacle : Collectible {
-	
+
+	public GameObject blockingRocks;
 	public GameObject firstCentralRoom;
 	public GameObject secondCentralRoom;
 	public GameObject skulls;
@@ -17,6 +18,7 @@ public class Pentacle : Collectible {
 	public new void Update () {
 		base.Update();
 		if(pickedUp){
+			Destroy(blockingRocks);
 			Inventory.Instance.hasPentacle = true;
 			GameController.Instance.displayWidget(false);
 			Destroy (firstCentralRoom);

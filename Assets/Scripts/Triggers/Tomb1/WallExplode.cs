@@ -3,7 +3,6 @@
 public class WallExplode : MonoBehaviour {
 
 	public GameObject wall;
-	public GameObject blockingRocks;
 	public GameObject smoke;
 	private Collider[] rocks;
 	
@@ -15,7 +14,6 @@ public class WallExplode : MonoBehaviour {
 	public void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
 			Explode();
-			Destroy(blockingRocks);
 		}
 	}
 
