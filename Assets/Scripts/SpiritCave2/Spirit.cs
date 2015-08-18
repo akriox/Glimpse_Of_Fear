@@ -48,14 +48,14 @@ public class Spirit : MonoBehaviour {
 		case State.NotAppear:	
 			if (Time.time > timeToNotAppear)_state = State.Appear;
 			CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
-			CameraController.Instance.setNoiseAndScratches (false);
+			CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
 			GameController.Instance.stopVibration ();
 			break;
 		case State.Appear:
 			if (_gazeAwareComponent.HasGaze && nearPlayer(distDetection)) {
 				if (!_audioSource.isPlaying)_audioSource.Play ();
 				CameraController.Instance.setVortexState (CameraController.VortexState.INC);
-				CameraController.Instance.setNoiseAndScratches (true);
+				CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.INC);
 				GameController.Instance.startVibration (0.8f, 0.8f);
 				faceTarget (targetPlayer.transform.position);
 				StartCoroutine (CameraController.Instance.Shake (2.0f, 0.05f, 10.0f));

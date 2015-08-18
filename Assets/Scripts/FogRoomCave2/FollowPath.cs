@@ -8,7 +8,9 @@ namespace UnityStandardAssets.ImageEffects
 	[RequireComponent(typeof(GazeAwareComponent))]
 	public class FollowPath : MonoBehaviour {
 		public static FollowPath Instance {get; private set;}
-		
+
+
+		public enum MovementTypes { Follow, Reverse };
 		public Transform pathToFollow;
 		[SerializeField][Range(2F, 10.0F)] private float speed;
 		[SerializeField][Range(2F, 5.0F)] private float DistanceMinForMove;
@@ -46,14 +48,14 @@ namespace UnityStandardAssets.ImageEffects
 		void Update () {
 			if (_gazeAwareComponent.HasGaze && ready) {
 				if(audioSource.isPlaying) pauseASong(); 
-				CameraController.Instance.setVortexState(CameraController.VortexState.DEC);
-				CameraController.Instance.setNoiseAndScratches(false);
+				//CameraController.Instance.setVortexState(CameraController.VortexState.DEC);
+				CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.DEC);
 			} 
 			else {
 				if(ready){
 					if(!audioSource.isPlaying) playASong(); 
-					CameraController.Instance.setVortexState(CameraController.VortexState.INC);
-					CameraController.Instance.setNoiseAndScratches(true);
+					//CameraController.Instance.setVortexState(CameraController.VortexState.INC);
+					CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.INC);
 				}
 			}
 			Walk();
@@ -65,8 +67,8 @@ namespace UnityStandardAssets.ImageEffects
 			}
 		}
 		
-		void GetNewPosition(MovementTypes t){
-			switch (t) {
+		void GetNewPosition(MovementTypes type){
+			switch (type) {
 				case MovementTypes.Follow:
 					index = (index < listPaths.Count) ? index + 1 : 1;
 					currentTarget = listPaths.Single (p => p.name == "Path" + index);
@@ -74,7 +76,6 @@ namespace UnityStandardAssets.ImageEffects
 				case MovementTypes.Reverse:
 					index = (index > 1) ? index - 1 : listPaths.Count;
 					currentTarget = listPaths.Single (p => p.name == "Path" + index);
-					
 				break;
 			}
 		}
@@ -83,22 +84,19 @@ namespace UnityStandardAssets.ImageEffects
 		void Walk(){
 			if(currentTarget != null){
 				transform.position = Vector3.MoveTowards(transform.position, currentTarget.position, Time.deltaTime * speed);
-				if(CheckDistance() <= 0.5f &&CheckPlayerDistance()>=DistanceMaxBeforeComeBack){
+				if(CheckDistance(currentTarget.transform.position) <= 0.5f &&CheckDistance(player.transform.position)>=DistanceMaxBeforeComeBack){
 					GetNewPosition(contraryType);
 				}
 				else {
-					if(CheckDistance() <= 0.5f && CheckPlayerDistance()<=DistanceMinForMove){
+					if(CheckDistance(currentTarget.transform.position) <= 0.5f && CheckDistance(player.transform.position)<=DistanceMinForMove){
 						GetNewPosition(type);
 					}
 				}
 			}
 		}
-		float CheckPlayerDistance(){
-			return Vector3.Distance(transform.position, player.transform.position);
-		}
 		
-		float CheckDistance(){
-			return Vector3.Distance(transform.position, currentTarget.position);
+		float CheckDistance(Vector3 to){
+			return Vector3.Distance(transform.position, to);
 		}
 
 		private void playASong(){
@@ -121,10 +119,6 @@ namespace UnityStandardAssets.ImageEffects
 			ready = false;
 			audioSource.Stop();
 		}
-		public void resetImageEffect(){
-			CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
-			CameraController.Instance.setNoiseAndScratches(false);
-		}
 
 		public void resetBeginningRoom(){
 			type = MovementTypes.Follow;
@@ -145,4 +139,3 @@ namespace UnityStandardAssets.ImageEffects
 	}
 }
 
-public enum MovementTypes { Follow, Reverse }

@@ -10,11 +10,6 @@ namespace UnityStandardAssets.ImageEffects
 		public GameObject desactivAnObject;
 		public GameObject activAnObject;
 
-		public void resetImageEffect(){
-			CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
-			CameraController.Instance.setNoiseAndScratches(false);
-		}
-
 		public void OnTriggerEnter(Collider other) {
 
 			if (other.gameObject.tag == "Player") {
@@ -22,18 +17,16 @@ namespace UnityStandardAssets.ImageEffects
 					activAnObject.SetActive(true);
 				switch (_case) {
 				case 0:
+					canDesactiveAnObject();
 					if(!FollowPath.Instance.isReady()){
 						FollowPath.Instance.setReady();
 						FollowPath.Instance.resetBeginningRoom ();
 					}
 					break;
 				case 1:
-					CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
-					CameraController.Instance.setNoiseAndScratches(false);
+					resetImageEffect();
 					FollowPath.Instance.setFinish();
-					if (desactivAnObject != null && desactivAnObject.activeSelf){
-						desactivAnObject.SetActive(false);
-					}
+					canDesactiveAnObject();
 					break;
 				case 2:
 					if(!FollowPath.Instance.isReady()){
@@ -42,11 +35,20 @@ namespace UnityStandardAssets.ImageEffects
 					}
 					break;
 				case 3:
-					if (desactivAnObject != null && desactivAnObject.activeSelf){
-						desactivAnObject.SetActive(false);
-					}
+						canDesactiveAnObject();
 					break;
 				}
+			}
+		}
+
+		public void resetImageEffect(){
+			CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
+			CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.DEC);
+		}
+
+		public void canDesactiveAnObject(){
+			if (desactivAnObject != null && desactivAnObject.activeSelf) {
+				desactivAnObject.SetActive (false);
 			}
 		}
 	}

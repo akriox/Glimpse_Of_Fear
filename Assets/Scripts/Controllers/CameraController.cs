@@ -9,16 +9,22 @@ public class CameraController : MonoBehaviour {
 	private Camera _camera;
 
 	private Vortex _vortexScript;
+	private NoiseAndScratches _noiseAndScratches;
 	//private VertigoEffect _vertigoScript;
 	private ColorCorrectionCurves _colorCorrectionCurvesScript;
-	private NoiseAndScratches _noiseAndScratches;
+
 	
 	private bool _vertigo;
+	private bool _noiseAndScratchesNotActive;
 
 	public enum VortexState {INC, DEC, OFF};
+	public enum NoiseAndScratchesState {INC, DEC, OFF};
 	private VortexState _vortexState = VortexState.OFF;
+	private NoiseAndScratchesState _noiseAndScratchesState = NoiseAndScratchesState.OFF;
 	[SerializeField][Range(0.0f, 1.0f)] private float _vortexMaxRadius = 0.6f;
+	[SerializeField][Range(0.0f, 2.5f)] private float _noiseAndScratchesMaxValue = 1.5f;
 	[SerializeField][Range(0.0f, 1.0f)] private float _vortexSpeed = 1.0f;
+	[SerializeField][Range(0.0f, 1.0f)] private float _noiseAndScratchesMaxValueSpeed = 1.0f;
 
 	public void Awake(){
 		Instance = this;
@@ -31,10 +37,12 @@ public class CameraController : MonoBehaviour {
 		//_vertigoScript = _camera.GetComponent<VertigoEffect>();
 		_colorCorrectionCurvesScript = _camera.GetComponent<ColorCorrectionCurves>();
 		_noiseAndScratches = _camera.GetComponent<NoiseAndScratches>();
+		_noiseAndScratchesNotActive = true;
 	}
 
 	public void Update(){
 		VortexEffect();
+		NoiseAndScratchesEffect ();
 	}
 	
 	public void setVortexState(VortexState state){
@@ -45,8 +53,40 @@ public class CameraController : MonoBehaviour {
 		_colorCorrectionCurvesScript.enabled = b;
 	}
 
-	public void setNoiseAndScratches(bool b){
-		_noiseAndScratches.enabled = b;
+	public void setNoiseAndScratches(NoiseAndScratchesState state){
+		_noiseAndScratchesState = state;
+	}
+
+	private void NoiseAndScratchesEffect(){
+		switch (_noiseAndScratchesState) {
+			case NoiseAndScratchesState.INC:
+				if(_noiseAndScratchesNotActive){
+					_noiseAndScratches.enabled = true;
+					_noiseAndScratchesNotActive = false;
+				}
+				if(_noiseAndScratches.grainIntensityMax < _noiseAndScratchesMaxValue){
+					_noiseAndScratches.grainIntensityMax += _noiseAndScratchesMaxValueSpeed * Time.deltaTime;
+				}
+				else{
+					_noiseAndScratches.grainIntensityMax = _noiseAndScratchesMaxValue;
+					_noiseAndScratchesState = NoiseAndScratchesState.OFF;
+				}
+				break;
+			case NoiseAndScratchesState.DEC:
+				if(_noiseAndScratches.grainIntensityMax >0.0f){
+					_noiseAndScratches.grainIntensityMax -= _noiseAndScratchesMaxValueSpeed * Time.deltaTime;
+				}
+				else{
+					_noiseAndScratches.grainIntensityMax = 0.0f;
+					_noiseAndScratches.enabled = false;
+					_noiseAndScratchesNotActive = true;
+					_noiseAndScratchesState = NoiseAndScratchesState.OFF;
+				}
+				break;
+
+			case NoiseAndScratchesState.OFF:
+				break;
+		}
 	}
 
 	private void VortexEffect(){
