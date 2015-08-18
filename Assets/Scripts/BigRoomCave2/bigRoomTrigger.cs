@@ -7,11 +7,7 @@ namespace UnityStandardAssets.ImageEffects
 		
 		[SerializeField]private GameObject[] Path;
 
-		private AudioClip audioClip;
-
 		public void Start(){
-			audioClip = (AudioClip) Resources.Load("Audio/ghost_apparition01", typeof(AudioClip));
-
 			if (Path != null) {
 				foreach (GameObject path in Path) {
 					path.SetActive (false);
@@ -20,7 +16,6 @@ namespace UnityStandardAssets.ImageEffects
 		}
 		public void OnTriggerEnter(Collider other) {
 			if (other.gameObject.tag == "Player") {
-				EventSound.playClip(audioClip);
 				if (Path != null) {
 					foreach(GameObject path in Path)
 					{

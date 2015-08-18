@@ -9,7 +9,8 @@ public class lookPathReaper : MonoBehaviour {
 	[SerializeField] private Transform positionEnd;
 	[SerializeField] private GameObject triggerToDesactive;
 	[SerializeField] private GameObject[] pathToDesactive;
-	[SerializeField] [Range(1.5F, 3.0F)] private float timeSetActiv = 2.0F;
+	[SerializeField] private AudioClip _audioClip;
+	private float timeSetActiv = 0.5F;
 	private float timeUntilDesactivItSelf; 
 
 	private bool alreadyCall = false;
@@ -21,8 +22,10 @@ public class lookPathReaper : MonoBehaviour {
 	}
 	void Update () {
 		if (_gazeAwareComponent.HasGaze && !alreadyCall) {
+			if(_audioClip != null)
+				EventSound.playClip(_audioClip);
+
 			moveReaperBigRoom.Instance.setPosition (positionStart.position, positionEnd.position);
-			alreadyCall = true;
 			timeUntilDesactivItSelf = Time.time + timeSetActiv;
 			if(triggerToDesactive != null)
 				triggerToDesactive.SetActive(false);
@@ -31,8 +34,11 @@ public class lookPathReaper : MonoBehaviour {
 					path.SetActive (false);
 				}
 			}
+			alreadyCall = true;
 		}
-		if (alreadyCall && timeUntilDesactivItSelf > Time.time)
+		if (alreadyCall && Time.time >timeUntilDesactivItSelf) {
+			HeartBeat.playLoop();
 			this.enabled = false;
+		}
 	}
 }

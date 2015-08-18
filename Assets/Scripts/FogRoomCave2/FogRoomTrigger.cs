@@ -35,7 +35,7 @@ namespace UnityStandardAssets.ImageEffects
 					}
 					break;
 				case 3:
-						canDesactiveAnObject();
+					canDesactiveAnObject();
 					break;
 				}
 			}

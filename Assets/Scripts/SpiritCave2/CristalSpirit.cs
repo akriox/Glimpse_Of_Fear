@@ -18,11 +18,12 @@ public class CristalSpirit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (closeToTheTarget (distActivationCrystal, targetSpirit)) {
-			gazeEffects(activeMat);
-		} 
-		else {
-			gazeEffects(inactiveMat);
+		if (targetSpirit != null) {
+			if (closeToTheTarget (distActivationCrystal, targetSpirit)) {
+				gazeEffects (activeMat);
+			} else {
+				gazeEffects (inactiveMat);
+			}
 		}
 	}
 
