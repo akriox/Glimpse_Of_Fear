@@ -19,7 +19,7 @@ public class moveReaperBigRoom : MonoBehaviour {
 	private bool walk;
 	private Renderer _renderer;
 
-	[SerializeField][Range(1.0F, 10.0F)] public float moveSpeed;
+	[SerializeField][Range(1.0F, 15.0F)] public float moveSpeed = 10.0f;
 
 	public void Awake(){
 		Instance = this;
