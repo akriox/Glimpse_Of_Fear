@@ -9,6 +9,7 @@ public class Skull : MonoBehaviour {
 	private Light[] eye;
 	private GameObject player;
 	private Vector3 dir;
+	private Vector3 originalLook;
 	private Quaternion rotation;
 	private float angleOrigine;
 	private float rotationSpeed = 4.0f;
@@ -17,12 +18,17 @@ public class Skull : MonoBehaviour {
 		_gazeAwareComponent = GetComponent<GazeAwareComponent>();
 		eye = GetComponentsInChildren<Light>();
 		angleOrigine = transform.eulerAngles.x;
+		originalLook = new Vector3 (transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
 		player = GameObject.FindGameObjectWithTag("Player");
 	}
 
 	public void Update () {
-		if(_gazeAwareComponent.HasGaze && eye[0].enabled && eye[1].enabled){
-			faceTargetAt(player.transform.position);
+		if (eye [0].enabled && eye [1].enabled) {
+			if (_gazeAwareComponent.HasGaze) {
+				faceTargetAt (player.transform.position);
+			} else {
+				returnOriginalPosition ();
+			}
 		}
 	}
 
@@ -30,6 +36,11 @@ public class Skull : MonoBehaviour {
 		dir = (at - transform.position).normalized;
 		rotation = Quaternion.LookRotation (new Vector3 (dir.x, angleOrigine, dir.z));
 		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+	}
+
+	private void returnOriginalPosition(){
+		var target = Quaternion.Euler (originalLook);
+		transform.rotation = Quaternion.Slerp(transform.rotation, target,  Time.deltaTime * 2.0f);
 	}
 
 }
