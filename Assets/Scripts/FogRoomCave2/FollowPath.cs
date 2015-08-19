@@ -25,7 +25,12 @@ namespace UnityStandardAssets.ImageEffects
 		private GazeAwareComponent _gazeAwareComponent;
 		private AudioSource audioSource;
 		private bool ready;
-		
+
+		public AudioClip whisper;
+		private AudioClip nothing;
+
+		private FadingAudioSource _fadingAudioSource;
+
 		public void Awake(){
 			Instance = this;
 		}
@@ -33,8 +38,10 @@ namespace UnityStandardAssets.ImageEffects
 		void Start () {
 			ready = false;
 			audioSource = GetComponent<AudioSource>();
+			nothing = (AudioClip) Resources.Load("Audio/blank_sound", typeof(AudioClip));
 			player = GameObject.FindGameObjectWithTag("Player");
 			_gazeAwareComponent = GetComponent<GazeAwareComponent>();
+			_fadingAudioSource = GetComponent<FadingAudioSource> ();
 			if(pathToFollow == null){
 				Debug.LogError("Un GameObject 'Path' doit etre renseigné dans le script 'FollowPath.cs'.");
 			} 
@@ -100,11 +107,11 @@ namespace UnityStandardAssets.ImageEffects
 		}
 
 		private void playASong(){
-			audioSource.Play();
+			_fadingAudioSource.Fade (whisper, 0.8f, true);
 		}
 
 		private void pauseASong(){
-			audioSource.Pause();
+			_fadingAudioSource.Fade (nothing, 0.0f, false);
 		}
 
 		public void setReady(){
