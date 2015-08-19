@@ -6,7 +6,7 @@ public class PlayTab : MonoBehaviour {
 	public GameObject loadingScreenGO;
 
 	public void Play(){
-		loadingScreenGO.SetActive(true);
+		if(loadingScreenGO != null) loadingScreenGO.SetActive(true);
 		StartCoroutine(LoadingScreen.Instance.loadScene(1));
 	}
 

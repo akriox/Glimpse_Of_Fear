@@ -19,11 +19,11 @@ public class FPSHand : MonoBehaviour {
 		
 		float yRot = Input.GetAxis("RStickH") + Input.GetAxis("RStickV") != 0.0f ? Input.GetAxis("RStickH") : Input.GetAxis("Mouse X");
 		float xRot = Input.GetAxis("RStickH") + Input.GetAxis("RStickV") != 0.0f ? -Input.GetAxis("RStickV") : Input.GetAxis("Mouse Y");
-
+		
 		yRot *= Settings.MousePadXYSensitivity;
 		xRot *= Settings.MousePadXYSensitivity;
 		
-		targetRotation *= Quaternion.Euler (-yRot, -xRot, 0f);
+		targetRotation *= Quaternion.Euler (-yRot, -xRot, 0.0f);
 		targetRotation = ClampRotationXYAxis(targetRotation);
 		targetRotation.z = initRotZ;
 

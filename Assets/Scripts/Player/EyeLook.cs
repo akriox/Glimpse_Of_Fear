@@ -20,7 +20,7 @@ public class EyeLook : MonoBehaviour {
 	private float w;
 	private float h;
 	private float ratio;
-	private int offset = 80;
+	private int offset = 50;
 	private Rect[] r;
 
 	public void Start () {
@@ -86,7 +86,7 @@ public class EyeLook : MonoBehaviour {
 		return q;
 	}
 
-	/* DEBUG DISPLAY RECT
+	/*DEBUG DISPLAY RECT
 	public void OnGUI() {
 		GUI.Box(r[4], "");
 		GUI.Box(r[3], "");

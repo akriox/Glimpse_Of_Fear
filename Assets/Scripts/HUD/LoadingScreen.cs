@@ -64,6 +64,19 @@ public class LoadingScreen : MonoBehaviour {
 	public void OnLevelWasLoaded(int level){
 		fading = Fading.OUT;
 		levelLoaded = true;
+
+		//Cave1
+		if(level == 1){
+			setPlayerPosition(new Vector3(38.0f, 2.0f, -55.0f));
+		}
+		//Cave2
+		if(level == 2){
+			setPlayerPosition(new Vector3(-36.0f, 4.0f, 46.0f));
+		}
+		//Tomb1
+		if(level == 3){
+			setPlayerPosition(new Vector3(0.0f, 2.0f, -8.0f));
+		}
 	}
 
 	private void fadeIn(){
@@ -103,5 +116,10 @@ public class LoadingScreen : MonoBehaviour {
 		fade.color = Color.black;
 		fading = Fading.IN;
 		fade.gameObject.SetActive(true);
+	}
+
+	private void setPlayerPosition(Vector3 pos){
+		GameObject player = GameObject.FindGameObjectWithTag("Player");
+		player.transform.position = pos;
 	}
 }

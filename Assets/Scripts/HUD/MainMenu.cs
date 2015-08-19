@@ -32,6 +32,10 @@ public class MainMenu: MonoBehaviour {
 		SwitchTab(creditsTab);
 	}
 
+	public void ExitGame(){
+		Application.LoadLevel(0);
+	}
+
 	public void ExitToDesktop(){
 		Application.Quit();
 	}
