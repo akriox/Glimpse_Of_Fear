@@ -24,7 +24,9 @@ public class lookPathReaper : MonoBehaviour {
 		if (_gazeAwareComponent.HasGaze && !alreadyCall) {
 			if(_audioClip != null)
 				EventSound.playClip(_audioClip);
-
+			HeartBeat.playLoop();
+			StartCoroutine (CameraController.Instance.Shake (1.0f, 0.5f, 2.0f));
+			StartCoroutine (GameController.Instance.timedVibration (0.6f, 0.6f, 1.0f));
 			moveReaperBigRoom.Instance.setPosition (positionStart.position, positionEnd.position);
 			timeUntilDesactivItSelf = Time.time + timeSetActiv;
 			if(triggerToDesactive != null)
@@ -37,7 +39,6 @@ public class lookPathReaper : MonoBehaviour {
 			alreadyCall = true;
 		}
 		if (alreadyCall && Time.time >timeUntilDesactivItSelf) {
-			HeartBeat.playLoop();
 			this.enabled = false;
 		}
 	}

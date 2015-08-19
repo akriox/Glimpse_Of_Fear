@@ -14,18 +14,26 @@ public class HeartBeat : MonoBehaviour {
 	}
 	
 	public void Update () {
-		if (loop && Time.time > _time)
+		if (loop) {
+			StartCoroutine(Wait (0.5f));
+		}
+		if (audioSource.isPlaying && Time.time > _time)
 			stopLoop ();
 	}
 	
 	public static void playLoop(){
-		audioSource.loop = true;
 		loop = true;
-		_time = Time.time + timeHeartBeat;
-		audioSource.Play();
 	}
 	public static void stopLoop(){
 		audioSource.loop = false;
+		loop = false;
+	}
+	
+	public static IEnumerator Wait (float s){
+		yield return new WaitForSeconds(s);
+		audioSource.loop = true;
+		audioSource.Play();
+		_time = Time.time + timeHeartBeat;
 		loop = false;
 	}
 }

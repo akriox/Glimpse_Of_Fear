@@ -20,7 +20,7 @@ public class EyeLook : MonoBehaviour {
 	private float w;
 	private float h;
 	private float ratio;
-	private int offset = 80;
+	private int offset = 50;
 	private Rect[] r;
 
 	public void Start () {
