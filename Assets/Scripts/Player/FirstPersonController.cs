@@ -27,6 +27,7 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] private AudioClip[] m_FootstepWood;	  // an array of footstep sounds to play when walking on a wooden surface
 	[SerializeField] private AudioClip[] m_FootstepSand;	  // an array of footstep sounds to play when walking on sand
 	[SerializeField] private AudioClip[] m_FootstepRock;	  // an array of footstep sounds to play when walking on rocks
+	[SerializeField] private AudioClip[] m_FootstepWater;	  // an array of footstep sounds to play when walking in water
     [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground
     [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground
 
@@ -49,7 +50,7 @@ public class FirstPersonController : MonoBehaviour
 	private float m_StandingHeight;
 	private float m_DuckingHeight;
 
-	private enum GroundType {ROCK, SAND, WOOD};
+	private enum GroundType {ROCK, SAND, WOOD, WATER};
 	private GroundType groundType;
 
 	public static GameObject rightHand;
@@ -192,7 +193,7 @@ public class FirstPersonController : MonoBehaviour
             m_StepCycle += (m_CharacterController.velocity.magnitude + (speed*(m_IsWalking ? 1f : m_RunstepLenghten)))* Time.fixedDeltaTime;
 			if(groundType == GroundType.WOOD){
 				StartCoroutine(GameController.Instance.timedVibration(0.08f, 0.08f, 0.3f));
-				StartCoroutine(CameraController.Instance.Shake(0.3f, 0.02f, 1.0f));
+				//StartCoroutine(CameraController.Instance.Shake(0.3f, 0.02f, 1.0f));
 			}
         }
 
@@ -218,6 +219,7 @@ public class FirstPersonController : MonoBehaviour
 			case GroundType.SAND: m_FootstepSounds = m_FootstepSand; break;
 			case GroundType.ROCK: m_FootstepSounds = m_FootstepRock; break;
 			case GroundType.WOOD: m_FootstepSounds = m_FootstepWood; break;
+			case GroundType.WATER: m_FootstepSounds = m_FootstepWater; break;
 		}
         // pick & play a random footstep sound from the array,
         // excluding sound at index 0
@@ -301,6 +303,7 @@ public class FirstPersonController : MonoBehaviour
 			case "Wood": groundType = GroundType.WOOD; break;
 			case "Rock": groundType = GroundType.ROCK; break;
 			case "Sand": groundType = GroundType.SAND; break;
+			case "Water": groundType = GroundType.WATER; break;
 		}
 
         Rigidbody body = hit.collider.attachedRigidbody;
