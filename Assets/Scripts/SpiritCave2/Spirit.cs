@@ -64,6 +64,7 @@ public class Spirit : MonoBehaviour {
 				timeFollowPlayer = Time.time + Random.Range (timeForFollowPlayer - 0.5f, timeForFollowPlayer + 0.5f);
 				_smoke.SetActive (true);
 				_texture.SetActive (true);
+				HeartBeat.playLoop();
 			} 
 			else {
 					WalkAround ();
