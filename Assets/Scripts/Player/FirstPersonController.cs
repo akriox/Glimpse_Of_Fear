@@ -28,8 +28,8 @@ public class FirstPersonController : MonoBehaviour
 	[SerializeField] private AudioClip[] m_FootstepSand;	  // an array of footstep sounds to play when walking on sand
 	[SerializeField] private AudioClip[] m_FootstepRock;	  // an array of footstep sounds to play when walking on rocks
 	[SerializeField] private AudioClip[] m_FootstepWater;	  // an array of footstep sounds to play when walking in water
-    [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground
-    [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground
+    //[SerializeField] private AudioClip m_JumpSound;         // the sound played when character leaves the ground
+    //[SerializeField] private AudioClip m_LandSound;         // the sound played when character touches back on ground
 
 	public bool MouseLookEnabled = false;
 	private UserPresenceComponent _userPresenceComponent;
@@ -85,17 +85,13 @@ public class FirstPersonController : MonoBehaviour
 
 		if(_userPresenceComponent.IsUserPresent == false && MouseLookEnabled) RotateView();
 
-		if(Input.GetButton("Duck")){
-			m_Duck = true;
-			if(m_CharacterController.height > m_DuckingHeight){
-				m_CharacterController.height -= m_StickToGroundForce * Time.deltaTime;
-			}
+		if(Input.GetButton("Duck")) m_Duck = !m_Duck;
+
+		if(m_Duck && m_CharacterController.height > m_DuckingHeight){
+			m_CharacterController.height -= m_StickToGroundForce * Time.deltaTime;
 		}
-		else{
-			m_Duck = false;
-			if(m_CharacterController.height < m_StandingHeight){
-				m_CharacterController.height +=  m_StickToGroundForce * Time.deltaTime;
-			}
+		else if(m_Duck == false && m_CharacterController.height < m_StandingHeight){
+			m_CharacterController.height +=  m_StickToGroundForce * Time.deltaTime;
 		}
 	
 		/*
@@ -126,7 +122,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void PlayLandingSound()
     {
-        m_AudioSource.clip = m_LandSound;
+        //m_AudioSource.clip = m_LandSound;
         m_AudioSource.Play();
         m_NextStep = m_StepCycle + .5f;
     }
