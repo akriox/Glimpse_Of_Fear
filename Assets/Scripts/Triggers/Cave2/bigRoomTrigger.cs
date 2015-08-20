@@ -8,29 +8,24 @@ namespace UnityStandardAssets.ImageEffects
 		[SerializeField]private GameObject[] Path;
 
 		public void Start(){
-			if (Path != null) {
-				foreach (GameObject path in Path) {
-					path.SetActive (false);
-				}
+			if(Path == null){
+				Debug.LogError("Un GameObject 'Path' doit etre renseigné dans le script 'bigRoomTrigger.cs'.");
+			} 
+			foreach (GameObject path in Path) {
+				path.SetActive (false);
 			}
 		}
 		public void OnTriggerEnter(Collider other) {
 			if (other.gameObject.tag == "Player") {
-				if (Path != null) {
-					foreach(GameObject path in Path)
-					{
-						path.SetActive(true);
-					}
+				foreach(GameObject path in Path){
+					path.SetActive(true);
 				}
 			}
 		}
 		public void OnTriggerExit(Collider other) {
 			if (other.gameObject.tag == "Player") {
-				if (Path != null) {
-					foreach(GameObject path in Path)
-					{
-						path.SetActive(false);
-					}
+				foreach(GameObject path in Path){
+					path.SetActive(false);
 				}
 			}
 		}

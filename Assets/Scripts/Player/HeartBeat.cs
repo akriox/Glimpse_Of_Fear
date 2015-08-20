@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HeartBeat : MonoBehaviour {
 	
-	public static AudioSource audioSource;
+	private static AudioSource audioSource;
 	[SerializeField][Range(3.0F, 10.0F)] private static float timeHeartBeat = 7.0f;
 	private static float _time;
 	private static bool loop;

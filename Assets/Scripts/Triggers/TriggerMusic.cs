@@ -2,16 +2,20 @@
 using System.Collections;
 
 public class TriggerMusic : MonoBehaviour {
-	public GameObject son;
-	public bool playMusic;
+	public GameObject soundtrack;
+	[SerializeField] private AudioClip soundtrackToPlay;
+	[SerializeField][Range(0.0F, 1.0F)] private float volume;
+	[SerializeField] private bool loop;
+
+	public void start(){
+		if(soundtrack == null){
+			Debug.LogError("Un GameObject 'soundtrack' doit etre renseigné dans le script 'TriggerMusic.cs'.");
+		} 
+	}
 
 	public void OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Player") {
-			if(playMusic)
-				if (son != null)son.SetActive(true);
-			else{
-				if (son != null) son.SetActive(false);
-			}
+			soundtrack.GetComponent<FadingAudioSource> ().Fade (soundtrackToPlay, volume, loop);
 		}
 	}
 }

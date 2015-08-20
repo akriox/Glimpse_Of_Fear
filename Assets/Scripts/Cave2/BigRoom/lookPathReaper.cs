@@ -17,7 +17,6 @@ public class lookPathReaper : MonoBehaviour {
 
 
 	public void Start(){
-		//get component for eye tracker
 		_gazeAwareComponent = GetComponent<GazeAwareComponent> ();
 	}
 	void Update () {

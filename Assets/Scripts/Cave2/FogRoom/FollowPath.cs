@@ -9,12 +9,13 @@ namespace UnityStandardAssets.ImageEffects
 	public class FollowPath : MonoBehaviour {
 		public static FollowPath Instance {get; private set;}
 
-
-		public enum MovementTypes { Follow, Reverse };
-		public Transform pathToFollow;
+		[SerializeField] private Transform pathToFollow;
 		[SerializeField][Range(2F, 10.0F)] private float speed;
 		[SerializeField][Range(2F, 5.0F)] private float DistanceMinForMove;
 		[SerializeField][Range(5F, 10.0F)] private float DistanceMaxBeforeComeBack;
+		[SerializeField] private AudioClip whisper;
+
+		private enum MovementTypes { Follow, Reverse };
 		private MovementTypes type = MovementTypes.Follow;
 		private MovementTypes contraryType = MovementTypes.Reverse;
 		
@@ -23,25 +24,24 @@ namespace UnityStandardAssets.ImageEffects
 		private Transform currentTarget;
 		private GameObject player;
 		private GazeAwareComponent _gazeAwareComponent;
-		private AudioSource audioSource;
 		private bool ready;
 
-		public AudioClip whisper;
 		private AudioClip nothing;
-
 		private FadingAudioSource _fadingAudioSource;
 
 		public void Awake(){
 			Instance = this;
 		}
 		
-		void Start () {
+		private void Start () {
 			ready = false;
-			audioSource = GetComponent<AudioSource>();
 			nothing = (AudioClip) Resources.Load("Audio/blank_sound", typeof(AudioClip));
 			player = GameObject.FindGameObjectWithTag("Player");
 			_gazeAwareComponent = GetComponent<GazeAwareComponent>();
 			_fadingAudioSource = GetComponent<FadingAudioSource> ();
+			type = MovementTypes.Follow;
+			contraryType = MovementTypes.Reverse;
+			_fadingAudioSource.Fade (nothing, 0.0f, false);
 			if(pathToFollow == null){
 				Debug.LogError("Un GameObject 'Path' doit etre renseigné dans le script 'FollowPath.cs'.");
 			} 
@@ -52,15 +52,15 @@ namespace UnityStandardAssets.ImageEffects
 			}
 		}
 		
-		void Update () {
+		private void Update () {
 			if (_gazeAwareComponent.HasGaze && ready) {
-				if(audioSource.isPlaying) pauseASong(); 
+				_fadingAudioSource.Fade (nothing, 0.0f, false);
 				//CameraController.Instance.setVortexState(CameraController.VortexState.DEC);
 				CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.DEC);
 			} 
 			else {
 				if(ready){
-					if(!audioSource.isPlaying) playASong(); 
+					_fadingAudioSource.Fade (whisper, 1.0f, true);
 					//CameraController.Instance.setVortexState(CameraController.VortexState.INC);
 					CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.INC);
 				}
@@ -68,13 +68,13 @@ namespace UnityStandardAssets.ImageEffects
 			Walk();
 		}
 		
-		void GetPaths(){
+		private void GetPaths(){
 			foreach(Transform temp in pathToFollow){
 				listPaths.Add(temp);
 			}
 		}
 		
-		void GetNewPosition(MovementTypes type){
+		private void GetNewPosition(MovementTypes type){
 			switch (type) {
 				case MovementTypes.Follow:
 					index = (index < listPaths.Count) ? index + 1 : 1;
@@ -86,9 +86,8 @@ namespace UnityStandardAssets.ImageEffects
 				break;
 			}
 		}
-		
-		
-		void Walk(){
+
+		private void Walk(){
 			if(currentTarget != null){
 				transform.position = Vector3.MoveTowards(transform.position, currentTarget.position, Time.deltaTime * speed);
 				if(CheckDistance(currentTarget.transform.position) <= 0.5f &&CheckDistance(player.transform.position)>=DistanceMaxBeforeComeBack){
@@ -101,17 +100,9 @@ namespace UnityStandardAssets.ImageEffects
 				}
 			}
 		}
-		
-		float CheckDistance(Vector3 to){
+
+		private float CheckDistance(Vector3 to){
 			return Vector3.Distance(transform.position, to);
-		}
-
-		private void playASong(){
-			_fadingAudioSource.Fade (whisper, 0.8f, true);
-		}
-
-		private void pauseASong(){
-			_fadingAudioSource.Fade (nothing, 0.0f, false);
 		}
 
 		public void setReady(){
@@ -124,7 +115,7 @@ namespace UnityStandardAssets.ImageEffects
 
 		public void setFinish(){
 			ready = false;
-			audioSource.Stop();
+			_fadingAudioSource.Fade (nothing, 0.0f, false);
 		}
 
 		public void resetBeginningRoom(){
@@ -136,6 +127,7 @@ namespace UnityStandardAssets.ImageEffects
 				transform.position = new Vector3 (currentTarget.transform.position.x, currentTarget.transform.position.y, currentTarget.transform.position.z);
 			}
 		}
+
 		public void resetEndRoom(){
 			type = MovementTypes.Reverse;
 			contraryType = MovementTypes.Follow;
