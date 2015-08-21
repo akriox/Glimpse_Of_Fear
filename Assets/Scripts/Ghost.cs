@@ -1,67 +1,181 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
+
+[RequireComponent (typeof(Animator))]
+[RequireComponent (typeof(GazeAwareComponent))]
 public class Ghost : MonoBehaviour {
+
+	public enum MovementTypes { Follow, Random}
 
 	public bool gazeContact;
 	public float fadeSpeed = 2.0f;
 
-	private Animator _anim;
-	private GazeAwareComponent _gazeAwareComponent;
-	private Material _material;
+	public MovementTypes _movementType = MovementTypes.Follow;
+	public Transform pathToFollow;
+
+	[SerializeField][Range(0.1F, 5.0F)] public float speed;
+
+	private List<Transform> listPaths = new List<Transform>();
+	private int index = 1;
+	private bool walk = true;
+	private bool lookPlayer = false;
+
+	private Transform currentTarget;
+	private Transform lastTarget;
 	
+	private Animator _anim;
+
 	private int moving = Animator.StringToHash("Moving");
 	private int turn = Animator.StringToHash("Turn");
 	private int shakeHead = Animator.StringToHash("ShakeHead");
 	private int point = Animator.StringToHash("Point");
+	
+	private float animationTimeShake_Head = 9.967f;
+	private float animationTurn = 3.967f;
+	private float animationPoint = 3.8f;
+	private float animationIdle = 2.867f;
 
+	private Vector3 direction;
+	private Quaternion rotation;
+	private GameObject _player;
 
-	public void Start () {
+	private GazeAwareComponent _gazeAwareComponent;
+	private Material _material;
+
+	void Start () {
 		_anim = GetComponent<Animator>();
 		_gazeAwareComponent = GetComponentInChildren<GazeAwareComponent>();
 		_material = GetComponentInChildren<Renderer>().material;
+		_player = GameObject.FindGameObjectWithTag("Player");
+		if(pathToFollow == null){
+			Debug.LogError("Un GameObject 'pathGhost' doit etre renseigné dans le script 'Ghost.cs'.");
+		} else {
+			foreach(Transform temp in pathToFollow){
+				listPaths.Add(temp);
+			}
+			switch(_movementType){
+			case MovementTypes.Follow:
+				index = 1;
+				break;
+			case MovementTypes.Random:
+				index = 1;
+				break;
+			}
+			if(listPaths.Count > 0) GetNewPosition();
+		}
 	}
 
-	public void Update () {
-		if(gazeContact){
-			if(_gazeAwareComponent.HasGaze){
-				Disappear();
-			}
-			else{
-				Appear();
+	void Update () {
+		if (lookPlayer)
+			faceTarget (_player.transform.position);
+		if (gazeContact) {
+			if (_gazeAwareComponent.HasGaze) {
+				Disappear ();
+			} else {
+				Appear ();
 			}
 		}
+		if(walk) {
+			StartWalk();
+			faceTarget (currentTarget.transform.position);
+		}
+	}
+
+	//face the target
+	private void faceTarget(Vector3 to){
+		direction = (to - transform.position).normalized;
+		rotation = Quaternion.LookRotation (new Vector3 (direction.x, 0, direction.z));
+		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, 2 * Time.deltaTime);
+	}
+
+	void GetNewPosition(){
+		
+		switch(_movementType){
+		case MovementTypes.Follow:
+			currentTarget = listPaths.Single(p => p.name == "Path" + index);
+			index = (index < listPaths.Count) ? index +1 : 1;
+			break;
+		case MovementTypes.Random:
+			currentTarget = listPaths[Random.Range(0, listPaths.Count)];
+			break;
+		}
+	}
+
+	public void StartWalk(){
+		if(currentTarget != null){
+			Walk ();
+			transform.position = Vector3.MoveTowards(transform.position, currentTarget.position, Time.deltaTime * speed);
+			
+			if(CheckDistance() <= 0.5f){
+				walk = false;
+				StartCoroutine(playAnimation(2));
+				GetNewPosition();
+			}
+		}
+	}
+
+	float CheckDistance(){
+		return Vector3.Distance(transform.position, currentTarget.position);
+	}
+
+	IEnumerator playAnimation(int numAnimation){
+		switch (numAnimation) {
+		case 0:
+			ShakeHead();
+			yield return new WaitForSeconds(animationTimeShake_Head);
+			break;
+		case 1:
+			Turn();
+			yield return new WaitForSeconds(animationTurn);
+			break;
+		case 2:
+			Idle();
+			yield return new WaitForSeconds(animationIdle);
+			break;
+		case 3:
+			lookPlayer = true;
+			Point();
+			yield return new WaitForSeconds(animationPoint);
+			lookPlayer = false;
+			break;
+		}
+		walk = true;
+	}
+
+	public void Idle(){
+		_anim.SetBool(moving, false);
+	}
+	
+	public void Walk(){
+		_anim.SetBool(moving, true);
+	}
+	
+	public void ShakeHead(){
+		_anim.SetTrigger(shakeHead);
+	}
+	
+	public void Turn(){
+		_anim.SetTrigger(turn);
+	}
+	
+	public void Point(){
+		_anim.SetTrigger(point);
 	}
 
 	private void Appear(){
 		if(_material.color != Color.white){
-			_material.color = Color.Lerp (_material.color, Color.white, fadeSpeed * Time.deltaTime);
+			_material.color = Color.Lerp (_material.color, Color.white, 0.1f*fadeSpeed * Time.deltaTime);
 		}
 	}
-
+	
 	private void Disappear(){
 		if(_material.color != Color.black){
 			_material.color = Color.Lerp (_material.color, Color.black, fadeSpeed * Time.deltaTime);
 		}
 	}
 
-	private void Idle(){
-		_anim.SetBool(moving, false);
-	}
-
-	private void Walk(){
-		_anim.SetBool(moving, true);
-	}
-
-	private void ShakeHead(){
-		_anim.SetTrigger(shakeHead);
-	}
-
-	private void Turn(){
-		_anim.SetTrigger(turn);
-	}
-
-	private void Point(){
-		_anim.SetTrigger(point);
-	}
-}
+} 
