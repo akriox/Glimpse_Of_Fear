@@ -23,7 +23,6 @@ public class Spirit : MonoBehaviour {
 	[SerializeField] private GameObject _smoke;
 	[SerializeField][Range(1.5F, 3.5F)] private float timeForFollowPlayer = 2f;
 	[SerializeField][Range(5f, 20f)] private float distDetection = 15f;
-	[SerializeField] private bool beTheOtherSpecter;
 	[SerializeField] private GameObject forDestroyItSelf;
 
 	private float timeFollowPlayer;
@@ -49,10 +48,11 @@ public class Spirit : MonoBehaviour {
 	public void Update(){
 		switch(_state){
 		case State.NotAppear:	
-			if (Time.time > timeToNotAppear)_state = State.Appear;
-			CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
-			CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
-			GameController.Instance.stopVibration ();
+			if (Time.time > timeToNotAppear){
+				_state = State.Appear;
+				GetNewPosition();
+			}
+
 			break;
 		case State.Appear:
 			if (_gazeAwareComponent.HasGaze && nearPlayer(distDetection)) {
@@ -63,12 +63,12 @@ public class Spirit : MonoBehaviour {
 				faceTarget (targetPlayer.transform.position);
 				StartCoroutine (CameraController.Instance.Shake (2.0f, 0.05f, 10.0f));
 				StartCoroutine (Flashlight.Instance.Flicker ());
-				_state = State.FollowPlayer;
 				timeFollowPlayer = Time.time + Random.Range (timeForFollowPlayer - 0.5f, timeForFollowPlayer + 0.5f);
 				_smoke.SetActive (true);
 				_texture.SetActive (true);
 				HeartBeat.playLoop();
 				iniatFog.specterSeen();
+				_state = State.FollowPlayer;
 			} 
 			else {
 					WalkAround ();
@@ -78,12 +78,14 @@ public class Spirit : MonoBehaviour {
 			faceTarget (targetPlayer.transform.position);
 			StartWalk ();
 			if (Time.time > timeFollowPlayer) {
-				GetNewPosition ();
+				CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
+				CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
+				GameController.Instance.stopVibration ();
 				switchPosition ();
 				_smoke.SetActive (false);
 				_texture.SetActive (false);
 				timeToNotAppear = Time.time + Random.Range (4f, 6f);
-				if(beTheOtherSpecter)
+				if(forDestroyItSelf != null)
 					Destroy(forDestroyItSelf);
 				_state = State.NotAppear;
 			}
@@ -102,7 +104,7 @@ public class Spirit : MonoBehaviour {
 	}
 
 	void switchPosition(){
-		transform.position = currentTarget.position;
+		transform.position = listPosition[Random.Range (0, listPosition.Count)].position;
 		GetNewPosition ();
 	}
 
