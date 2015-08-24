@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class iniatFog : MonoBehaviour {
+public class IniatFog : MonoBehaviour {
 
 	public GameObject activFog;
 	public GameObject otherSpecter;
 	public GameObject desactivRealSpecter;
-	public GameObject trigger;
 
 	private static bool jumpScare;
 
@@ -14,15 +13,17 @@ public class iniatFog : MonoBehaviour {
 		jumpScare = false;
 	}
 	
-	public void OnTriggerEnter(Collider other) {
+	public IEnumerator OnTriggerEnter(Collider other) {
 		
 		if (other.gameObject.tag == "Player") {
+			CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.INC);
 			activFog.SetActive (true);
 			if (!jumpScare){
 				otherSpecter.SetActive(true);
 				desactivRealSpecter.SetActive(false);
 			}
-			DestroyObject(trigger);
+			yield return new WaitForSeconds(1f);
+			this.enabled = false;
 		}
 	}
 

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +9,13 @@ using System.Linq;
 public class Ghost : MonoBehaviour {
 
 	public enum MovementTypes { Follow, Random}
+	public enum AnimationTypes {Random, ShakeHead, Turn, Idle, Point}
 
 	public bool gazeContact;
 	public float fadeSpeed = 2.0f;
 
 	public MovementTypes _movementType = MovementTypes.Follow;
+	public AnimationTypes _animationTypes = AnimationTypes.Random;
 	public Transform pathToFollow;
 
 	[SerializeField][Range(0.1F, 5.0F)] public float speed;
@@ -109,10 +110,25 @@ public class Ghost : MonoBehaviour {
 		if(currentTarget != null){
 			Walk ();
 			transform.position = Vector3.MoveTowards(transform.position, currentTarget.position, Time.deltaTime * speed);
-			
 			if(CheckDistance() <= 0.5f){
 				walk = false;
-				StartCoroutine(playAnimation(2));
+				switch(_animationTypes){
+				case AnimationTypes.Random:
+					StartCoroutine(playAnimation(Random.Range(0, 4)));
+					break;
+				case AnimationTypes.ShakeHead:
+					StartCoroutine(playAnimation(0));
+					break;
+				case AnimationTypes.Turn:
+					StartCoroutine(playAnimation(1));
+					break;
+				case AnimationTypes.Idle:
+					StartCoroutine(playAnimation(2));
+					break;
+				case AnimationTypes.Point:
+					StartCoroutine(playAnimation(3));
+					break;
+				}
 				GetNewPosition();
 			}
 		}
@@ -168,7 +184,7 @@ public class Ghost : MonoBehaviour {
 
 	private void Appear(){
 		if(_material.color != Color.white){
-			_material.color = Color.Lerp (_material.color, Color.white, 0.1f*fadeSpeed * Time.deltaTime);
+			_material.color = Color.Lerp (_material.color, Color.white, 0.8f*fadeSpeed * Time.deltaTime);
 		}
 	}
 	

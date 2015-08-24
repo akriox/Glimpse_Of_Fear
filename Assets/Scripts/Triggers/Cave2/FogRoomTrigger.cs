@@ -6,7 +6,7 @@ namespace UnityStandardAssets.ImageEffects
 	public class FogRoomTrigger: MonoBehaviour {
 		
 		
-		[SerializeField][Range(0, 3)]public int _case = 1;
+		[SerializeField][Range(0, 2)]public int _case = 1;
 		public GameObject desactivAnObject;
 		public GameObject activAnObject;
 
@@ -24,7 +24,8 @@ namespace UnityStandardAssets.ImageEffects
 					}
 					break;
 				case 1:
-					resetImageEffect();
+					CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
+					CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.DEC);
 					FollowPath.Instance.setFinish();
 					canDesactiveAnObject();
 					break;
@@ -34,16 +35,8 @@ namespace UnityStandardAssets.ImageEffects
 						FollowPath.Instance.resetEndRoom ();
 					}
 					break;
-				case 3:
-					canDesactiveAnObject();
-					break;
 				}
 			}
-		}
-
-		public void resetImageEffect(){
-			CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
-			CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.DEC);
 		}
 
 		public void canDesactiveAnObject(){

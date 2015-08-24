@@ -26,6 +26,8 @@ public class CameraController : MonoBehaviour {
 	[SerializeField][Range(0.0f, 1.0f)] private float _vortexSpeed = 1.0f;
 	[SerializeField][Range(0.0f, 1.0f)] private float _noiseAndScratchesMaxValueSpeed = 1.0f;
 
+	private Quaternion initCamera;
+
 	public void Awake(){
 		Instance = this;
 		DontDestroyOnLoad(this.gameObject);
@@ -33,6 +35,7 @@ public class CameraController : MonoBehaviour {
 
 	public void Start(){
 		_camera = Camera.main;
+		initCamera = Camera.main.transform.localRotation;
 		_vortexScript = _camera.GetComponent<Vortex>();
 		//_vertigoScript = _camera.GetComponent<VertigoEffect>();
 		_colorCorrectionCurvesScript = _camera.GetComponent<ColorCorrectionCurves>();
@@ -141,5 +144,9 @@ public class CameraController : MonoBehaviour {
 		}
 		
 		Camera.main.transform.localRotation = initRot;
+	}
+
+	public void resetShake(){
+		Camera.main.transform.localRotation = initCamera;
 	}
 }

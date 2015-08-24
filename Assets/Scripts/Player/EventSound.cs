@@ -13,4 +13,14 @@ public class EventSound : MonoBehaviour {
 		audioSource.clip = clip;
 		audioSource.Play();
 	}
+
+	public static void playClip(AudioClip clip, float v){
+		audioSource.volume = v;
+		audioSource.clip = clip;
+		audioSource.Play();
+	}
+
+	public static void volume(float v){
+		audioSource.volume = v;
+	}
 }

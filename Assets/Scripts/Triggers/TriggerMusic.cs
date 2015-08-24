@@ -7,7 +7,7 @@ public class TriggerMusic : MonoBehaviour {
 	[SerializeField][Range(0.0F, 1.0F)] private float volume;
 	[SerializeField] private bool loop;
 
-	public void start(){
+	public void Start(){
 		if(soundtrack == null){
 			Debug.LogError("Un GameObject 'soundtrack' doit etre renseigné dans le script 'TriggerMusic.cs'.");
 		} 

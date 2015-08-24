@@ -10,7 +10,7 @@ public class lookPathReaper : MonoBehaviour {
 	[SerializeField] private GameObject triggerToDesactive;
 	[SerializeField] private GameObject[] pathToDesactive;
 	[SerializeField] private AudioClip _audioClip;
-	private float timeSetActiv = 0.5F;
+	private float timeSetActiv = 2F;
 	private float timeUntilDesactivItSelf; 
 
 	private bool alreadyCall = false;

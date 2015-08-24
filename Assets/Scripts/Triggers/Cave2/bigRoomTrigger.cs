@@ -22,11 +22,14 @@ namespace UnityStandardAssets.ImageEffects
 				}
 			}
 		}
-		public void OnTriggerExit(Collider other) {
+		public IEnumerator OnTriggerExit(Collider other) {
 			if (other.gameObject.tag == "Player") {
 				foreach(GameObject path in Path){
 					path.SetActive(false);
 				}
+				yield return new WaitForSeconds(1f);
+				CameraController.Instance.resetShake();
+				GameController.Instance.stopVibration();
 			}
 		}
 	}
