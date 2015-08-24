@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IniatFog : MonoBehaviour {
+public class InitFog : MonoBehaviour {
 
 	public GameObject activFog;
 	public GameObject otherSpecter;

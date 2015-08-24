@@ -67,7 +67,7 @@ public class Spirit : MonoBehaviour {
 				_smoke.SetActive (true);
 				_texture.SetActive (true);
 				HeartBeat.playLoop();
-				IniatFog.specterSeen();
+				InitFog.specterSeen();
 				_state = State.FollowPlayer;
 			} 
 			else {

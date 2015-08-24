@@ -71,10 +71,12 @@ public class LoadingScreen : MonoBehaviour {
 		}
 		//Cave2
 		if(level == 2){
+			FirstPersonController.enableRightHand(false);
 			setPlayerPosition(new Vector3(-36.0f, 4.0f, 46.0f));
 		}
 		//Tomb1
 		if(level == 3){
+			FirstPersonController.enableRightHand(true);
 			setPlayerPosition(new Vector3(0.0f, 2.0f, -8.0f));
 		}
 	}

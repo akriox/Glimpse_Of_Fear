@@ -10,8 +10,9 @@ public class GameController : MonoBehaviour {
 
 	public GameObject keyboardWidget;
 	public GameObject gamepadWidget;
-
 	public Text debugText;
+
+	private GameObject player;
 
 	public void Awake(){
 		Instance = this;
@@ -19,6 +20,8 @@ public class GameController : MonoBehaviour {
 
 	public void Start(){
 		Cursor.visible = false;
+		player = GameObject.FindGameObjectWithTag("Player");
+		DontDestroyOnLoad(player);
 	}
 
 	public void Update () {

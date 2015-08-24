@@ -80,12 +80,11 @@ public class FirstPersonController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
 		if(Input.GetKeyDown(KeyCode.F)) rightHand.SetActive(!rightHand.activeSelf);
 
 		if(_userPresenceComponent.IsUserPresent == false && MouseLookEnabled) RotateView();
 
-		if(Input.GetButton("Duck")) m_Duck = !m_Duck;
+		if(Input.GetButtonUp("Duck")) m_Duck = !m_Duck;
 
 		if(m_Duck && m_CharacterController.height > m_DuckingHeight){
 			m_CharacterController.height -= m_StickToGroundForce * Time.deltaTime;
