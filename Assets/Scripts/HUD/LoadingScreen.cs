@@ -67,17 +67,20 @@ public class LoadingScreen : MonoBehaviour {
 
 		//Cave1
 		if(level == 1){
-			setPlayerPosition(new Vector3(38.0f, 2.0f, -55.0f));
+			setPlayerTransform(new Vector3(38.0f, 2.0f, -55.0f), new Quaternion(0.0f, -1.0f, 0.0f, 1.0f));
 		}
 		//Cave2
 		if(level == 2){
 			FirstPersonController.enableRightHand(false);
-			setPlayerPosition(new Vector3(-36.0f, 4.0f, 46.0f));
+			resetCameraTransform();
+			setPlayerTransform(new Vector3(-36.0f, 4.0f, 46.0f), new Quaternion(0.0f, 1.0f, 0.0f, 1.0f));
+			CameraController.Instance.GettingUpAnimation();
 		}
 		//Tomb1
 		if(level == 3){
 			FirstPersonController.enableRightHand(true);
-			setPlayerPosition(new Vector3(0.0f, 2.0f, -8.0f));
+			resetCameraTransform();
+			setPlayerTransform(new Vector3(0.0f, 2.0f, -8.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
 		}
 	}
 
@@ -120,8 +123,14 @@ public class LoadingScreen : MonoBehaviour {
 		fade.gameObject.SetActive(true);
 	}
 
-	private void setPlayerPosition(Vector3 pos){
+	private void setPlayerTransform(Vector3 position, Quaternion rotation){
 		GameObject player = GameObject.FindGameObjectWithTag("Player");
-		player.transform.position = pos;
+		player.transform.position = position;
+		player.transform.rotation = rotation;
+	}
+
+	private void resetCameraTransform(){
+		Camera.main.transform.localPosition = Vector3.zero;
+		Camera.main.transform.localRotation = Quaternion.identity;
 	}
 }

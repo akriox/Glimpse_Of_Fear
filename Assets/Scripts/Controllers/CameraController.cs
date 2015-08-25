@@ -7,12 +7,14 @@ public class CameraController : MonoBehaviour {
 	public static CameraController Instance {get; private set;}
 
 	private Camera _camera;
+	private Animator _animator;
+
+	private int gettingUp = Animator.StringToHash("GettingUp");
 
 	private Vortex _vortexScript;
 	private NoiseAndScratches _noiseAndScratches;
 	//private VertigoEffect _vertigoScript;
 	private ColorCorrectionCurves _colorCorrectionCurvesScript;
-
 	
 	private bool _vertigo;
 	private bool _noiseAndScratchesNotActive;
@@ -30,12 +32,14 @@ public class CameraController : MonoBehaviour {
 
 	public void Awake(){
 		Instance = this;
-		DontDestroyOnLoad(this.gameObject);
+		//DontDestroyOnLoad(this.gameObject);
 	}
 
 	public void Start(){
 		_camera = Camera.main;
 		initCamera = Camera.main.transform.localRotation;
+		_animator = _camera.GetComponent<Animator>();
+		_animator.enabled = false;
 		_vortexScript = _camera.GetComponent<Vortex>();
 		//_vertigoScript = _camera.GetComponent<VertigoEffect>();
 		_colorCorrectionCurvesScript = _camera.GetComponent<ColorCorrectionCurves>();
@@ -148,5 +152,16 @@ public class CameraController : MonoBehaviour {
 
 	public void resetShake(){
 		Camera.main.transform.localRotation = initCamera;
+	}
+
+	public void GettingUpAnimation(){
+		_animator.enabled = true;
+		_animator.SetTrigger(gettingUp);
+	}
+
+	public void lockPlayer(int i){
+		bool b = i == 1 ? true : false;
+		FirstPersonController.ableToMove = !b;
+		EyeLook.isActive = !b;
 	}
 }
