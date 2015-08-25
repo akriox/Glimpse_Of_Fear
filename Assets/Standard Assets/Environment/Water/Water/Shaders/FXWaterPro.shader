@@ -19,7 +19,9 @@ Properties {
 
 
 Subshader {
-	Tags { "WaterMode"="Refractive" "RenderType"="Opaque" }
+	Tags { "WaterMode"="Refractive" "Queue" = "Transparent" }
+	Blend SrcAlpha OneMinusSrcAlpha
+	ColorMask RGB 
 	Pass {
 CGPROGRAM
 #pragma vertex vert

@@ -6,6 +6,7 @@ public class Inventory : MonoBehaviour {
 	public static Inventory Instance { get; private set; }
 	public int glowStickStash { get; private set; }
 	public bool hasPentacle;
+	public bool hasTablet;
 
 	public void Awake(){
 		Instance = this;

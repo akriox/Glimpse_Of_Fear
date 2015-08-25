@@ -6,7 +6,7 @@ public class ThrowObject : MonoBehaviour {
 
 	private GazeAwareComponent _gazeAwareComponent;
 	private GazePointDataComponent _gazePointDataComponent;
-	private string GlowStickPrefab = "Prefabs/Items/GlowStick";
+	private string GlowStickPrefab = "Prefabs/CollectibleItems/GlowStick";
 	private static GameObject objectToThrow;
 	private float force = 2000.0f;
 	private Vector3 trajectory;
