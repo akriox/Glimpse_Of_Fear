@@ -39,7 +39,6 @@ public class CameraController : MonoBehaviour {
 		_camera = Camera.main;
 		initCamera = Camera.main.transform.localRotation;
 		_animator = _camera.GetComponent<Animator>();
-		_animator.enabled = false;
 		_vortexScript = _camera.GetComponent<Vortex>();
 		//_vertigoScript = _camera.GetComponent<VertigoEffect>();
 		_colorCorrectionCurvesScript = _camera.GetComponent<ColorCorrectionCurves>();
@@ -50,6 +49,7 @@ public class CameraController : MonoBehaviour {
 	public void Update(){
 		VortexEffect();
 		NoiseAndScratchesEffect ();
+		if(Input.GetKeyDown(KeyCode.O)) GettingUpAnimation();
 	}
 	
 	public void setVortexState(VortexState state){
@@ -155,13 +155,13 @@ public class CameraController : MonoBehaviour {
 	}
 
 	public void GettingUpAnimation(){
-		_animator.enabled = true;
 		_animator.SetTrigger(gettingUp);
 	}
 
-	public void lockPlayer(int i){
-		bool b = i == 1 ? true : false;
+	public void lockPlayer(int value){
+		bool b = value == 1 ? true : false;
 		FirstPersonController.ableToMove = !b;
 		EyeLook.isActive = !b;
+		_animator.applyRootMotion = !b;
 	}
 }

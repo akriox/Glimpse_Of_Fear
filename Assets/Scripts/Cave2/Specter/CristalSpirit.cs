@@ -10,8 +10,8 @@ public class CristalSpirit : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		inactiveMat = (Material)Resources.Load("Materials/Caves_objects/Crystal", typeof(Material));
-		activeMat = (Material)Resources.Load("Materials/Caves_objects/CrystalSpirit", typeof(Material));
+		inactiveMat = (Material)Resources.Load("Materials/CaveObjects/Crystal", typeof(Material));
+		activeMat = (Material)Resources.Load("Materials/CaveObjects/CrystalSpirit", typeof(Material));
 		gazeEffects (inactiveMat);
 		targetSpirit = GameObject.FindGameObjectWithTag("Specter");
 	}
