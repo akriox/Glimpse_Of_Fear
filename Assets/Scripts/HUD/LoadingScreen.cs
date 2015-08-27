@@ -65,6 +65,12 @@ public class LoadingScreen : MonoBehaviour {
 		fading = Fading.OUT;
 		levelLoaded = true;
 
+		if(level == 0){
+			GameObject player = GameObject.FindGameObjectWithTag("Player");
+			Destroy(this.gameObject);
+			Destroy(player);
+		}
+
 		//Cave1
 		if(level == 1){
 			setPlayerTransform(new Vector3(38.0f, 2.0f, -55.0f), new Quaternion(0.0f, -1.0f, 0.0f, 1.0f));

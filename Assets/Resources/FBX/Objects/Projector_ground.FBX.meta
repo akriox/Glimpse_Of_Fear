@@ -7,14 +7,19 @@ ModelImporter:
   fileIDToRecycleName:
     100000: //RootNode
     100002: Projector_Lamp
+    100004: Projector_Light
     400000: //RootNode
     400002: Projector_Lamp
+    400004: Projector_Light
     2300000: //RootNode
     2300002: Projector_Lamp
+    2300004: Projector_Light
     3300000: //RootNode
     3300002: Projector_Lamp
+    3300004: Projector_Light
     4300000: Projector_Ground
     4300002: Projector_Lamp
+    4300004: Projector_Light
   materials:
     importMaterials: 1
     materialName: 0

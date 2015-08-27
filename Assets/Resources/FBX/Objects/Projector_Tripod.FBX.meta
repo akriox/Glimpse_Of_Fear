@@ -9,22 +9,32 @@ ModelImporter:
     100002: Projector_Rotator
     100004: //RootNode
     100006: Projector_Tripod_Lamp
+    100008: Projector_Tripod_Light
+    100010: Projector_Tripod_Rotator
     400000: Projector_Light
     400002: Projector_Rotator
     400004: //RootNode
     400006: Projector_Tripod_Lamp
+    400008: Projector_Tripod_Light
+    400010: Projector_Tripod_Rotator
     2300000: Projector_Light
     2300002: Projector_Rotator
     2300004: //RootNode
     2300006: Projector_Tripod_Lamp
+    2300008: Projector_Tripod_Light
+    2300010: Projector_Tripod_Rotator
     3300000: Projector_Light
     3300002: Projector_Rotator
     3300004: //RootNode
     3300006: Projector_Tripod_Lamp
+    3300008: Projector_Tripod_Light
+    3300010: Projector_Tripod_Rotator
     4300000: Projector_Tripod
     4300002: Projector_Rotator
     4300004: Projector_Tripod_Lamp
     4300006: Projector_Light
+    4300008: Projector_Tripod_Rotator
+    4300010: Projector_Tripod_Light
   materials:
     importMaterials: 1
     materialName: 0
