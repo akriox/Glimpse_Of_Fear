@@ -16,7 +16,6 @@ public class InitFog : MonoBehaviour {
 	public IEnumerator OnTriggerEnter(Collider other) {
 		
 		if (other.gameObject.tag == "Player") {
-			CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.INC);
 			activFog.SetActive (true);
 			if (!jumpScare){
 				otherSpecter.SetActive(true);

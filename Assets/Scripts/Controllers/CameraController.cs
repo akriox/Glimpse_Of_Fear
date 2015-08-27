@@ -17,16 +17,15 @@ public class CameraController : MonoBehaviour {
 	private ColorCorrectionCurves _colorCorrectionCurvesScript;
 	
 	private bool _vertigo;
-	private bool _noiseAndScratchesNotActive;
 
-	public enum VortexState {INC, DEC, OFF};
-	public enum NoiseAndScratchesState {INC, DEC, OFF};
+	public enum VortexState {INC, DEC, MAX,OFF};
+	public enum NoiseAndScratchesState {INC, DEC, MAX, OFF};
 	private VortexState _vortexState = VortexState.OFF;
 	private NoiseAndScratchesState _noiseAndScratchesState = NoiseAndScratchesState.OFF;
 	[SerializeField][Range(0.0f, 1.0f)] private float _vortexMaxRadius = 0.6f;
 	[SerializeField][Range(0.0f, 2.5f)] private float _noiseAndScratchesMaxValue = 1.5f;
 	[SerializeField][Range(0.0f, 1.0f)] private float _vortexSpeed = 1.0f;
-	[SerializeField][Range(0.0f, 1.0f)] private float _noiseAndScratchesMaxValueSpeed = 1.0f;
+	[SerializeField][Range(0.0f, 1.0f)] private float _noiseAndScratchesMaxValueSpeed = 0.5f;
 
 	private Quaternion initCamera;
 
@@ -43,7 +42,6 @@ public class CameraController : MonoBehaviour {
 		//_vertigoScript = _camera.GetComponent<VertigoEffect>();
 		_colorCorrectionCurvesScript = _camera.GetComponent<ColorCorrectionCurves>();
 		_noiseAndScratches = _camera.GetComponent<NoiseAndScratches>();
-		_noiseAndScratchesNotActive = true;
 	}
 
 	public void Update(){
@@ -67,31 +65,29 @@ public class CameraController : MonoBehaviour {
 	private void NoiseAndScratchesEffect(){
 		switch (_noiseAndScratchesState) {
 			case NoiseAndScratchesState.INC:
-				if(_noiseAndScratchesNotActive){
-					_noiseAndScratches.enabled = true;
-					_noiseAndScratchesNotActive = false;
-				}
+				_noiseAndScratches.enabled = true;
 				if(_noiseAndScratches.grainIntensityMax < _noiseAndScratchesMaxValue){
 					_noiseAndScratches.grainIntensityMax += _noiseAndScratchesMaxValueSpeed * Time.deltaTime;
 				}
 				else{
 					_noiseAndScratches.grainIntensityMax = _noiseAndScratchesMaxValue;
-					_noiseAndScratchesState = NoiseAndScratchesState.OFF;
+					_noiseAndScratchesState = NoiseAndScratchesState.MAX;
 				}
 				break;
 			case NoiseAndScratchesState.DEC:
 				if(_noiseAndScratches.grainIntensityMax >0.0f){
-					_noiseAndScratches.grainIntensityMax -= _noiseAndScratchesMaxValueSpeed * Time.deltaTime;
+					_noiseAndScratches.grainIntensityMax -= _noiseAndScratchesMaxValueSpeed *2* Time.deltaTime;
 				}
 				else{
 					_noiseAndScratches.grainIntensityMax = 0.0f;
 					_noiseAndScratches.enabled = false;
-					_noiseAndScratchesNotActive = true;
 					_noiseAndScratchesState = NoiseAndScratchesState.OFF;
 				}
 				break;
-
+			case NoiseAndScratchesState.MAX:
+				break;
 			case NoiseAndScratchesState.OFF:
+			_noiseAndScratches.enabled = false;
 				break;
 		}
 	}
@@ -100,15 +96,15 @@ public class CameraController : MonoBehaviour {
 
 		switch(_vortexState){
 			case VortexState.INC:
+				_vortexScript.enabled = true;
 				if(_vortexScript.radius.x < _vortexMaxRadius && _vortexScript.radius.y < _vortexMaxRadius){
 					_vortexScript.radius.x = _vortexScript.radius.y += _vortexSpeed * Time.deltaTime;
 				}
 				else{
 					_vortexScript.radius.x = _vortexScript.radius.y = _vortexMaxRadius;
-					_vortexState = VortexState.OFF;
+					_vortexState = VortexState.MAX;
 				}
 				break;
-
 			case VortexState.DEC:
 				if(_vortexScript.radius.x > 0.0f && _vortexScript.radius.y > 0.0f){
 					_vortexScript.radius.x = _vortexScript.radius.y -= _vortexSpeed * Time.deltaTime;
@@ -118,8 +114,11 @@ public class CameraController : MonoBehaviour {
 					_vortexState = VortexState.OFF;
 				}
 				break;
-
-			case VortexState.OFF: break;
+			case VortexState.MAX:
+				break;
+			case VortexState.OFF: 
+				_vortexScript.enabled = false;
+				break;
 		}
 	}
 

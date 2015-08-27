@@ -58,7 +58,7 @@ public class Spirit : MonoBehaviour {
 			if (_gazeAwareComponent.HasGaze && nearPlayer(distDetection)) {
 				if (!_audioSource.isPlaying)_audioSource.Play ();
 				CameraController.Instance.setVortexState (CameraController.VortexState.INC);
-				CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.INC);
+				//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.INC);
 				GameController.Instance.startVibration (0.8f, 0.8f);
 				faceTarget (targetPlayer.transform.position);
 				StartCoroutine (CameraController.Instance.Shake (2.0f, 0.05f, 10.0f));
@@ -79,7 +79,7 @@ public class Spirit : MonoBehaviour {
 			StartWalk ();
 			if (Time.time > timeFollowPlayer) {
 				CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
-				CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
+				//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
 				GameController.Instance.stopVibration ();
 				switchPosition ();
 				_smoke.SetActive (false);

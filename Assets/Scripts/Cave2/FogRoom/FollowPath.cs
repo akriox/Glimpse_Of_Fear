@@ -24,7 +24,7 @@ namespace UnityStandardAssets.ImageEffects
 		private Transform currentTarget;
 		private GameObject player;
 		private GazeAwareComponent _gazeAwareComponent;
-		private bool ready;
+		private bool ready = false;
 
 		private AudioClip nothing;
 		private FadingAudioSource _fadingAudioSource;
@@ -34,7 +34,6 @@ namespace UnityStandardAssets.ImageEffects
 		}
 		
 		private void Start () {
-			ready = false;
 			nothing = (AudioClip) Resources.Load("Audio/blank_sound", typeof(AudioClip));
 			player = GameObject.FindGameObjectWithTag("Player");
 			_gazeAwareComponent = GetComponent<GazeAwareComponent>();
