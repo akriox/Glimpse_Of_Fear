@@ -8,7 +8,7 @@ public class lookPathReaper : MonoBehaviour {
 	[SerializeField] private Transform positionStart;
 	[SerializeField] private Transform positionEnd;
 	[SerializeField] private GameObject triggerToDesactive;
-	[SerializeField] private GameObject[] pathToDesactive;
+	[SerializeField] private GameObject pathToDesactive;
 	[SerializeField] private AudioClip _audioClip;
 	private float timeSetActiv = 2F;
 	private float timeUntilDesactivItSelf; 
@@ -26,14 +26,12 @@ public class lookPathReaper : MonoBehaviour {
 			HeartBeat.playLoop();
 			StartCoroutine (CameraController.Instance.Shake (1.0f, 0.5f, 2.0f));
 			StartCoroutine (GameController.Instance.timedVibration (0.6f, 0.6f, 1.0f));
-			moveReaperBigRoom.Instance.setPosition (positionStart.position, positionEnd.position);
+			moveWraithCave2.setPosition (positionStart.position, positionEnd.position);
 			timeUntilDesactivItSelf = Time.time + timeSetActiv;
 			if(triggerToDesactive != null)
 				triggerToDesactive.SetActive(false);
 			if (pathToDesactive != null) {
-				foreach (GameObject path in pathToDesactive) {
-					path.SetActive (false);
-				}
+				pathToDesactive.SetActive (false);
 			}
 			alreadyCall = true;
 		}
