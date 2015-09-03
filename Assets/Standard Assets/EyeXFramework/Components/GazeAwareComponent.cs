@@ -13,7 +13,7 @@ public class GazeAwareComponent : EyeXGameObjectInteractorBase
 {
 	// Delay between first glance and gaze aware event response
 	public int delayInMilliseconds;
-	
+
 	/// <summary>
 	/// Gets a value indicating whether the user's eye-gaze is within the bounds of the interactor.
 	/// </summary>
@@ -27,8 +27,13 @@ public class GazeAwareComponent : EyeXGameObjectInteractorBase
 	protected override void Update()
 	{
 		base.Update();
-		
-		HasGaze = GameObjectInteractor.HasGaze() && checkVisibility();
+
+		if(GameObjectInteractor.HasGaze() && checkVisibility()){
+			HasGaze = true;
+		}
+		else{
+			HasGaze = false;
+		}
 	}
 	
 	protected override IList<IEyeXBehavior> GetEyeXBehaviorsForGameObjectInteractor()
@@ -38,7 +43,7 @@ public class GazeAwareComponent : EyeXGameObjectInteractorBase
 	
 	protected bool checkVisibility()
 	{
-		Debug.DrawLine(transform.position, Camera.main.transform.position, Color.white);
+		Debug.DrawLine(transform.position, Camera.main.transform.position, Color.magenta);
 		return Physics.Linecast(transform.position, Camera.main.transform.position, layerMask) ? false : true;
 	}
 }

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(UserPresenceComponent))]
+[RequireComponent (typeof(UserPresenceComponent))]
 public class Flashlight : MonoBehaviour {
 	
 	public static Flashlight Instance {get; private set;}
-	
+
 	private UserPresenceComponent _userPresenceComponent;
 	public Light lum {get; private set;}
 	private enum State{ON, OFF, FLICKER};
@@ -21,14 +21,13 @@ public class Flashlight : MonoBehaviour {
 	private Color defaultColor;
 	public GameObject batteryLevel;
 
-	public bool EyeTracking = true;
-
 	public void Awake(){
 		Instance = this;
 	}
 
-	public void Start() {
+	public void Start() { 
 		_userPresenceComponent = GetComponent<UserPresenceComponent>();
+
 		lum = GetComponentInChildren<Light>();
 		audioSource = GetComponent<AudioSource>();
 
@@ -40,11 +39,10 @@ public class Flashlight : MonoBehaviour {
 	}
 
 	public void Update() {
-		bool b = EyeTracking ? _userPresenceComponent.IsUserPresent : true;
+
+		bool b = _userPresenceComponent.GazeTracking == EyeXGazeTracking.GazeTracked ? true : false;
 		lum.gameObject.SetActive(b);
-
-		if(Input.GetKeyDown(KeyCode.R)) charge();
-
+		
 		if(lum.isActiveAndEnabled){
 			if(_state == State.OFF){
 				audioSource.clip = buttonSound[0];

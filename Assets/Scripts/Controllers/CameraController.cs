@@ -154,6 +154,7 @@ public class CameraController : MonoBehaviour {
 	}
 
 	public void GettingUpAnimation(){
+		lockPlayer(1);
 		_animator.SetTrigger(gettingUp);
 	}
 
