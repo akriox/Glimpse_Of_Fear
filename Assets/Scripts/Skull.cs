@@ -13,6 +13,7 @@ public class Skull : MonoBehaviour {
 	private Quaternion rotation;
 	private float angleOrigine;
 	private float rotationSpeed = 4.0f;
+	private float timer;
 	
 	public void Start(){
 		_gazeAwareComponent = GetComponent<GazeAwareComponent>();
@@ -20,14 +21,17 @@ public class Skull : MonoBehaviour {
 		angleOrigine = transform.eulerAngles.x;
 		originalLook = new Vector3 (transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
 		player = GameObject.FindGameObjectWithTag("Player");
+		timer = Time.time;
 	}
 
 	public void Update () {
 		if (eye [0].enabled && eye [1].enabled) {
 			if (_gazeAwareComponent.HasGaze) {
 				faceTargetAt (player.transform.position);
+				timer = Time.time;
 			} else {
-				returnOriginalPosition ();
+				if(Time.time > timer + 1.5f)
+					returnOriginalPosition();
 			}
 		}
 	}
