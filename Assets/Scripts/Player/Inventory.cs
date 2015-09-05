@@ -4,20 +4,20 @@ using System.Collections;
 public class Inventory : MonoBehaviour {
 
 	public static Inventory Instance { get; private set; }
-	public int glowStickStash { get; private set; }
+	public int FlareStickStash { get; private set; }
 	public bool hasPentacle;
 	public bool hasTablet;
 
 	public void Awake(){
 		Instance = this;
-		glowStickStash = 10;
+		FlareStickStash = 5;
 	}
 
-	public void addGlowStick(int qty){
-		glowStickStash += qty;
+	public void addFlareStick(int qty){
+		FlareStickStash += qty;
 	}
 
-	public void removeGlowStick(int qty){
-		glowStickStash -= qty;
+	public void removeFlareStick(int qty){
+		FlareStickStash -= qty;
 	}
 }

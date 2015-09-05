@@ -65,10 +65,11 @@ public class LoadingScreen : MonoBehaviour {
 		fading = Fading.OUT;
 		levelLoaded = true;
 
+		//MainMenu
 		if(level == 0){
 			GameObject player = GameObject.FindGameObjectWithTag("Player");
-			Destroy(this.gameObject);
 			Destroy(player);
+			Destroy(this.gameObject);
 		}
 
 		//Cave1

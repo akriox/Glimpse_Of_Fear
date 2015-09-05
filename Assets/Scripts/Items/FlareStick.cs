@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class GlowStick : Collectible {
+public class FlareStick : Collectible {
 
 	private Vector3 rotation;
 	
@@ -24,7 +24,7 @@ public class GlowStick : Collectible {
 
 		if(pickedUp){
 			GameController.Instance.displayWidget(false);
-			Inventory.Instance.addGlowStick(1);
+			Inventory.Instance.addFlareStick(1);
 			Destroy(this.gameObject);
 		}
 	}

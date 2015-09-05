@@ -22,6 +22,8 @@ public class FPSHand : MonoBehaviour {
 		
 		yRot *= Settings.MousePadXYSensitivity;
 		xRot *= Settings.MousePadXYSensitivity;
+
+		if(Settings.invertedAxis) xRot = -xRot;
 		
 		targetRotation *= Quaternion.Euler (-yRot, -xRot, 0.0f);
 		targetRotation = ClampRotationXYAxis(targetRotation);

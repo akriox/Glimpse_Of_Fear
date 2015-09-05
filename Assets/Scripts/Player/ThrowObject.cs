@@ -6,7 +6,7 @@ public class ThrowObject : MonoBehaviour {
 
 	private GazeAwareComponent _gazeAwareComponent;
 	private GazePointDataComponent _gazePointDataComponent;
-	private string GlowStickPrefab = "Prefabs/CollectibleItems/GlowStick";
+	private string FlareStickPrefab = "Prefabs/CollectibleItems/FlareStick";
 	private static GameObject objectToThrow;
 	private float force = 2000.0f;
 	private Vector3 trajectory;
@@ -23,10 +23,10 @@ public class ThrowObject : MonoBehaviour {
 		if(gazePoint.IsValid && gazePoint.IsWithinScreenBounds){
 
 			if(Input.GetButtonDown("Throw")){
-				if(Inventory.Instance.glowStickStash > 0 && objectToThrow == null){
-					objectToThrow = Instantiate(Resources.Load (GlowStickPrefab), transform.position, Quaternion.identity) as GameObject;
-					objectToThrow.name = "Glowstick";
-					Inventory.Instance.removeGlowStick(1);
+				if(Inventory.Instance.FlareStickStash > 0 && objectToThrow == null){
+					objectToThrow = Instantiate(Resources.Load (FlareStickPrefab), transform.position, Quaternion.identity) as GameObject;
+					objectToThrow.name = "FlareStick";
+					Inventory.Instance.removeFlareStick(1);
 				}
 				if(objectToThrow != null){
 					throwing = true;
