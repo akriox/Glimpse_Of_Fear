@@ -15,6 +15,9 @@ public class Flashlight : MonoBehaviour {
 	private float _power;
 	private float _timer = 0.0f;
 
+	public AudioClip voiceRecharge;
+	private bool rechargeHint = false;
+
 	public AudioClip[] buttonSound;
 	private AudioSource audioSource;
 
@@ -39,6 +42,7 @@ public class Flashlight : MonoBehaviour {
 	}
 
 	public void Update() {
+		Debug.Log(lum.intensity);
 
 		bool b = _userPresenceComponent.GazeTracking == EyeXGazeTracking.GazeTracked ? true : false;
 		lum.gameObject.SetActive(b);
@@ -86,6 +90,7 @@ public class Flashlight : MonoBehaviour {
 	public void charge(){
 		lum.intensity = _maxIntensity;
 		batteryLevel.GetComponent<Renderer>().material.color = defaultColor;
+		rechargeHint = false;
 	}
 
 	private void updateBatteryLevel(){
@@ -94,6 +99,10 @@ public class Flashlight : MonoBehaviour {
 			c.r = 1.0f;
 		}
 		if(lum.intensity < _maxIntensity/4.0f){
+			if(!VoiceOver._audioSource.isPlaying && rechargeHint == false) {
+				VoiceOver.Talk(voiceRecharge);
+				rechargeHint = true;
+			}
 			c.g = 0.0f;
 		}
 		batteryLevel.GetComponent<Renderer>().material.color = c;

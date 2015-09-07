@@ -47,7 +47,7 @@ public class FirstPersonController : MonoBehaviour
 	private float m_StandingHeight;
 	private float m_DuckingHeight;
 
-	private enum GroundType {ROCK, SAND, WOOD, WATER};
+	private enum GroundType {ROCK, SAND, WOOD, WATER, FOG};
 	private GroundType groundType;
 
 	public static GameObject rightHand;
@@ -213,6 +213,7 @@ public class FirstPersonController : MonoBehaviour
 			case GroundType.ROCK: m_FootstepSounds = m_FootstepRock; break;
 			case GroundType.WOOD: m_FootstepSounds = m_FootstepWood; break;
 			case GroundType.WATER: m_FootstepSounds = m_FootstepWater; break;
+			case GroundType.FOG: m_FootstepSounds = m_FootstepRock; break;
 		}
         // pick & play a random footstep sound from the array,
         // excluding sound at index 0
@@ -266,7 +267,7 @@ public class FirstPersonController : MonoBehaviour
         speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
 
 		// cannot run on wooden bridge
-		if(groundType == GroundType.WOOD) speed = m_WalkSpeed;
+		if(groundType == GroundType.WOOD || groundType == GroundType.FOG) speed = m_WalkSpeed;
 
         m_Input = new Vector2(horizontal, vertical);
 
@@ -297,6 +298,7 @@ public class FirstPersonController : MonoBehaviour
 			case "Rock": groundType = GroundType.ROCK; break;
 			case "Sand": groundType = GroundType.SAND; break;
 			case "Water": groundType = GroundType.WATER; break;
+			case "Fog": groundType = GroundType.FOG; break;
 		}
 
         Rigidbody body = hit.collider.attachedRigidbody;

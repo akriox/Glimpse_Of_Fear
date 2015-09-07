@@ -25,10 +25,18 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void Update () {
-		if(Input.GetButtonDown("Menu") && inGameMenu != null){
-			EyeLook.isActive = !EyeLook.isActive;
+
+		if(Input.GetButtonUp("Menu")){
 			inGameMenu.SetActive(!inGameMenu.activeSelf);
-			Cursor.visible = !Cursor.visible;
+		}
+
+		if(inGameMenu.activeSelf){
+			EyeLook.isActive = false;
+			Cursor.visible = true;
+		}
+		else{
+			EyeLook.isActive = true;
+			Cursor.visible = false;
 		}
 	}
 
@@ -63,5 +71,11 @@ public class GameController : MonoBehaviour {
 
 	public void displayDebug(string str){
 		debugText.text = str;
+	}
+
+	public IEnumerator displayTimedDebug(string str, float timeout){
+		debugText.text = str;
+		yield return new WaitForSeconds(timeout);
+		debugText.text = "";
 	}
 }
