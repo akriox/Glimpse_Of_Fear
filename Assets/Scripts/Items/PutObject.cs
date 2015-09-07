@@ -16,7 +16,7 @@ public class PutObject: GazeAwareComponent {
 	
 	public new void Start(){
 		base.Start ();
-		GetComponent<MeshRenderer>().enabled = false;
+		//GetComponent<MeshRenderer>().enabled = false;
 		widgetSprite =  (Sprite) Resources.Load("2D/Buttons/A", typeof(Sprite)); 
 		//Inventory.Instance.hasTablet = true;
 		_anim = gate.GetComponent<Animator> ();
@@ -46,7 +46,7 @@ public class PutObject: GazeAwareComponent {
 	}	
 	
 	private void Open(){
-		GetComponent<MeshRenderer>().enabled = true;
+		//GetComponent<MeshRenderer>().enabled = true;
 		gate.GetComponent<AudioSource>().Play();
 		_anim.SetBool(Animator.StringToHash("Open"), true);
 		GameController.Instance.displayWidget(false);
