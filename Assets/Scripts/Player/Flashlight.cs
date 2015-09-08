@@ -42,7 +42,6 @@ public class Flashlight : MonoBehaviour {
 	}
 
 	public void Update() {
-		Debug.Log(lum.intensity);
 
 		bool b = _userPresenceComponent.GazeTracking == EyeXGazeTracking.GazeTracked ? true : false;
 		lum.gameObject.SetActive(b);

@@ -14,7 +14,7 @@ public class Battery : Collectible {
 		base.Update();
 		if(pickedUp){
 			GameController.Instance.displayWidget(false);
-			VoiceOver.Talk(clip);
+			if(!VoiceOver._audioSource.isPlaying) VoiceOver.Talk(clip);
 			Flashlight.Instance.charge();
 			Destroy(this.gameObject);
 		}
