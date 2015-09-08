@@ -10,12 +10,12 @@ public class lookPathReaper : MonoBehaviour {
 	[SerializeField] private GameObject triggerToDesactive;
 	[SerializeField] private GameObject pathToDesactive;
 	[SerializeField] private AudioClip _audioClip;
-	private float timeSetActiv = 2F;
-	private float timeUntilDesactivItSelf; 
 
 	private bool alreadyCall = false;
-
-
+	public string str;
+	public AudioClip voice;
+	public AudioClip voice2;
+	
 	public void Start(){
 		_gazeAwareComponent = GetComponent<GazeAwareComponent> ();
 	}
@@ -23,20 +23,28 @@ public class lookPathReaper : MonoBehaviour {
 		if (_gazeAwareComponent.HasGaze && !alreadyCall) {
 			if(_audioClip != null)
 				EventSound.playClip(_audioClip);
-			HeartBeat.playLoop();
-			StartCoroutine (CameraController.Instance.Shake (1.0f, 0.5f, 2.0f));
-			StartCoroutine (GameController.Instance.timedVibration (0.6f, 0.6f, 1.0f));
+			StartCoroutine(fear());
+			alreadyCall = true;
 			moveWraithCave2.setPosition (positionStart.position, positionEnd.position);
-			timeUntilDesactivItSelf = Time.time + timeSetActiv;
 			if(triggerToDesactive != null)
 				triggerToDesactive.SetActive(false);
 			if (pathToDesactive != null) {
 				pathToDesactive.SetActive (false);
 			}
-			alreadyCall = true;
 		}
-		if (alreadyCall && Time.time >timeUntilDesactivItSelf) {
-			this.enabled = false;
-		}
+	}
+
+	IEnumerator fear(){
+		StartCoroutine (CameraController.Instance.Shake (1.0f, 0.5f, 2.0f));
+		StartCoroutine (GameController.Instance.timedVibration (0.6f, 0.6f, 1.0f));
+		yield return new WaitForSeconds(0.5f);
+		HeartBeat.playLoop();
+		if(voice != null) VoiceOver.Talk(voice);
+		yield return new WaitForSeconds(1.5f);
+		if(voice2 != null) VoiceOver.Talk(voice2);
+		if(Settings.subtitles) GameController.Instance.displayDebug(str);
+		yield return new WaitForSeconds(1.5f);
+		if(Settings.subtitles) GameController.Instance.displayDebug("");
+		Destroy(this.gameObject);
 	}
 }

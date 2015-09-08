@@ -9,25 +9,21 @@ public class Spirit : MonoBehaviour {
 
 	private GazeAwareComponent _gazeAwareComponent;
 	private AudioSource _audioSource;
-
 	private List<Transform> listPosition = new List<Transform>();
 	private Transform currentTarget;
 	private NavMeshAgent agent;
 	private GameObject targetPlayer;
-
 	private Vector3 direction;
 	private Quaternion rotation;
-
+	
 	[SerializeField] private Transform PositionSpirit;
 	[SerializeField] private GameObject _texture;
 	[SerializeField] private GameObject _smoke;
 	[SerializeField][Range(1.5F, 3.5F)] private float timeForFollowPlayer = 2f;
 	[SerializeField][Range(5f, 20f)] private float distDetection = 15f;
-	[SerializeField] private GameObject forDestroyItSelf;
-
+	
 	private float timeFollowPlayer;
 	private float timeToNotAppear;
-
 	private enum State{NotAppear, Appear, FollowPlayer};
 	private State _state;
 
@@ -85,8 +81,6 @@ public class Spirit : MonoBehaviour {
 				_smoke.SetActive (false);
 				_texture.SetActive (false);
 				timeToNotAppear = Time.time + Random.Range (4f, 6f);
-				if(forDestroyItSelf != null)
-					Destroy(forDestroyItSelf);
 				_state = State.NotAppear;
 			}
 			break;

@@ -6,12 +6,16 @@ namespace UnityStandardAssets.ImageEffects
 	public class FogRoomTrigger: MonoBehaviour {
 		
 		
-		[SerializeField][Range(0, 4)]public int _case = 1;
-		public GameObject desactivAnObject;
-		public GameObject activAnObject;
+		[SerializeField][Range(0, 5)]public int _case = 1;
+		[SerializeField] private GameObject desactivAnObject;
+		[SerializeField] private GameObject activAnObject;
+		[SerializeField] private GameObject thisTrigger;
+		[SerializeField] private GameObject otherTrigger;
+
+		[SerializeField] private string str;
+		[SerializeField] private AudioClip voice;
 
 		public void OnTriggerEnter(Collider other) {
-
 			if (other.gameObject.tag == "Player") {
 				if (activAnObject != null)
 					activAnObject.SetActive(true);
@@ -42,7 +46,14 @@ namespace UnityStandardAssets.ImageEffects
 				case 4:
 					FollowPath.Instance.setReady();
 					break;
+				case 5:
+					CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.DEC);
+					FollowPath.Instance.setFinish();
+					StartCoroutine(voiceFall());
+					break;
 				}
+				if(thisTrigger!= null) thisTrigger.SetActive(false);
+				if(otherTrigger!= null) otherTrigger.SetActive(true);
 			}
 		}
 
@@ -50,6 +61,14 @@ namespace UnityStandardAssets.ImageEffects
 			if (desactivAnObject != null && desactivAnObject.activeSelf) {
 				desactivAnObject.SetActive (false);
 			}
+		}
+
+		IEnumerator voiceFall(){
+			yield return new WaitForSeconds(1f);
+			if(voice != null) VoiceOver.Talk(voice);
+			if(Settings.subtitles) GameController.Instance.displayDebug(str);
+			yield return new WaitForSeconds(1.5f);
+			if(Settings.subtitles) GameController.Instance.displayDebug("");
 		}
 	}
 }

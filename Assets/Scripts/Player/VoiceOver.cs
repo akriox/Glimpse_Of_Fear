@@ -13,4 +13,9 @@ public class VoiceOver : MonoBehaviour {
 		_audioSource.clip = clip;
 		_audioSource.Play();
 	}
+
+	public static void stop(){
+		if (_audioSource.isPlaying)
+			_audioSource.Stop ();
+	}
 }

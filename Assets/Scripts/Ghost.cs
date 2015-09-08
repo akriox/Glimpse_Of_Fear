@@ -10,12 +10,14 @@ public class Ghost : MonoBehaviour {
 
 	public enum MovementTypes { Follow, Random}
 	public enum AnimationTypes {Random, ShakeHead, Turn, Idle, Point}
+	public enum Sex {homme, femme}
 
 	public bool gazeContact;
 	public float fadeSpeed = 2.0f;
 
 	public MovementTypes _movementType = MovementTypes.Follow;
 	public AnimationTypes _animationTypes = AnimationTypes.Random;
+	public Sex _sexType = Sex.homme;
 	public Transform pathToFollow;
 
 	[SerializeField][Range(0.1F, 5.0F)] public float speed;
@@ -47,11 +49,22 @@ public class Ghost : MonoBehaviour {
 	private GazeAwareComponent _gazeAwareComponent;
 	private Material _material;
 
+	private AudioClip sonPointage;
+	private AudioClip _voice;
+	private AudioSource _audioSource;
+
 	void Start () {
 		_anim = GetComponent<Animator>();
 		_gazeAwareComponent = GetComponentInChildren<GazeAwareComponent>();
 		_material = GetComponentInChildren<Renderer>().material;
 		_player = GameObject.FindGameObjectWithTag("Player");
+		_audioSource = GetComponent<AudioSource> ();
+		sonPointage = (AudioClip)Resources.Load("Audio/Ghost/Spirit_wander01", typeof(AudioClip));
+		if (_sexType == Sex.homme)
+			_voice = (AudioClip)Resources.Load ("Audio/Ghost/Spirit_malevoice01", typeof(AudioClip));
+		else {
+			_voice = (AudioClip)Resources.Load("Audio/Ghost/Spirit_femalevoice01", typeof(AudioClip));
+		}
 		if(pathToFollow == null){
 			Debug.LogError("Un GameObject 'pathGhost' doit etre renseigné dans le script 'Ghost.cs'.");
 		} else {
@@ -175,10 +188,14 @@ public class Ghost : MonoBehaviour {
 	}
 	
 	public void Turn(){
+		_audioSource.clip = _voice;
+		_audioSource.Play();
 		_anim.SetTrigger(turn);
 	}
 	
 	public void Point(){
+		_audioSource.clip = sonPointage;
+		_audioSource.Play();
 		_anim.SetTrigger(point);
 	}
 

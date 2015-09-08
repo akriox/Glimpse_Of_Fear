@@ -7,11 +7,10 @@ public class TriggerMusic : MonoBehaviour {
 	[SerializeField][Range(0.0F, 1.0F)] private float volume;
 	[SerializeField] private bool loop;
 
-	public IEnumerator OnTriggerEnter(Collider other) {
+	public void OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Player") {
 			soundtrack.GetComponent<FadingAudioSource> ().Fade (soundtrackToPlay, volume, loop);
-			yield return new WaitForSeconds(1);
-			this.enabled =false;
+			Destroy(this.gameObject);
 		}
 	}
 }

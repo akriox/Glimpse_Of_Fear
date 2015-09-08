@@ -6,7 +6,7 @@ public class CristalSpirit : MonoBehaviour {
 	private Material activeMat;
 	private Material inactiveMat;
 	private GameObject targetSpirit;
-	private float distActivationCrystal = 5f;
+	private float distActivationCrystal = 8f;
 
 	// Use this for initialization
 	void Start () {
