@@ -1,15 +1,20 @@
 fileFormatVersion: 2
-guid: cbbf753f1a8896144b55f97794586f5c
-timeCreated: 1441454244
+guid: 9367098c904a3fe4d9c1310a10ef6039
+timeCreated: 1441719898
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
+    100000: Flare_stick_body
+    100002: //RootNode
+    400000: Flare_stick_body
+    400002: //RootNode
+    2300000: Flare_stick_body
+    2300002: //RootNode
+    3300000: Flare_stick_body
+    3300002: //RootNode
     4300000: glowstick
+    4300002: Flare_stick_body
   materials:
     importMaterials: 1
     materialName: 0

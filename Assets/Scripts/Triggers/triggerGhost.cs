@@ -18,7 +18,7 @@ public class triggerGhost : MonoBehaviour {
 			_activ.SetActive(true);
 			StartCoroutine(ProjectorObject.Flicker(50));
 			yield return new WaitForSeconds(4.3f);
-			EventSound.playClip(_audioClip,0.8f);
+			EventSound.playClip(_audioClip, 0.3f);
 			yield return new WaitForSeconds(7f);
 			_activ.SetActive(false);
 			this.enabled = false;
