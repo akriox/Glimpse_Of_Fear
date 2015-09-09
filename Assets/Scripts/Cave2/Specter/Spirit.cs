@@ -58,7 +58,6 @@ public class Spirit : MonoBehaviour {
 				GameController.Instance.startVibration (0.8f, 0.8f);
 				faceTarget (targetPlayer.transform.position);
 				StartCoroutine (CameraController.Instance.Shake (2.0f, 0.05f, 10.0f));
-				StartCoroutine (Flashlight.Instance.Flicker ());
 				timeFollowPlayer = Time.time + Random.Range (timeForFollowPlayer - 0.5f, timeForFollowPlayer + 0.5f);
 				_smoke.SetActive (true);
 				_texture.SetActive (true);
