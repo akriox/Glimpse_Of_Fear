@@ -43,6 +43,8 @@ public class Flashlight : MonoBehaviour {
 
 	public void Update() {
 
+		if(Input.GetKeyDown(KeyCode.R)) charge();
+
 		bool b = _userPresenceComponent.GazeTracking == EyeXGazeTracking.GazeTracked ? true : false;
 		lum.gameObject.SetActive(b);
 		

@@ -5,8 +5,8 @@ public class FPSHand : MonoBehaviour {
 
 	public bool smooth;
 	public float smoothTime = 5.0f;
-	private float min = -30.0f;
-	private float max = 30.0f;
+	private float min = -25.0f;
+	private float max = 25.0f;
 	private Quaternion targetRotation;
 	private float initRotZ;
 

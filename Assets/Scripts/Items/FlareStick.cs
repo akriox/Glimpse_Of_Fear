@@ -10,6 +10,8 @@ public class FlareStick : Collectible {
 		base.Awake();
 		// Ignore collisions with guardrail colliders
 		Physics.IgnoreLayerCollision(10, 11);
+		// Ignore collisions with water
+		Physics.IgnoreLayerCollision(10, 4);
 	}
 
 	public new void Start(){

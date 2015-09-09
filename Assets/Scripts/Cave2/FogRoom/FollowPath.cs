@@ -62,14 +62,14 @@ namespace UnityStandardAssets.ImageEffects
 				_fadingAudioSource.Fade (nothing, 0.0f, false);
 				//CameraController.Instance.setVortexState(CameraController.VortexState.DEC);
 				CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
-				if(!correctWay)talk (voice);
+				//if(!correctWay)talk (voice);
 			} 
 			else {
 				if(ready){
 					_fadingAudioSource.Fade (whisper, 1.0f, true);
 					//CameraController.Instance.setVortexState(CameraController.VortexState.INC);
 					CameraController.Instance.setNoiseAndScratches(CameraController.NoiseAndScratchesState.INC);
-					if(correctWay)talk(voice2);
+					//if(correctWay)talk(voice2);
 				}
 			}
 			Walk();

@@ -24,7 +24,7 @@ namespace UnityStandardAssets.ImageEffects
 			if (other.gameObject.tag == "Player") {
 				Path.SetActive(false);
 				yield return new WaitForSeconds(1f);
-				CameraController.Instance.resetShake();
+				//CameraController.Instance.resetShake();
 				GameController.Instance.stopVibration();
 			}
 		}

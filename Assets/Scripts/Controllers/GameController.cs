@@ -33,15 +33,8 @@ public class GameController : MonoBehaviour {
 
 		if(Input.GetButtonUp("Menu")){
 			inGameMenu.SetActive(!inGameMenu.activeSelf);
-		}
-
-		if(inGameMenu.activeSelf){
-			EyeLook.isActive = false;
-			Cursor.visible = true;
-		}
-		else{
-			EyeLook.isActive = true;
-			Cursor.visible = false;
+			EyeLook.isActive = !EyeLook.isActive;
+			Cursor.visible = !Cursor.visible;
 		}
 	}
 

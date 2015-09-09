@@ -35,7 +35,7 @@ public class lookPathReaper : MonoBehaviour {
 	}
 
 	IEnumerator fear(){
-		StartCoroutine (CameraController.Instance.Shake (1.0f, 0.5f, 2.0f));
+		//StartCoroutine (CameraController.Instance.Shake (1.0f, 0.5f, 2.0f));
 		StartCoroutine (GameController.Instance.timedVibration (0.6f, 0.6f, 1.0f));
 		yield return new WaitForSeconds(0.5f);
 		HeartBeat.playLoop();
