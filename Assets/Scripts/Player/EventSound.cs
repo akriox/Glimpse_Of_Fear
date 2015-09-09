@@ -5,7 +5,7 @@ public class EventSound : MonoBehaviour {
 	
 	public static AudioSource audioSource;
 	
-	public void Start () {
+	public void Awake () {
 		audioSource = GetComponent<AudioSource>();
 	}
 	

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityStandardAssets.ImageEffects;
 
@@ -7,87 +8,91 @@ public class CameraController : MonoBehaviour {
 	public static CameraController Instance {get; private set;}
 
 	private Camera _camera;
-	private Animator _animator;
+	private Quaternion initCamera;
 
+	private Animator _animator;
 	private int gettingUp = Animator.StringToHash("GettingUp");
 
-	private Vortex _vortexScript;
-	private NoiseAndScratches _noiseAndScratches;
 	//private VertigoEffect _vertigoScript;
-	private ColorCorrectionCurves _colorCorrectionCurvesScript;
-	
-	private bool _vertigo;
+	private Vortex _vortexScript;
+	private NoiseAndScratches _noiseAndScratchesScript;
 
-	public enum VortexState {INC, DEC, MAX,OFF};
-	public enum NoiseAndScratchesState {INC, DEC, MAX, OFF};
+	public Image fade;
+	public enum FadeState {IN, OUT, OFF};
+	private FadeState _fadeState = FadeState.OFF;
+	private float _fadeSpeed = 2.0f;
+
+	public enum VortexState {INC, DEC, MAX, OFF};
 	private VortexState _vortexState = VortexState.OFF;
-	private NoiseAndScratchesState _noiseAndScratchesState = NoiseAndScratchesState.OFF;
+	[SerializeField][Range(0.0f, 10.0f)] private float _vortexSpeed = 1.0f;
 	[SerializeField][Range(0.0f, 1.0f)] private float _vortexMaxRadius = 0.6f;
+
+	public enum NoiseAndScratchesState {INC, DEC, MAX, OFF};
+	private NoiseAndScratchesState _noiseAndScratchesState = NoiseAndScratchesState.OFF;
 	[SerializeField][Range(0.0f, 2.5f)] private float _noiseAndScratchesMaxValue = 1.5f;
-	[SerializeField][Range(0.0f, 1.0f)] private float _vortexSpeed = 1.0f;
 	[SerializeField][Range(0.0f, 1.0f)] private float _noiseAndScratchesMaxValueSpeed = 0.5f;
 
-	private Quaternion initCamera;
 
 	public void Awake(){
 		Instance = this;
-		//DontDestroyOnLoad(this.gameObject);
 	}
 
 	public void Start(){
 		_camera = Camera.main;
 		initCamera = Camera.main.transform.localRotation;
 		_animator = _camera.GetComponent<Animator>();
+
 		_vortexScript = _camera.GetComponent<Vortex>();
+		_noiseAndScratchesScript = _camera.GetComponent<NoiseAndScratches>();
 		//_vertigoScript = _camera.GetComponent<VertigoEffect>();
-		_colorCorrectionCurvesScript = _camera.GetComponent<ColorCorrectionCurves>();
-		_noiseAndScratches = _camera.GetComponent<NoiseAndScratches>();
 	}
 
 	public void Update(){
 		VortexEffect();
-		NoiseAndScratchesEffect ();
-		if(Input.GetKeyDown(KeyCode.O)) GettingUpAnimation();
+		NoiseAndScratchesEffect();
+		FadeEffect();
 	}
 	
 	public void setVortexState(VortexState state){
 		_vortexState = state;
 	}
 
-	public void setColorCorrectionCurves(bool b){
-		_colorCorrectionCurvesScript.enabled = b;
-	}
-
 	public void setNoiseAndScratches(NoiseAndScratchesState state){
 		_noiseAndScratchesState = state;
 	}
 
+	public void setFadeState(FadeState state, float speed){
+		_fadeState = state;
+		_fadeSpeed = speed;
+	}
+
 	private void NoiseAndScratchesEffect(){
+
 		switch (_noiseAndScratchesState) {
 			case NoiseAndScratchesState.INC:
-				_noiseAndScratches.enabled = true;
-				if(_noiseAndScratches.grainIntensityMax < _noiseAndScratchesMaxValue){
-					_noiseAndScratches.grainIntensityMax += _noiseAndScratchesMaxValueSpeed * Time.deltaTime;
+				_noiseAndScratchesScript.enabled = true;
+				if(_noiseAndScratchesScript.grainIntensityMax < _noiseAndScratchesMaxValue){
+					_noiseAndScratchesScript.grainIntensityMax += _noiseAndScratchesMaxValueSpeed * Time.deltaTime;
 				}
 				else{
-					_noiseAndScratches.grainIntensityMax = _noiseAndScratchesMaxValue;
+					_noiseAndScratchesScript.grainIntensityMax = _noiseAndScratchesMaxValue;
 					_noiseAndScratchesState = NoiseAndScratchesState.MAX;
 				}
 				break;
 			case NoiseAndScratchesState.DEC:
-				if(_noiseAndScratches.grainIntensityMax >0.0f){
-					_noiseAndScratches.grainIntensityMax -= _noiseAndScratchesMaxValueSpeed *2* Time.deltaTime;
+				if(_noiseAndScratchesScript.grainIntensityMax >0.0f){
+					_noiseAndScratchesScript.grainIntensityMax -= _noiseAndScratchesMaxValueSpeed * 2 * Time.deltaTime;
 				}
 				else{
-					_noiseAndScratches.grainIntensityMax = 0.0f;
-					_noiseAndScratches.enabled = false;
+					_noiseAndScratchesScript.grainIntensityMax = 0.0f;
+					_noiseAndScratchesScript.enabled = false;
 					_noiseAndScratchesState = NoiseAndScratchesState.OFF;
 				}
 				break;
 			case NoiseAndScratchesState.MAX:
 				break;
 			case NoiseAndScratchesState.OFF:
-			_noiseAndScratches.enabled = false;
+				_noiseAndScratchesScript.enabled = false;
 				break;
 		}
 	}
@@ -117,7 +122,35 @@ public class CameraController : MonoBehaviour {
 			case VortexState.MAX:
 				break;
 			case VortexState.OFF: 
-				_vortexScript.enabled = false;
+			    _vortexScript.enabled = false;
+				break;
+		}
+	}
+
+	private void FadeEffect(){
+
+		switch(_fadeState){
+			case FadeState.IN:
+				if(fade.color.a >= 0.05f){ 
+					fade.color = Color.Lerp(fade.color, Color.clear, _fadeSpeed * Time.deltaTime);
+				}
+				else{
+					fade.color = Color.clear;
+					_fadeState = FadeState.OFF;
+					fade.enabled = false;
+				}
+				break;
+			case FadeState.OUT:
+				if(fade.color.a <= 0.95f){ 
+					fade.color = Color.Lerp(fade.color, Color.black, _fadeSpeed * Time.deltaTime);
+				}
+				else{
+					fade.color = Color.black;
+					_fadeState = FadeState.OFF;
+					fade.enabled = false;
+				}
+				break;
+			case FadeState.OFF:
 				break;
 		}
 	}

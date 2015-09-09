@@ -74,6 +74,7 @@ public class LoadingScreen : MonoBehaviour {
 
 		//Cave1
 		if(level == 1){
+			StartCoroutine(GameController.Instance.OpeningScene());
 			setPlayerTransform(new Vector3(38.0f, 2.0f, -55.0f), new Quaternion(0.0f, -1.0f, 0.0f, 1.0f));
 		}
 		//Cave2

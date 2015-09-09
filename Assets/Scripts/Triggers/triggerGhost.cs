@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class triggerGhost : MonoBehaviour {
+public class TriggerGhost : MonoBehaviour {
 
 	private AudioClip _audioClip;
 	private bool alreadyCall;

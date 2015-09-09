@@ -14,8 +14,13 @@ public class GameController : MonoBehaviour {
 
 	private GameObject player;
 
+	private AudioClip rockSlideClip;
+	private AudioClip whereAmIClip;
+
 	public void Awake(){
 		Instance = this;
+		rockSlideClip = (AudioClip) Resources.Load("Audio/Cave1/medium_landslide01", typeof(AudioClip));
+		whereAmIClip = (AudioClip) Resources.Load("Audio/VoiceOver/Cave1/whereAmI", typeof(AudioClip));
 	}
 
 	public void Start(){
@@ -77,5 +82,15 @@ public class GameController : MonoBehaviour {
 		debugText.text = str;
 		yield return new WaitForSeconds(timeout);
 		debugText.text = "";
+	}
+
+	public IEnumerator OpeningScene(){
+		CameraController.Instance.fade.enabled = true;
+		EventSound.playClip(rockSlideClip);
+		yield return new WaitForSeconds(2.0f);
+		CameraController.Instance.setFadeState(CameraController.FadeState.IN, 0.8f);
+		yield return new WaitForSeconds(2.0f);
+		VoiceOver.Talk(whereAmIClip);
+		if(Settings.subtitles) displayDebug("Where am I ? I need to find a way out.");
 	}
 }
