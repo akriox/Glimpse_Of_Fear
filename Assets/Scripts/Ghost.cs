@@ -13,7 +13,7 @@ public class Ghost : MonoBehaviour {
 	public enum Sex {homme, femme}
 
 	public bool gazeContact;
-	public float fadeSpeed = 2.0f;
+	private float fadeSpeed = 4.0f;
 
 	public MovementTypes _movementType = MovementTypes.Follow;
 	public AnimationTypes _animationTypes = AnimationTypes.Random;

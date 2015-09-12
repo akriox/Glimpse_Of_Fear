@@ -47,6 +47,11 @@ public class FirstPersonController : MonoBehaviour
 	private float m_StandingHeight;
 	private float m_DuckingHeight;
 
+	/*
+	private float _sprintTimer = 0.0f;
+	private float _sprintDuration = 3.0f;
+	*/
+
 	private enum GroundType {ROCK, SAND, WOOD, WATER, FOG};
 	private GroundType groundType;
 
@@ -186,7 +191,6 @@ public class FirstPersonController : MonoBehaviour
             m_StepCycle += (m_CharacterController.velocity.magnitude + (speed*(m_IsWalking ? 1f : m_RunstepLenghten)))* Time.fixedDeltaTime;
 			if(groundType == GroundType.WOOD){
 				StartCoroutine(GameController.Instance.timedVibration(0.08f, 0.08f, 0.3f));
-				//StartCoroutine(CameraController.Instance.Shake(0.3f, 0.02f, 1.0f));
 			}
         }
 
@@ -258,11 +262,20 @@ public class FirstPersonController : MonoBehaviour
 
         bool waswalking = m_IsWalking;
 
-#if !MOBILE_INPUT
-        // On standalone builds, walk/run speed is modified by a key press.
-        // keep track of whether or not the character is walking or running
-        m_IsWalking = !Input.GetButton("Run");
-#endif
+		/*
+		if(_sprintTimer >= _sprintDuration){
+			m_IsWalking = true;
+		}
+		else{
+			m_IsWalking = Input.GetAxis("RightTrigger") == 1 || Input.GetAxis("LeftTrigger") == 1  || Input.GetButton("Run") ? false : true;
+		}
+
+		if(!m_IsWalking && _sprintTimer < _sprintDuration) _sprintTimer += Time.deltaTime;
+		else _sprintTimer -= Time.deltaTime;
+		*/
+
+		m_IsWalking = Input.GetAxis("RightTrigger") == 1 || Input.GetAxis("LeftTrigger") == 1  || Input.GetButton("Run") ? false : true;
+
         // set the desired speed to be walking or running
         speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
 

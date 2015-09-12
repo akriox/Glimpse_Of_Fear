@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+using XInputDotNetPure;
+
 [RequireComponent (typeof(GazePointDataComponent))]
 public class EyeLook : MonoBehaviour {
 
@@ -20,8 +22,10 @@ public class EyeLook : MonoBehaviour {
 	private float w;
 	private float h;
 	private float ratio;
-	private int offset = 50;
 	private Rect[] r;
+	private int maxRect = 5;
+	private int offset = 40;
+	private int i;
 
 	public void Start () {
 	
@@ -31,11 +35,11 @@ public class EyeLook : MonoBehaviour {
 		w = Screen.width;
 		h = Screen.height;
 		ratio = w/h;
-		r = new Rect[5];
+		r = new Rect[maxRect];
 
-		int i;
-		for(i=0; i<r.Length; i++){
-			r[i] = new Rect( (i+1)*offset*ratio, (i+1)*offset, w-ratio*offset*(i+1)*2, h-offset*(i+1)*2);
+		r[0] = new Rect(0, 0, w, h);
+		for(i=1; i < r.Length; i++){
+			r[i] = new Rect( i*offset*ratio, i*offset, w-ratio*offset*i*2, h-offset*i*2);
 		}
 	}
 
@@ -88,11 +92,9 @@ public class EyeLook : MonoBehaviour {
 
 	/*DEBUG DISPLAY RECT
 	public void OnGUI() {
-		GUI.Box(r[4], "");
-		GUI.Box(r[3], "");
-		GUI.Box(r[2], "");
-		GUI.Box(r[1], "");
-		GUI.Box(r[0], velocity.ToString());
+		foreach(Rect rect in r){
+			GUI.Box(rect, "");
+		}
 	}
 	*/
 }

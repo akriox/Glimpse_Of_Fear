@@ -22,7 +22,7 @@ public class ThrowObject : MonoBehaviour {
 		
 		if(gazePoint.IsValid && gazePoint.IsWithinScreenBounds){
 
-			if(Input.GetButtonDown("Throw")){
+			if(Input.GetButtonUp("Throw")){
 				if(Inventory.Instance.FlareStickStash > 0 && objectToThrow == null){
 					objectToThrow = Instantiate(Resources.Load (FlareStickPrefab), transform.position, Quaternion.identity) as GameObject;
 					objectToThrow.name = "FlareStick";
