@@ -47,11 +47,6 @@ public class FirstPersonController : MonoBehaviour
 	private float m_StandingHeight;
 	private float m_DuckingHeight;
 
-	/*
-	private float _sprintTimer = 0.0f;
-	private float _sprintDuration = 3.0f;
-	*/
-
 	private enum GroundType {ROCK, SAND, WOOD, WATER, FOG};
 	private GroundType groundType;
 
@@ -261,18 +256,6 @@ public class FirstPersonController : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
 
         bool waswalking = m_IsWalking;
-
-		/*
-		if(_sprintTimer >= _sprintDuration){
-			m_IsWalking = true;
-		}
-		else{
-			m_IsWalking = Input.GetAxis("RightTrigger") == 1 || Input.GetAxis("LeftTrigger") == 1  || Input.GetButton("Run") ? false : true;
-		}
-
-		if(!m_IsWalking && _sprintTimer < _sprintDuration) _sprintTimer += Time.deltaTime;
-		else _sprintTimer -= Time.deltaTime;
-		*/
 
 		m_IsWalking = Input.GetAxis("RightTrigger") == 1 || Input.GetAxis("LeftTrigger") == 1  || Input.GetButton("Run") ? false : true;
 

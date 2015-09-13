@@ -6,8 +6,7 @@ public class Collectible : GazeAwareComponent {
 	private bool pickUp;
 	protected bool pickedUp;
 	protected Sprite widgetSprite;
-
-	private bool gaze;
+	protected bool gaze;
 
 	public new void Start(){
 		base.Start();
@@ -15,14 +14,14 @@ public class Collectible : GazeAwareComponent {
 	}
 
 	public new void Update(){
-		base.Update ();
+		base.Update();
 		if(HasGaze && gaze == false) gaze = true;
 		pickedUp = pickUp && Input.GetButtonDown("Submit");
 	}
 
 	public void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
-			GameController.Instance.displayWidget(gaze);
+			GameController.Instance.displayWidget(true);
 			pickUp = true;
 		}
 	}
