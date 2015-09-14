@@ -5,22 +5,22 @@ using System.Linq;
 
 
 [RequireComponent (typeof(Animator))]
-[RequireComponent (typeof(GazeAwareComponent))]
 public class Ghost : MonoBehaviour {
 
 	public enum MovementTypes { Follow, Random}
 	public enum AnimationTypes {Random, ShakeHead, Turn, Idle, Point}
 	public enum Sex {homme, femme}
 
-	public bool gazeContact;
-	public float fadeSpeed = 2.0f;
+	[SerializeField] private bool gazeContact;
+	[SerializeField] private float fadeSpeed = 2.0f;
 
-	public MovementTypes _movementType = MovementTypes.Follow;
-	public AnimationTypes _animationTypes = AnimationTypes.Random;
-	public Sex _sexType = Sex.homme;
-	public Transform pathToFollow;
+	[SerializeField] private MovementTypes _movementType = MovementTypes.Follow;
+	[SerializeField] private AnimationTypes _animationTypes = AnimationTypes.Random;
+	[SerializeField] private Sex _sexType = Sex.homme;
+	[SerializeField] private Transform pathToFollow;
 
-	[SerializeField][Range(0.1F, 5.0F)] public float speed;
+	[SerializeField][Range(0.1F, 5.0F)] private float speed;
+
 
 	private List<Transform> listPaths = new List<Transform>();
 	private int index = 1;
@@ -200,15 +200,19 @@ public class Ghost : MonoBehaviour {
 	}
 
 	private void Appear(){
+		/*
 		if(_material.color != Color.white){
 			_material.color = Color.Lerp (_material.color, Color.white, 0.8f*fadeSpeed * Time.deltaTime);
 		}
+		*/
 	}
 	
 	private void Disappear(){
+		/*
 		if(_material.color != Color.black){
 			_material.color = Color.Lerp (_material.color, Color.black, fadeSpeed * Time.deltaTime);
 		}
+		*/
 	}
 
 } 
