@@ -33,7 +33,7 @@ public class MainMenu: MonoBehaviour {
 	}
 
 	public void ExitGame(){
-		if(Cursor.visible == false) Cursor.visible = true;
+		GameController.Instance.displayInGameMenu(false);
 		Application.LoadLevel(0);
 	}
 

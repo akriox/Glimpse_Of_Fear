@@ -8,8 +8,12 @@ public class GameController : MonoBehaviour {
 	public static GameController Instance {get; private set;}
 	public GameObject inGameMenu;
 
-	public GameObject keyboardWidget;
-	public GameObject gamepadWidget;
+	public Image keyboardWidget;
+	public Image gamepadWidget;
+
+	public Image keyboardTip;
+	public Image gamepadTip;
+
 	public Text debugText;
 
 	private GameObject player;
@@ -30,15 +34,13 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void Update () {
-
 		if(Input.GetButtonUp("Menu")){
-			inGameMenu.SetActive(!inGameMenu.activeSelf);
-			EyeLook.isActive = !EyeLook.isActive;
-			Cursor.visible = !Cursor.visible;
+			displayInGameMenu(!inGameMenu.activeSelf);
 		}
 	}
 
 	public void ExitGame(){
+		displayInGameMenu(false);
 		Application.LoadLevel("Menu");
 	}
 	
@@ -61,10 +63,44 @@ public class GameController : MonoBehaviour {
 		GamePad.SetVibration(0, 0.0f, 0.0f);
 	}
 
+	public void displayInGameMenu(bool b){
+		inGameMenu.SetActive(b);
+		EyeLook.isActive = !b;
+		FirstPersonController.ableToMove = !b;
+		Cursor.visible = b;
+	}
+
 	public void displayWidget(bool b){
 		GamePadState state = GamePad.GetState(PlayerIndex.One);
-		if(state.IsConnected) gamepadWidget.GetComponent<Image>().enabled = b;
-		else keyboardWidget.GetComponent<Image>().enabled = b;
+		if(state.IsConnected) gamepadWidget.enabled = b;
+		else keyboardWidget.enabled = b;
+	}
+
+	public void displayTip(float duration){
+		GamePadState state = GamePad.GetState(PlayerIndex.One);
+		if(state.IsConnected) {
+			StartCoroutine(enableGamepadTip(duration));
+		}
+		else {
+			StartCoroutine(enableKeyboardTip(duration));
+		}
+	}
+
+	private IEnumerator enableKeyboardTip(float duration){
+		gamepadTip.enabled = true;
+		yield return new WaitForSeconds(duration);
+		gamepadTip.enabled = false;
+	}
+
+	private IEnumerator enableGamepadTip(float duration){
+		keyboardTip.enabled = true;
+		yield return new WaitForSeconds(duration);
+		keyboardTip.enabled = false;
+	}
+
+	public void setTipSprite(Sprite keyboard, Sprite gamepad){
+		gamepadTip.sprite = gamepad;
+		keyboardTip.sprite = keyboard;
 	}
 
 	public void displayDebug(string str){
@@ -82,7 +118,7 @@ public class GameController : MonoBehaviour {
 		EventSound.playClip(rockSlideClip);
 		yield return new WaitForSeconds(2.0f);
 		CameraController.Instance.setFadeState(CameraController.FadeState.IN, 0.8f);
-		yield return new WaitForSeconds(2.0f);
+		yield return new WaitForSeconds(2.5f);
 		VoiceOver.Talk(whereAmIClip);
 		if(Settings.subtitles) displayDebug("Where am I ? I need to find a way out.");
 	}

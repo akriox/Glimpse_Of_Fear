@@ -23,12 +23,13 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
     [SerializeField] private float m_StepInterval;
     private AudioClip[] m_FootstepSounds;    // default array of footstep sounds that will be randomly selected from
-	[SerializeField] private AudioClip[] m_FootstepWood;	  // an array of footstep sounds to play when walking on a wooden surface
-	[SerializeField] private AudioClip[] m_FootstepSand;	  // an array of footstep sounds to play when walking on sand
-	[SerializeField] private AudioClip[] m_FootstepRock;	  // an array of footstep sounds to play when walking on rocks
-	[SerializeField] private AudioClip[] m_FootstepWater;	  // an array of footstep sounds to play when walking in water
-    //[SerializeField] private AudioClip m_JumpSound;         // the sound played when character leaves the ground
-    //[SerializeField] private AudioClip m_LandSound;         // the sound played when character touches back on ground
+	[SerializeField] private AudioClip[] m_FootstepWood;	      // an array of footstep sounds to play when walking on a wooden surface
+	[SerializeField] private AudioClip[] m_FootstepSand;	      // an array of footstep sounds to play when walking on sand
+	[SerializeField] private AudioClip[] m_FootstepRock;	      // an array of footstep sounds to play when walking on rocks
+	[SerializeField] private AudioClip[] m_FootstepWater;	  	  // an array of footstep sounds to play when walking in water
+	[SerializeField] private AudioClip[] m_FootstepDeepWater;	  // an array of footstep sounds to play when walking in deep water
+    //[SerializeField] private AudioClip m_JumpSound;             // the sound played when character leaves the ground
+    //[SerializeField] private AudioClip m_LandSound;             // the sound played when character touches back on ground
 
     private Camera m_Camera;
     //private bool m_Jump;
@@ -47,7 +48,7 @@ public class FirstPersonController : MonoBehaviour
 	private float m_StandingHeight;
 	private float m_DuckingHeight;
 
-	private enum GroundType {ROCK, SAND, WOOD, WATER, FOG};
+	private enum GroundType {ROCK, SAND, WOOD, WATER, DEEPWATER, FOG};
 	private GroundType groundType;
 
 	public static GameObject rightHand;
@@ -212,6 +213,7 @@ public class FirstPersonController : MonoBehaviour
 			case GroundType.ROCK: m_FootstepSounds = m_FootstepRock; break;
 			case GroundType.WOOD: m_FootstepSounds = m_FootstepWood; break;
 			case GroundType.WATER: m_FootstepSounds = m_FootstepWater; break;
+			case GroundType.DEEPWATER: m_FootstepSounds = m_FootstepDeepWater; break;
 			case GroundType.FOG: m_FootstepSounds = m_FootstepRock; break;
 		}
         // pick & play a random footstep sound from the array,
@@ -294,6 +296,7 @@ public class FirstPersonController : MonoBehaviour
 			case "Rock": groundType = GroundType.ROCK; break;
 			case "Sand": groundType = GroundType.SAND; break;
 			case "Water": groundType = GroundType.WATER; break;
+			case "DeepWater": groundType = GroundType.DEEPWATER; break;
 			case "Fog": groundType = GroundType.FOG; break;
 		}
 

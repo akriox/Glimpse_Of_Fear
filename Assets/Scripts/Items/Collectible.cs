@@ -4,13 +4,12 @@ using System.Collections;
 public class Collectible : GazeAwareComponent {
 
 	private bool pickUp;
+
 	protected bool pickedUp;
-	protected Sprite widgetSprite;
 	protected bool gaze;
 
 	public new void Start(){
 		base.Start();
-		widgetSprite =  (Sprite) Resources.Load("2D/Buttons/A", typeof(Sprite)); 
 	}
 
 	public new void Update(){
