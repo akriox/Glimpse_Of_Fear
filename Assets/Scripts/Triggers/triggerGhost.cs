@@ -3,25 +3,26 @@ using System.Collections;
 
 public class TriggerGhost : MonoBehaviour {
 
-	private AudioClip _audioClip;
+	[SerializeField] private AudioClip _audioClip;
 	private bool alreadyCall;
 	[SerializeField] private GameObject _activ;
+	private bool delay;
 
 	public void Start(){
-		_audioClip = (AudioClip)Resources.Load("Audio/scream_ghost02", typeof(AudioClip));
 		alreadyCall = false;
 	}
 
 	public IEnumerator OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Player" && !alreadyCall) {
 			alreadyCall = true;
+			if(delay)yield return new WaitForSeconds(7f);
 			_activ.SetActive(true);
 			StartCoroutine(ProjectorObject.Flicker(50));
-			yield return new WaitForSeconds(4.3f);
+			yield return new WaitForSeconds(0.3f);
 			EventSound.playClip(_audioClip, 0.3f);
-			yield return new WaitForSeconds(7f);
+			yield return new WaitForSeconds(25f);
 			_activ.SetActive(false);
-			this.enabled = false;
+			Destroy(this.gameObject);
 		}
 	}
 }

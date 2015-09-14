@@ -20,7 +20,7 @@ public class Spirit : MonoBehaviour {
 	[SerializeField] private GameObject _texture;
 	[SerializeField] private GameObject _smoke;
 	[SerializeField][Range(1.5F, 3.5F)] private float timeForFollowPlayer = 2f;
-	[SerializeField][Range(5f, 20f)] private float distDetection = 15f;
+	[SerializeField][Range(2f, 12f)] private float distDetection = 5f;
 	
 	private float timeFollowPlayer;
 	private float timeToNotAppear;
@@ -66,7 +66,7 @@ public class Spirit : MonoBehaviour {
 				_state = State.FollowPlayer;
 			} 
 			else {
-					WalkAround ();
+				WalkAround ();
 			}
 			break;
 		case State.FollowPlayer:

@@ -5,11 +5,10 @@ using System.Linq;
 
 
 [RequireComponent (typeof(Animator))]
-[RequireComponent (typeof(GazeAwareComponent))]
 public class Ghost : MonoBehaviour {
 
 	public enum MovementTypes { Follow, Random}
-	public enum AnimationTypes {Random, ShakeHead, Turn, Idle, Point}
+	public enum AnimationTypes {Random, ShakeHead, Turn, Idle, Point, PentacleRoom}
 	public enum Sex {homme, femme}
 
 	public bool gazeContact;
@@ -140,6 +139,10 @@ public class Ghost : MonoBehaviour {
 					break;
 				case AnimationTypes.Point:
 					StartCoroutine(playAnimation(3));
+					break;
+				case AnimationTypes.PentacleRoom:
+					StartCoroutine(playAnimation(1));
+					_animationTypes = AnimationTypes.Point;
 					break;
 				}
 				GetNewPosition();
