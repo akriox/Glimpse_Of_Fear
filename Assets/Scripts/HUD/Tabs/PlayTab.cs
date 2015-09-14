@@ -7,8 +7,12 @@ public class PlayTab : MonoBehaviour {
 
 	public void Play(){
 		if(loadingScreenGO != null) loadingScreenGO.SetActive(true);
+		StartCoroutine(LoadingScreen.Instance.loadScene(1));
+	}
+
+	public void Restart(){
 		GameObject player = GameObject.FindGameObjectWithTag("Player");
-		if(player != null) Destroy(player);
+		Destroy(player);
 		StartCoroutine(LoadingScreen.Instance.loadScene(1));
 	}
 

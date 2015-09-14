@@ -7,8 +7,10 @@ public class ThrowObject : MonoBehaviour {
 	private GazeAwareComponent _gazeAwareComponent;
 	private GazePointDataComponent _gazePointDataComponent;
 	private string FlareStickPrefab = "Prefabs/CollectibleItems/FlareStick";
-	private static GameObject objectToThrow;
-	private float force = 2000.0f;
+	public static GameObject objectToThrow;
+	private float force = 0;
+	private float flareStickThrowingForce = 2000;
+	private float rockThrowingForce = 3000;
 	private Vector3 trajectory;
 	private bool throwing;
 
@@ -22,15 +24,17 @@ public class ThrowObject : MonoBehaviour {
 		
 		if(gazePoint.IsValid && gazePoint.IsWithinScreenBounds){
 
-			if(Input.GetButtonDown("Throw")){
+			if(Input.GetButtonUp("Throw")){
 				if(Inventory.Instance.FlareStickStash > 0 && objectToThrow == null){
+					force = flareStickThrowingForce;
 					objectToThrow = Instantiate(Resources.Load (FlareStickPrefab), transform.position, Quaternion.identity) as GameObject;
 					objectToThrow.name = "FlareStick";
 					Inventory.Instance.removeFlareStick(1);
 				}
 				if(objectToThrow != null){
 					throwing = true;
-				
+					force = rockThrowingForce;
+
 					Ray ray = Camera.main.ScreenPointToRay(gazePoint.Screen);
 					RaycastHit hit;
 					
