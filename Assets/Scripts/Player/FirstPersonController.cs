@@ -81,7 +81,10 @@ public class FirstPersonController : MonoBehaviour
 		/* DEBUG FLASHLIGHT */
 		if(Input.GetKeyDown(KeyCode.F)) rightHand.SetActive(!rightHand.activeSelf);
 
-		if(Input.GetButtonUp("Duck")) m_Duck = !m_Duck;
+		if(Input.GetButtonUp("Duck")){
+			TipsTracker.Instance.displayTip(TipsTracker.Tips.Crouch);
+			m_Duck = !m_Duck;
+		}
 
 		if(m_Duck && m_CharacterController.height > m_DuckingHeight){
 			m_CharacterController.height -= m_StickToGroundForce * Time.deltaTime;
@@ -259,7 +262,7 @@ public class FirstPersonController : MonoBehaviour
 
         bool waswalking = m_IsWalking;
 
-		m_IsWalking = Input.GetAxis("RightTrigger") == 1 || Input.GetAxis("LeftTrigger") == 1  || Input.GetButton("Run") ? false : true;
+		m_IsWalking = Input.GetAxis("RightTrigger") > 0.5f || Input.GetAxis("LeftTrigger") > 0.5f || Input.GetButton("Run") ? false : true;
 
         // set the desired speed to be walking or running
         speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;

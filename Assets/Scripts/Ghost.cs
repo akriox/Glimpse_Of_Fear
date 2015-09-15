@@ -203,15 +203,19 @@ public class Ghost : MonoBehaviour {
 	}
 
 	private void Appear(){
+		/*
 		if(_material.color != Color.white){
 			_material.color = Color.Lerp (_material.color, Color.white, 0.8f*fadeSpeed * Time.deltaTime);
 		}
+		*/
 	}
 	
 	private void Disappear(){
+		/*
 		if(_material.color != Color.black){
 			_material.color = Color.Lerp (_material.color, Color.black, fadeSpeed * Time.deltaTime);
 		}
+		*/
 	}
 
 } 

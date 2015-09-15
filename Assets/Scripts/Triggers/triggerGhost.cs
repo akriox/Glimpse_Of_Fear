@@ -6,7 +6,7 @@ public class TriggerGhost : MonoBehaviour {
 	[SerializeField] private AudioClip _audioClip;
 	private bool alreadyCall;
 	[SerializeField] private GameObject _activ;
-	private bool delay;
+	private bool delay = false;
 
 	public void Start(){
 		alreadyCall = false;

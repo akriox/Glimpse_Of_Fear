@@ -18,7 +18,7 @@ public class Interruptor : Collectible {
 		base.Update();
 		if(pickedUp){
 			GameController.Instance.displayWidget(false);
-			EventSound.playClip(clip);
+			EventSound.playClip(clip, 0.5f);
 			GetComponent<Animation>().Play();
 			triggerWallExplode.SetActive(true);
 			GetComponent<Renderer>().material.shader = defaultShader;

@@ -11,9 +11,6 @@ public class GameController : MonoBehaviour {
 	public Image keyboardWidget;
 	public Image gamepadWidget;
 
-	public Image keyboardTip;
-	public Image gamepadTip;
-
 	public Text debugText;
 
 	private GameObject player;
@@ -76,33 +73,6 @@ public class GameController : MonoBehaviour {
 		else keyboardWidget.enabled = b;
 	}
 
-	public void displayTip(float duration){
-		GamePadState state = GamePad.GetState(PlayerIndex.One);
-		if(state.IsConnected) {
-			StartCoroutine(enableGamepadTip(duration));
-		}
-		else {
-			StartCoroutine(enableKeyboardTip(duration));
-		}
-	}
-
-	private IEnumerator enableKeyboardTip(float duration){
-		gamepadTip.enabled = true;
-		yield return new WaitForSeconds(duration);
-		gamepadTip.enabled = false;
-	}
-
-	private IEnumerator enableGamepadTip(float duration){
-		keyboardTip.enabled = true;
-		yield return new WaitForSeconds(duration);
-		keyboardTip.enabled = false;
-	}
-
-	public void setTipSprite(Sprite keyboard, Sprite gamepad){
-		gamepadTip.sprite = gamepad;
-		keyboardTip.sprite = keyboard;
-	}
-
 	public void displayDebug(string str){
 		debugText.text = str;
 	}
@@ -115,11 +85,13 @@ public class GameController : MonoBehaviour {
 
 	public IEnumerator OpeningScene(){
 		CameraController.Instance.fade.enabled = true;
+		FirstPersonController.ableToMove = false;
 		EventSound.playClip(rockSlideClip);
 		yield return new WaitForSeconds(2.0f);
 		CameraController.Instance.setFadeState(CameraController.FadeState.IN, 0.8f);
 		yield return new WaitForSeconds(2.5f);
 		VoiceOver.Talk(whereAmIClip);
 		if(Settings.subtitles) displayDebug("Where am I ? I need to find a way out.");
+		FirstPersonController.ableToMove = true;
 	}
 }

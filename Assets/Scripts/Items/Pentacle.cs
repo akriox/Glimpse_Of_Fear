@@ -9,6 +9,9 @@ public class Pentacle : Collectible {
 	public GameObject skulls;
 	private Light[] eyes;
 
+	public AudioClip pickUpSound;
+	public AudioSource skullTalk;
+
 	public new void Start(){
 		base.Start ();
 		eyes = skulls.GetComponentsInChildren<Light>();
@@ -24,6 +27,8 @@ public class Pentacle : Collectible {
 			Destroy (firstCentralRoom);
 			secondCentralRoom.SetActive(true);
 			enableSkulls(true);
+			EventSound.playClip(pickUpSound);
+			skullTalk.Play();
 			Destroy(this.gameObject);
 		}
 	}

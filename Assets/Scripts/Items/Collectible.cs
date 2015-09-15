@@ -4,7 +4,6 @@ using System.Collections;
 public class Collectible : GazeAwareComponent {
 
 	private bool pickUp;
-
 	protected bool pickedUp;
 	protected bool gaze;
 
@@ -20,7 +19,7 @@ public class Collectible : GazeAwareComponent {
 
 	public void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
-			GameController.Instance.displayWidget(true);
+			GameController.Instance.displayWidget(gaze);
 			pickUp = true;
 		}
 	}

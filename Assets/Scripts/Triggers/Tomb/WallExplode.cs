@@ -5,6 +5,8 @@ public class WallExplode : MonoBehaviour {
 	public GameObject wall;
 	public GameObject smoke;
 	private Collider[] rocks;
+
+	public AudioSource tombSkullRoomCrescendo;
 	
 	public void Start(){
 		rocks = wall.GetComponentsInChildren<Collider>();
@@ -32,5 +34,6 @@ public class WallExplode : MonoBehaviour {
 			rock.GetComponent<Rigidbody>().isKinematic = false;
 			rock.GetComponent<Rigidbody>().AddForce(Vector3.left * 800.0f);
 		}
+		tombSkullRoomCrescendo.Play();
 	}
 }
