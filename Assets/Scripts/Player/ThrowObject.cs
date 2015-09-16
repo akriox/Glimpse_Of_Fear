@@ -10,7 +10,7 @@ public class ThrowObject : MonoBehaviour {
 	public static GameObject objectToThrow;
 	private float force = 0;
 	private float flareStickThrowingForce = 2000;
-	private float rockThrowingForce = 3000;
+	private float rockThrowingForce = 4000;
 	private Vector3 trajectory;
 	private bool throwing;
 

@@ -7,23 +7,26 @@ using System.Linq;
 [RequireComponent (typeof(Animator))]
 public class Ghost : MonoBehaviour {
 
-	public enum MovementTypes { Follow, Random}
+	public enum MovementTypes { Follow, Random, followThenDestroy}
 	public enum AnimationTypes {Random, ShakeHead, Turn, Idle, Point, PentacleRoom}
 	public enum Sex {homme, femme}
 
-	public bool gazeContact;
+
 	private float fadeSpeed = 4.0f;
 
-	public MovementTypes _movementType = MovementTypes.Follow;
-	public AnimationTypes _animationTypes = AnimationTypes.Random;
-	public Sex _sexType = Sex.homme;
-	public Transform pathToFollow;
+	[SerializeField] private bool gazeContact;
+	[SerializeField] private MovementTypes _movementType = MovementTypes.Follow;
+	[SerializeField] private AnimationTypes _animationTypes = AnimationTypes.Random;
+	[SerializeField] private Sex _sexType = Sex.homme;
+	[SerializeField] private Transform pathToFollow;
+	[SerializeField] private bool waitUntilSeen;
 
 	[SerializeField][Range(0.1F, 5.0F)] public float speed;
 
 	private List<Transform> listPaths = new List<Transform>();
 	private int index = 1;
 	private bool walk = true;
+	private bool ready = true;
 	private bool lookPlayer = false;
 
 	private Transform currentTarget;
@@ -70,14 +73,6 @@ public class Ghost : MonoBehaviour {
 			foreach(Transform temp in pathToFollow){
 				listPaths.Add(temp);
 			}
-			switch(_movementType){
-			case MovementTypes.Follow:
-				index = 1;
-				break;
-			case MovementTypes.Random:
-				index = 1;
-				break;
-			}
 			if(listPaths.Count > 0) GetNewPosition();
 		}
 	}
@@ -85,16 +80,22 @@ public class Ghost : MonoBehaviour {
 	void Update () {
 		if (lookPlayer)
 			faceTarget (_player.transform.position);
-		if (gazeContact) {
-			if (_gazeAwareComponent.HasGaze) {
-				Disappear ();
-			} else {
-				Appear ();
+		if(waitUntilSeen && walk &&_gazeAwareComponent.HasGaze ) 
+			ready = true;
+		if (walk){
+			if (ready) {
+				StartWalk ();
+				faceTarget (currentTarget.transform.position);
+			}
+			else{
+				Idle ();
 			}
 		}
-		if(walk) {
-			StartWalk();
-			faceTarget (currentTarget.transform.position);
+		if (gazeContact && _gazeAwareComponent.HasGaze) {
+			Disappear ();
+		} 
+		else {
+			Appear ();
 		}
 	}
 
@@ -115,6 +116,11 @@ public class Ghost : MonoBehaviour {
 		case MovementTypes.Random:
 			currentTarget = listPaths[Random.Range(0, listPaths.Count)];
 			break;
+		case MovementTypes.followThenDestroy:
+			currentTarget = listPaths.Single(p => p.name == "Path" + index);
+			index += 1;
+			if(index > listPaths.Count+1) Destroy(this.gameObject);
+			break;
 		}
 	}
 
@@ -124,6 +130,8 @@ public class Ghost : MonoBehaviour {
 			transform.position = Vector3.MoveTowards(transform.position, currentTarget.position, Time.deltaTime * speed);
 			if(CheckDistance() <= 0.5f){
 				walk = false;
+				if(waitUntilSeen)
+					ready = false;
 				switch(_animationTypes){
 				case AnimationTypes.Random:
 					StartCoroutine(playAnimation(Random.Range(0, 4)));

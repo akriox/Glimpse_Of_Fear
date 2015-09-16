@@ -11,14 +11,14 @@ public class SwitchMusic : MonoBehaviour {
 	[SerializeField] private GameObject otherTrigger;
 	private AudioClip _audioClip;
 	void Start(){
-		_audioClip = (AudioClip)Resources.Load("Audio/blank_sound", typeof(AudioClip));
+			_audioClip = (AudioClip)Resources.Load("Audio/blank_sound", typeof(AudioClip));
 	}
 
 	public IEnumerator OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Player") {
 			_soundtrackToPlay.GetComponent<FadingAudioSource> ().Fade (soundToPlay, volume, loop);
 			_soundtrackToStop.GetComponent<FadingAudioSource> ().Fade (_audioClip, 0.0f, false);
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(10f);
 			thisTrigger.SetActive(false);
 			otherTrigger.SetActive(true);
 		}

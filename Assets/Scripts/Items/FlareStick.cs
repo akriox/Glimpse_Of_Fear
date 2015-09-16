@@ -25,9 +25,15 @@ public class FlareStick : Collectible {
 		base.Update();
 
 		if(pickedUp){
-			GameController.Instance.displayWidget(false);
-			Inventory.Instance.addFlareStick(1);
-			Destroy(this.gameObject);
+			if(Inventory.Instance.FlareStickStash < 10){
+				GameController.Instance.displayWidget(false);
+				Inventory.Instance.addFlareStick(1);
+				Destroy(this.gameObject);
+			}
+			else{
+				GameController.Instance.displayWidget(false);
+				StartCoroutine(GameController.Instance.displayTimedDebug("too many", 1.0f));
+			}
 		}
 	}
 }

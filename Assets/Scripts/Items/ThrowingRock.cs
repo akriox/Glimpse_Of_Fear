@@ -18,7 +18,7 @@ public class ThrowingRock : Collectible {
 		base.Update ();
 		if(pickedUp && ThrowObject.objectToThrow == null){
 			//Duplicate rock so there is always one available in the pile of rocks
-			GameObject newRock = (GameObject) Instantiate(this.gameObject, this.transform.position, this.transform.rotation);
+			GameObject newRock = (GameObject) Instantiate(this.gameObject, this.transform.position , this.transform.rotation);
 			newRock.name = "ThrowingRock";
 			newRock.transform.parent = transform.parent;
 
