@@ -20,6 +20,7 @@ public class Ghost : MonoBehaviour {
 	[SerializeField] private Sex _sexType = Sex.homme;
 	[SerializeField] private Transform pathToFollow;
 	[SerializeField] private bool waitUntilSeen;
+	[SerializeField] private GameObject toFace;
 
 	[SerializeField][Range(0.1F, 5.0F)] public float speed;
 
@@ -27,7 +28,7 @@ public class Ghost : MonoBehaviour {
 	private int index = 1;
 	private bool walk = true;
 	private bool ready = true;
-	private bool lookPlayer = false;
+	private bool look = false;
 
 	private Transform currentTarget;
 	private Transform lastTarget;
@@ -78,8 +79,12 @@ public class Ghost : MonoBehaviour {
 	}
 
 	void Update () {
-		if (lookPlayer)
-			faceTarget (_player.transform.position);
+		if (look) {
+			if(toFace != null) faceTarget (toFace.transform.position);
+			else{
+				faceTarget (_player.transform.position);
+			}
+		}
 		if(waitUntilSeen && walk &&_gazeAwareComponent.HasGaze ) 
 			ready = true;
 		if (walk){
@@ -117,9 +122,9 @@ public class Ghost : MonoBehaviour {
 			currentTarget = listPaths[Random.Range(0, listPaths.Count)];
 			break;
 		case MovementTypes.followThenDestroy:
+			if(index > listPaths.Count) Destroy(this.gameObject);
 			currentTarget = listPaths.Single(p => p.name == "Path" + index);
 			index += 1;
-			if(index > listPaths.Count+1) Destroy(this.gameObject);
 			break;
 		}
 	}
@@ -177,10 +182,10 @@ public class Ghost : MonoBehaviour {
 			yield return new WaitForSeconds(animationIdle);
 			break;
 		case 3:
-			lookPlayer = true;
+			look = true;
 			Point();
 			yield return new WaitForSeconds(animationPoint);
-			lookPlayer = false;
+			look = false;
 			break;
 		}
 		walk = true;

@@ -12,6 +12,11 @@ public class TriggerMusic : MonoBehaviour {
 		if (other.gameObject.tag == "Player") {
 			soundtrack.GetComponent<FadingAudioSource> ().Fade (soundtrackToPlay, volume, loop);
 			if(soundtrackWithoutFading !=null)soundtrackWithoutFading.Stop();
+		}
+	}
+
+	public void OnTriggerExit(Collider other){
+		if(other.gameObject.tag == "Player"){
 			Destroy(this.gameObject);
 		}
 	}

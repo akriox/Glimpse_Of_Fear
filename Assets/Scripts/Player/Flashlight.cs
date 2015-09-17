@@ -91,6 +91,17 @@ public class Flashlight : MonoBehaviour {
 		rechargeHint = false;
 	}
 
+	public void noMoreBattery(){
+		/* Decrease light intensity of _power per second */
+		_timer += Time.deltaTime;
+		if(lum.intensity > 0.0f){ 
+			if(_timer >= 0.001f){
+				lum.intensity -= 2*_power;
+				_timer = 0.0f;
+			}
+		}
+	}
+
 	private void updateBatteryLevel(){
 		Color c  = defaultColor;
 		if(lum.intensity < _maxIntensity/2.0f){

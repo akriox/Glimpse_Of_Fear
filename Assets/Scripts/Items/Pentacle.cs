@@ -7,6 +7,7 @@ public class Pentacle : Collectible {
 	public GameObject firstCentralRoom;
 	public GameObject secondCentralRoom;
 	public GameObject skulls;
+	public GameObject Wraith;
 	private Light[] eyes;
 
 	public AudioClip pickUpSound;
@@ -29,6 +30,7 @@ public class Pentacle : Collectible {
 			enableSkulls(true);
 			EventSound.playClip(pickUpSound);
 			skullTalk.Play();
+			Wraith.SetActive(true);
 			Destroy(this.gameObject);
 		}
 	}

@@ -16,11 +16,14 @@ public class moveWraithCave2 : MonoBehaviour {
 	private static Vector3 positionEnd;
 
 	private static bool ready;
-	private bool walk;
 	private Renderer _renderer;
 	private GameObject wraith;
 
 	public static float moveSpeed = 1.0f;
+
+	public bool takeOutBattery;
+	private GameObject _player;
+	private bool walk;
 
 	public void Awake(){
 		//Instance = this;
@@ -29,12 +32,12 @@ public class moveWraithCave2 : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		ready = false;
-		walk = false;
 		_renderer = GetComponent<Renderer> ();
 		_renderer.enabled = false;
 		wraith = this.gameObject.transform.parent.gameObject;
 		//save wraith Y angle and his original position
 		angleYOrigine = wraith.transform.eulerAngles.y;
+		_player = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	// Update is called once per frame
@@ -42,12 +45,23 @@ public class moveWraithCave2 : MonoBehaviour {
 		if (ready) {
 			_renderer.enabled = true;
 			wraith.transform.position = positionStart;
+			moveTowardTarget (positionEnd);
 			walk = true;
 			ready = false;
+
 		}
 		if (walk) {
 			moveTowardTarget (positionEnd);
+			if (takeOutBattery)
+					Flashlight.Instance.noMoreBattery ();
+			if(nearPlayer())_renderer.enabled = false;
 		}
+
+	}
+
+	private bool nearPlayer(){
+		if (Vector3.Distance(transform.position,_player.transform.position) < 2.5f) return true;
+		return false;	
 	}
 
 	public static void setPosition(Vector3 s, Vector3 e){
@@ -59,7 +73,7 @@ public class moveWraithCave2 : MonoBehaviour {
 	//face the target
 	private void faceTarget(Vector3 to){
 		direction = (to - wraith.transform.position).normalized;
-		rotation = Quaternion.LookRotation (new Vector3 (direction.x, angleYOrigine, direction.z));
+		rotation = Quaternion.LookRotation (new Vector3 (direction.x, 0, direction.z));
 		wraith.transform.rotation = Quaternion.Slerp (wraith.transform.rotation, rotation, rotationSpeed * Time.deltaTime);
 	}
 
@@ -68,8 +82,8 @@ public class moveWraithCave2 : MonoBehaviour {
 		faceTarget (to);
 		wraith.transform.position = Vector3.MoveTowards(wraith.transform.position, new Vector3(to.x, to.y, to.z), moveSpeed* Time.deltaTime);
 		if (Vector3.Distance(wraith.transform.position, to) <= 0.5f) {
-			walk = false;
 			_renderer.enabled = false;
+			walk = false;
 		}
 	}
 

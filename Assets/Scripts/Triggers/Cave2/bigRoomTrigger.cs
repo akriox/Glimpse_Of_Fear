@@ -9,9 +9,6 @@ namespace UnityStandardAssets.ImageEffects
 		[SerializeField] [Range(10.0F, 30.0F)]  private float wraithSpeed = 10.0f;
 
 		public void Start(){
-			if(Path == null){
-				Debug.LogError("Un GameObject 'Path' doit etre renseigné dans le script 'bigRoomTrigger.cs'.");
-			} 
 			Path.SetActive (false);
 		}
 		public void OnTriggerEnter(Collider other) {

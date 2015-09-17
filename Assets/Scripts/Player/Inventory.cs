@@ -10,7 +10,13 @@ public class Inventory : MonoBehaviour {
 
 	public void Awake(){
 		Instance = this;
-		FlareStickStash = 20;
+		FlareStickStash = 100000;
+	}
+	
+	public bool canTake(){
+		if (FlareStickStash < 14)
+			return true;
+		return false;
 	}
 
 	public void addFlareStick(int qty){

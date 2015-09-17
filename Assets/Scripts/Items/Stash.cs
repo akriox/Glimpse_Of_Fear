@@ -8,10 +8,16 @@ public class Stash : Collectible {
 		base.Update();
 		
 		if(pickedUp){
-			GameController.Instance.displayWidget(false);
-			Inventory.Instance.addFlareStick(4);
-			TipsTracker.Instance.displayTip(TipsTracker.Tips.UseFlareStick);
-			Destroy(this.gameObject);
+			if(Inventory.Instance.canTake()){
+				GameController.Instance.displayWidget(false);
+				Inventory.Instance.addFlareStick(4);
+				TipsTracker.Instance.displayTip(TipsTracker.Tips.UseFlareStick);
+				Destroy(this.gameObject);
+			}
+			else{
+				GameController.Instance.displayWidget(false);
+				StartCoroutine(GameController.Instance.displayTimedDebug("too many", 1.0f));
+			}
 		}
 	}
 }

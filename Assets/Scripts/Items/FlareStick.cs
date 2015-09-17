@@ -25,7 +25,7 @@ public class FlareStick : Collectible {
 		base.Update();
 
 		if(pickedUp){
-			if(Inventory.Instance.FlareStickStash < 10){
+			if(Inventory.Instance.canTake()){
 				GameController.Instance.displayWidget(false);
 				Inventory.Instance.addFlareStick(1);
 				Destroy(this.gameObject);
