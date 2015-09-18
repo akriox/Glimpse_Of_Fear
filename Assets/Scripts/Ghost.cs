@@ -14,13 +14,13 @@ public class Ghost : MonoBehaviour {
 
 	private float fadeSpeed = 4.0f;
 
-	[SerializeField] private bool gazeContact;
-	[SerializeField] private MovementTypes _movementType = MovementTypes.Follow;
-	[SerializeField] private AnimationTypes _animationTypes = AnimationTypes.Random;
-	[SerializeField] private Sex _sexType = Sex.homme;
-	[SerializeField] private Transform pathToFollow;
-	[SerializeField] private bool waitUntilSeen;
-	[SerializeField] private GameObject toFace;
+	public bool gazeContact;
+	public MovementTypes _movementType = MovementTypes.Follow;
+	public AnimationTypes _animationTypes = AnimationTypes.Random;
+	public Sex _sexType = Sex.homme;
+	public Transform pathToFollow;
+	public bool waitUntilSeen;
+	public GameObject toFace;
 
 	[SerializeField][Range(0.1F, 5.0F)] public float speed;
 
@@ -28,7 +28,6 @@ public class Ghost : MonoBehaviour {
 	private int index = 1;
 	private bool walk = true;
 	private bool ready = true;
-	private bool look = false;
 
 	private Transform currentTarget;
 	private Transform lastTarget;
@@ -56,7 +55,7 @@ public class Ghost : MonoBehaviour {
 	private AudioClip _voice;
 	private AudioSource _audioSource;
 
-	void Start () {
+	public void Start () {
 		_anim = GetComponent<Animator>();
 		_gazeAwareComponent = GetComponentInChildren<GazeAwareComponent>();
 		_material = GetComponentInChildren<Renderer>().material;
@@ -78,40 +77,29 @@ public class Ghost : MonoBehaviour {
 		}
 	}
 
-	void Update () {
-		if (look) {
-			if(toFace != null) faceTarget (toFace.transform.position);
-			else{
-				faceTarget (_player.transform.position);
-			}
-		}
+	public void Update () {
+		faceTarget (currentTarget.transform.position);
 		if(waitUntilSeen && walk &&_gazeAwareComponent.HasGaze ) 
 			ready = true;
 		if (walk){
 			if (ready) {
 				StartWalk ();
-				faceTarget (currentTarget.transform.position);
 			}
 			else{
-				Idle ();
+				Point();
 			}
 		}
-		if (gazeContact && _gazeAwareComponent.HasGaze) {
-			Disappear ();
-		} 
-		else {
-			Appear ();
-		}
+		AppearOrDisappear ();
 	}
 
 	//face the target
-	private void faceTarget(Vector3 to){
+	public void faceTarget(Vector3 to){
 		direction = (to - transform.position).normalized;
 		rotation = Quaternion.LookRotation (new Vector3 (direction.x, 0, direction.z));
 		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, 2 * Time.deltaTime);
 	}
 
-	void GetNewPosition(){
+	public void GetNewPosition(){
 		
 		switch(_movementType){
 		case MovementTypes.Follow:
@@ -123,9 +111,22 @@ public class Ghost : MonoBehaviour {
 			break;
 		case MovementTypes.followThenDestroy:
 			if(index > listPaths.Count) Destroy(this.gameObject);
-			currentTarget = listPaths.Single(p => p.name == "Path" + index);
-			index += 1;
+			else{
+				currentTarget = listPaths.Single(p => p.name == "Path" + index);
+				index += 1;
+			}
 			break;
+		}
+		lastTarget = currentTarget;
+	}
+
+	private void AppearOrDisappear(){
+		if (gazeContact) {
+			if (_gazeAwareComponent.HasGaze) {
+				Disappear ();
+			} else {
+				Appear ();
+			}
 		}
 	}
 
@@ -163,11 +164,11 @@ public class Ghost : MonoBehaviour {
 		}
 	}
 
-	float CheckDistance(){
+	public float CheckDistance(){
 		return Vector3.Distance(transform.position, currentTarget.position);
 	}
 
-	IEnumerator playAnimation(int numAnimation){
+	public IEnumerator playAnimation(int numAnimation){
 		switch (numAnimation) {
 		case 0:
 			ShakeHead();
@@ -182,10 +183,11 @@ public class Ghost : MonoBehaviour {
 			yield return new WaitForSeconds(animationIdle);
 			break;
 		case 3:
-			look = true;
+			currentTarget = _player.transform;
+			if(toFace!=null)currentTarget = toFace.transform;
 			Point();
 			yield return new WaitForSeconds(animationPoint);
-			look = false;
+			currentTarget = lastTarget;
 			break;
 		}
 		walk = true;
@@ -196,6 +198,7 @@ public class Ghost : MonoBehaviour {
 	}
 	
 	public void Walk(){
+		_anim.SetBool(point,false);
 		_anim.SetBool(moving, true);
 	}
 	
@@ -212,7 +215,7 @@ public class Ghost : MonoBehaviour {
 	public void Point(){
 		_audioSource.clip = sonPointage;
 		_audioSource.Play();
-		_anim.SetTrigger(point);
+		_anim.SetBool(point,true);
 	}
 
 	private void Appear(){

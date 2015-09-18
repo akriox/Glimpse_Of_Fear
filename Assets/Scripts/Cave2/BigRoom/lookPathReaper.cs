@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 [RequireComponent(typeof(GazeAwareComponent))]
 public class lookPathReaper : MonoBehaviour {
 	
 	private GazeAwareComponent _gazeAwareComponent;
 	[SerializeField] private Transform positionStart;
 	[SerializeField] private Transform positionEnd;
-	[SerializeField] private GameObject triggerToDesactive;
-	[SerializeField] private GameObject pathToDesactive;
+	[SerializeField] private GameObject _thisPath;
+	[SerializeField] private GameObject _otherPath;
 	[SerializeField] private AudioClip _audioClip;
 
 	private bool alreadyCall = false;
@@ -25,11 +26,10 @@ public class lookPathReaper : MonoBehaviour {
 				EventSound.playClip(_audioClip);
 			StartCoroutine(fear());
 			alreadyCall = true;
-			moveWraithCave2.setPosition (positionStart.position, positionEnd.position);
-			if(triggerToDesactive != null)
-				triggerToDesactive.SetActive(false);
-			if (pathToDesactive != null) {
-				pathToDesactive.SetActive (false);
+			bigRoomTrigger.isActif();
+			moveWraithScripte.setPosition (positionStart.position, positionEnd.position);
+			if (_otherPath != null) {
+				_otherPath.SetActive (false);
 			}
 		}
 	}
@@ -45,6 +45,8 @@ public class lookPathReaper : MonoBehaviour {
 		if(Settings.subtitles) GameController.Instance.displayDebug(str);
 		yield return new WaitForSeconds(1.5f);
 		if(Settings.subtitles) GameController.Instance.displayDebug("");
-		Destroy(this.gameObject);
+		bigRoomTrigger.isUnActif();
+		yield return new WaitForSeconds(0.5f);
+		Destroy(_thisPath);
 	}
 }

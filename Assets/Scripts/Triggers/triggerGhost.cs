@@ -3,13 +3,9 @@ using System.Collections;
 
 public class TriggerGhost : MonoBehaviour {
 	
-	private bool alreadyCall;
+	private bool alreadyCall= false;
 	[SerializeField] private GameObject _activ;
-
-
-	public void Start(){
-		alreadyCall = false;
-	}
+	
 
 	public IEnumerator OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Player" && !alreadyCall) {

@@ -8,6 +8,7 @@ public class PutObject: GazeAwareComponent {
 	private Animator _anim;
 	private bool putDown;
 	private bool gaze;
+	private Material _mat;
 
 	public enum ObjectToPut {Pentacle,Tablet}
 	public ObjectToPut _object = ObjectToPut.Tablet;
@@ -16,10 +17,15 @@ public class PutObject: GazeAwareComponent {
 	
 	public new void Start(){
 		base.Start ();
-		//GetComponent<MeshRenderer>().enabled = false;
 		widgetSprite =  (Sprite) Resources.Load("2D/Buttons/A", typeof(Sprite)); 
 		//Inventory.Instance.hasTablet = true;
+		//Inventory.Instance.hasPentacle = true;
 		_anim = gate.GetComponent<Animator> ();
+		if (_object == ObjectToPut.Pentacle)
+			_mat = (Material)Resources.Load ("Materials/Objects/PentacleKey", typeof(Material));
+		else {
+			_mat = (Material)Resources.Load ("Materials/Objects/PentacleKey", typeof(Material));
+		}
 	}
 	
 	public new void Update(){
@@ -46,7 +52,7 @@ public class PutObject: GazeAwareComponent {
 	}	
 	
 	private void Open(){
-		//GetComponent<MeshRenderer>().enabled = true;
+		GetComponent<MeshRenderer>().material = _mat;
 		gate.GetComponent<AudioSource>().Play();
 		_anim.SetBool(Animator.StringToHash("Open"), true);
 		GameController.Instance.displayWidget(false);

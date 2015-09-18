@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class moveWraithCave2 : MonoBehaviour {
+public class moveWraithScripte : MonoBehaviour {
 
-	//public static moveWraithCave2 Instance {get; private set;}
+	//public static moveWraithScripte Instance {get; private set;}
 
 	private Vector3 direction;
 	private Vector3 currentTarget;
 	private Quaternion rotation;
-	private float angleYOrigine;
 
  	private float rotationSpeed = 3.0f;
 
@@ -35,8 +34,6 @@ public class moveWraithCave2 : MonoBehaviour {
 		_renderer = GetComponent<Renderer> ();
 		_renderer.enabled = false;
 		wraith = this.gameObject.transform.parent.gameObject;
-		//save wraith Y angle and his original position
-		angleYOrigine = wraith.transform.eulerAngles.y;
 		_player = GameObject.FindGameObjectWithTag("Player");
 	}
 	
@@ -52,9 +49,11 @@ public class moveWraithCave2 : MonoBehaviour {
 		}
 		if (walk) {
 			moveTowardTarget (positionEnd);
-			if (takeOutBattery)
-					Flashlight.Instance.noMoreBattery ();
-			if(nearPlayer())_renderer.enabled = false;
+			 if (takeOutBattery)
+				Flashlight.Instance.noMoreBattery ();
+			if(nearPlayer()){
+				_renderer.enabled = false;
+			}
 		}
 
 	}

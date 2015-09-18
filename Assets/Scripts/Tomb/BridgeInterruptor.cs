@@ -7,6 +7,8 @@ public class BridgeInterruptor : MonoBehaviour {
 	public GameObject bridge;
 	public GameObject blockingCollider;
 	public BridgeInterruptor otherInterruptor;
+	public GameObject smoke;
+	private bool alreadyActive = false;
 
 	private Material activMat;
 
@@ -19,8 +21,20 @@ public class BridgeInterruptor : MonoBehaviour {
 		GetComponent<Renderer>().material = activMat;
 		GetComponent<ItemGlow>().enabled = false;
 		if(otherInterruptor.activ){
-			blockingCollider.SetActive(false);
-			bridge.GetComponent<Animation>().Play();
+			if(!alreadyActive){
+				smoke.SetActive(true);
+				StartCoroutine(removeCollider());
+				bridge.GetComponent<Animation>().Play();
+				alreadyActive = true;
+			}
 		}
+	}
+
+	public IEnumerator removeCollider(){
+		yield return new WaitForSeconds(6);
+		blockingCollider.SetActive(false);
+		yield return new WaitForSeconds(4f);
+		smoke.SetActive(false);
+		Destroy (this.gameObject);
 	}
 }
