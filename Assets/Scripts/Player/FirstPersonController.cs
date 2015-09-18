@@ -53,6 +53,7 @@ public class FirstPersonController : MonoBehaviour
 	
 	public static GameObject rightHand;
 	public static bool ableToMove = true;
+	private static bool lamp;
 	
 	// Use this for initialization
 	private void Start()
@@ -319,5 +320,10 @@ public class FirstPersonController : MonoBehaviour
 	
 	public static void enableRightHand(bool b){
 		rightHand.SetActive(b);
+		lamp = b;
+	}
+
+	public static bool haveFlashLight(){
+		return lamp;
 	}
 }

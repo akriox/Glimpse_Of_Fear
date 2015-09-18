@@ -49,17 +49,17 @@ public class moveWraithScripte : MonoBehaviour {
 		}
 		if (walk) {
 			moveTowardTarget (positionEnd);
-			 if (takeOutBattery)
+			if (takeOutBattery)
 				Flashlight.Instance.noMoreBattery ();
-			if(nearPlayer()){
+			if(nearPlayer(2.5f)){
 				_renderer.enabled = false;
 			}
 		}
 
 	}
 
-	private bool nearPlayer(){
-		if (Vector3.Distance(transform.position,_player.transform.position) < 2.5f) return true;
+	private bool nearPlayer(float dist){
+		if (Vector3.Distance(transform.position,_player.transform.position) < dist) return true;
 		return false;	
 	}
 

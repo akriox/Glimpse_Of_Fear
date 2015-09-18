@@ -16,6 +16,8 @@ public class LoadingScreen : MonoBehaviour {
 	private bool levelLoaded;
 	private int sceneTransition = 0;
 
+	private bool _lamp = true;
+
 	public void Awake(){
 		Instance = this;
 		DontDestroyOnLoad(this.gameObject);
@@ -86,7 +88,8 @@ public class LoadingScreen : MonoBehaviour {
 		}
 		//Tomb1
 		if(level == 3){
-			FirstPersonController.enableRightHand(true);
+			if(_lamp)
+				FirstPersonController.enableRightHand(true);
 			resetCameraTransform();
 			setPlayerTransform(new Vector3(0.0f, 2.0f, -8.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
 		}
@@ -123,6 +126,11 @@ public class LoadingScreen : MonoBehaviour {
 		fade.color = Color.clear;
 		fading = Fading.OUT;
 		fade.gameObject.SetActive(true);
+	}
+
+	public void fadeToBlack(int sceneIndex, bool _bool){
+		fadeToBlack (sceneIndex);
+		_lamp = _bool;
 	}
 
 	public void fadeToClear(){

@@ -8,7 +8,7 @@ public class SceneTransition : MonoBehaviour {
 
 	public void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
-			LoadingScreen.Instance.fadeToBlack(sceneIndex);
+			LoadingScreen.Instance.fadeToBlack(sceneIndex,FirstPersonController.haveFlashLight());
 		}
 	}
 }

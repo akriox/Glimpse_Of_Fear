@@ -75,7 +75,7 @@ public class Flashlight : MonoBehaviour {
 	}
 
 
-	private void discharge(float _float, int thePower){
+	private void discharge(float _float, float thePower){
 		/* Decrease light intensity of _power per second */
 		_timer += Time.deltaTime;
 		if(lum.intensity > 0.0f){ 
@@ -97,7 +97,7 @@ public class Flashlight : MonoBehaviour {
 	}
 
 	public void noMoreBattery(){
-		discharge (0.001f,2);
+		discharge (0.001f,2.5f);
 	}
 
 	private void updateBatteryLevel(){
