@@ -1,16 +1,17 @@
 fileFormatVersion: 2
-guid: 1f141f250c769ed40962508a82eecc89
-timeCreated: 1440078574
+guid: 610185541b347de408ef8624db263746
+timeCreated: 1442756938
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
+    100000: Tomb2activateButton
+    100002: //RootNode
+    400000: Tomb2activateButton
+    400002: //RootNode
+    2300000: Tomb2activateButton
+    3300000: Tomb2activateButton
     4300000: Tomb2activateButton
-    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -20,6 +21,10 @@ ModelImporter:
     bakeSimulation: 0
     optimizeGameObjects: 0
     motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
@@ -64,7 +69,7 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

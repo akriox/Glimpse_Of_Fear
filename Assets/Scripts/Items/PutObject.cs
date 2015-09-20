@@ -22,9 +22,9 @@ public class PutObject: GazeAwareComponent {
 		//Inventory.Instance.hasPentacle = true;
 		_anim = gate.GetComponent<Animator> ();
 		if (_object == ObjectToPut.Pentacle)
-			_mat = (Material)Resources.Load ("Materials/Objects/PentacleKey", typeof(Material));
+			_mat = (Material)Resources.Load ("Materials/Objects/PentacleWall", typeof(Material));
 		else {
-			_mat = (Material)Resources.Load ("Materials/Objects/PentacleKey", typeof(Material));
+			_mat = (Material)Resources.Load ("Materials/Objects/TabletWall", typeof(Material));
 		}
 	}
 	
