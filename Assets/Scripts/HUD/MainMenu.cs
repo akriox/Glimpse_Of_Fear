@@ -12,8 +12,15 @@ public class MainMenu: MonoBehaviour {
 
 	private GameObject currentTab;
 
+	private static AudioSource audioSource;
+	public static AudioClip openTab;
+	public static AudioClip submit;
+
 	public void Start(){
 		currentTab = playTab;
+		audioSource = GetComponent<AudioSource>();
+		openTab = (AudioClip) Resources.Load("Audio/Menu/open_tab", typeof(AudioClip));
+		submit = (AudioClip) Resources.Load("Audio/Menu/submit", typeof(AudioClip));
 	}
 
 	public void DisplayPlayTab(){
@@ -46,6 +53,14 @@ public class MainMenu: MonoBehaviour {
 			currentTab.SetActive(false);
 			currentTab = tab;
 			currentTab.SetActive(true);
+			playClip(openTab);
+		}
+	}
+
+	public static void playClip(AudioClip clip){
+		if(audioSource != null){
+			audioSource.clip = clip;
+			audioSource.Play();
 		}
 	}
 }

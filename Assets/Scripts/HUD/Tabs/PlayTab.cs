@@ -6,11 +6,13 @@ public class PlayTab : MonoBehaviour {
 	public GameObject loadingScreenGO;
 
 	public void Play(){
+		MainMenu.playClip(MainMenu.submit);
 		if(loadingScreenGO != null) loadingScreenGO.SetActive(true);
 		StartCoroutine(LoadingScreen.Instance.loadScene(1));
 	}
 
 	public void RestartLevel(){
+		MainMenu.playClip(MainMenu.submit);
 
 		// Avoid the presence of 2 players in the scene
 		int currentLevel = Application.loadedLevel;
@@ -24,6 +26,7 @@ public class PlayTab : MonoBehaviour {
 	}
 
 	public void Resume(){
+		MainMenu.playClip(MainMenu.submit);
 		GameController.Instance.displayInGameMenu(false);
 	}
 

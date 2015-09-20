@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class moveWraithScripte : MonoBehaviour {
+public class moveWraithScript : MonoBehaviour {
 
 	//public static moveWraithScripte Instance {get; private set;}
 
@@ -20,7 +20,6 @@ public class moveWraithScripte : MonoBehaviour {
 
 	public static float moveSpeed = 1.0f;
 
-	public bool takeOutBattery;
 	private GameObject _player;
 	private bool walk;
 
@@ -49,8 +48,6 @@ public class moveWraithScripte : MonoBehaviour {
 		}
 		if (walk) {
 			moveTowardTarget (positionEnd);
-			if (takeOutBattery)
-				Flashlight.Instance.noMoreBattery ();
 			if(nearPlayer(2.5f)){
 				_renderer.enabled = false;
 			}
@@ -88,5 +85,11 @@ public class moveWraithScripte : MonoBehaviour {
 
 	public static void setSpeed(float speed){
 		moveSpeed = speed;
+	}
+
+	public void OnTriggerEnter(Collider other){
+		if(other.gameObject.tag == "Player"){
+			Flashlight.Instance.drainBattery();
+		}
 	}
 }

@@ -95,7 +95,7 @@ public class Ghost : MonoBehaviour {
 	//face the target
 	public void faceTarget(Vector3 to){
 		direction = (to - transform.position).normalized;
-		rotation = Quaternion.LookRotation (new Vector3 (direction.x, 0, direction.z));
+		if(direction != Vector3.zero) rotation = Quaternion.LookRotation (new Vector3 (direction.x, 0, direction.z));
 		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, 2 * Time.deltaTime);
 	}
 

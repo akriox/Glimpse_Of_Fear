@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-
 using XInputDotNetPure;
 
 [RequireComponent (typeof(GazePointDataComponent))]
@@ -18,6 +17,7 @@ public class EyeLook : MonoBehaviour {
 	private Quaternion targetRotation;
 	private Quaternion lastRotation;
 	private float velocity;
+	private float speedFactor = 1.0f;
 
 	private float w;
 	private float h;
@@ -45,6 +45,11 @@ public class EyeLook : MonoBehaviour {
 
 	public void Update(){
 		lastRotation = player.transform.rotation;
+
+		GamePadState state = GamePad.GetState(PlayerIndex.One);
+		if(state.IsConnected) speedFactor = (state.Triggers.Left*2.0f) + 1.0f;
+		if(Input.GetKeyDown(KeyCode.R)) speedFactor = 3.0f;
+		if(Input.GetKeyUp(KeyCode.R)) speedFactor = 1.0f;
 	}
 	
 	public void LateUpdate(){
@@ -62,7 +67,7 @@ public class EyeLook : MonoBehaviour {
 		gazePointScreen = new Vector3(point.x, point.y, Camera.main.nearClipPlane);
 		gazePointWorld = Camera.main.ScreenToWorldPoint(gazePointScreen);
 		targetRotation = Quaternion.LookRotation(gazePointWorld - transform.position);
-		player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * velocity);
+		player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * velocity * speedFactor);
 
 		player.transform.rotation = ClampRotationXAxis(player.transform.rotation);
 	}

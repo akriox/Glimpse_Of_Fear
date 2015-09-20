@@ -263,7 +263,7 @@ public class FirstPersonController : MonoBehaviour
 		
 		bool waswalking = m_IsWalking;
 		
-		m_IsWalking = Input.GetAxis("RightTrigger") > 0.5f || Input.GetAxis("LeftTrigger") > 0.5f || Input.GetButton("Run") ? false : true;
+		m_IsWalking = Input.GetAxis("RightTrigger") > 0.5f || Input.GetButton("Run") ? false : true;
 		
 		// set the desired speed to be walking or running
 		speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;

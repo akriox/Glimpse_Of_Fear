@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour {
 	private Animator _animator;
 	private int gettingUp = Animator.StringToHash("GettingUp");
 
-	//private VertigoEffect _vertigoScript;
+	private VertigoEffect _vertigoScript;
 	private Vortex _vortexScript;
 	private NoiseAndScratches _noiseAndScratchesScript;
 
@@ -44,13 +44,13 @@ public class CameraController : MonoBehaviour {
 
 		_vortexScript = _camera.GetComponent<Vortex>();
 		_noiseAndScratchesScript = _camera.GetComponent<NoiseAndScratches>();
-		//_vertigoScript = _camera.GetComponent<VertigoEffect>();
+		_vertigoScript = _camera.GetComponent<VertigoEffect>();
 	}
 
 	public void Update(){
+		FadeEffect();
 		VortexEffect();
 		NoiseAndScratchesEffect();
-		FadeEffect();
 	}
 	
 	public void setVortexState(VortexState state){
@@ -64,6 +64,15 @@ public class CameraController : MonoBehaviour {
 	public void setFadeState(FadeState state, float speed){
 		_fadeState = state;
 		_fadeSpeed = speed;
+	}
+
+	public void setVertigoEffect(bool b){
+		if(b) _vertigoScript.StartVertigo();
+		else _vertigoScript.StopVertigo();
+	}
+
+	public void setVertigoTarget(Transform t){
+		_vertigoScript.target = t;
 	}
 
 	private void NoiseAndScratchesEffect(){

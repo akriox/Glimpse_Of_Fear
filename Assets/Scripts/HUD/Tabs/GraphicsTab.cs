@@ -32,6 +32,7 @@ public class GraphicsTab : MonoBehaviour {
 		if(QualitySettings.GetQualityLevel() != qualityLevel){
 			QualitySettings.SetQualityLevel(qualityLevel, true);
 		}
+		MainMenu.playClip(MainMenu.submit);
 	}
 	
 	public void UpdateResolution(){

@@ -10,10 +10,12 @@ public class InputTab : MonoBehaviour {
 	public Toggle toggleSubtitles;
 	
 	public void Start(){
-		sliderEyeX.value = PlayerPrefs.HasKey("EyeXSensitivity") ? PlayerPrefs.GetFloat("EyeXSensitivity") : 2;
+		sliderEyeX.value = PlayerPrefs.HasKey("EyeXSensitivity") ? PlayerPrefs.GetFloat("EyeXSensitivity") : 1.0f;
+		sliderEyeX.minValue = Settings.EyeXSensitivityMinValue;
+		sliderEyeX.maxValue = Settings.EyeXSensitivityMaxValue;
 		UpdateEyeXSensitivity();
 
-		sliderMousePad.value = PlayerPrefs.HasKey("MousePadXYSensitivity") ? PlayerPrefs.GetFloat("MousePadXYSensitivity") : 3;
+		sliderMousePad.value = PlayerPrefs.HasKey("MousePadXYSensitivity") ? PlayerPrefs.GetFloat("MousePadXYSensitivity") : 3.0f;
 		UpdateMousePadXYSensitivity();
 
 		toggleInvertedAxis.isOn = PlayerPrefs.HasKey("InvertedAxis") && PlayerPrefs.GetInt("InvertedAxis") == 1 ? true : false;

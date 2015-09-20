@@ -27,7 +27,7 @@ public class lookPathReaper : MonoBehaviour {
 			StartCoroutine(fear());
 			alreadyCall = true;
 			bigRoomTrigger.isActif();
-			moveWraithScripte.setPosition (positionStart.position, positionEnd.position);
+			moveWraithScript.setPosition (positionStart.position, positionEnd.position);
 			if (_otherPath != null) {
 				_otherPath.SetActive (false);
 			}

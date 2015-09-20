@@ -14,7 +14,7 @@ public class bigRoomTrigger: MonoBehaviour {
 	public void OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Player") {
 			Path.SetActive(true);
-			moveWraithScripte.setSpeed(wraithSpeed);
+			moveWraithScript.setSpeed(wraithSpeed);
 		}
 	}
 	public IEnumerator OnTriggerExit(Collider other) {

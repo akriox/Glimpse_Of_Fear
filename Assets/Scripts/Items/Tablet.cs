@@ -3,8 +3,6 @@ using System.Collections;
 
 public class Tablet : Collectible {
 
-
-	
 	public AudioClip pickUpSound;
 	
 	public new void Start(){
