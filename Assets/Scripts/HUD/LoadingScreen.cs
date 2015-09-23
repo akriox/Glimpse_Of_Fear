@@ -122,7 +122,15 @@ public class LoadingScreen : MonoBehaviour {
 	}
 
 	public void fadeToBlack(int sceneIndex){
+		fadeSpeed = 2f;
 		sceneTransition = sceneIndex;
+		fade.color = Color.clear;
+		fading = Fading.OUT;
+		fade.gameObject.SetActive(true);
+	}
+
+	public void fadeBlack(){
+		fadeSpeed = 10f;
 		fade.color = Color.clear;
 		fading = Fading.OUT;
 		fade.gameObject.SetActive(true);

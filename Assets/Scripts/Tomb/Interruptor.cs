@@ -5,6 +5,7 @@ public class Interruptor : Collectible {
 
 	public GameObject triggerWallExplode;
 	public AudioClip clip;
+	public GameObject sonMecanisme;
 
 	private Shader defaultShader;
 	
@@ -18,6 +19,7 @@ public class Interruptor : Collectible {
 		base.Update();
 		if(pickedUp){
 			GameController.Instance.displayWidget(false);
+			sonMecanisme.SetActive(true);
 			EventSound.playClip(clip, 0.5f);
 			GetComponent<Animation>().Play();
 			triggerWallExplode.SetActive(true);

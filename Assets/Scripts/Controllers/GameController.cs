@@ -55,9 +55,9 @@ public class GameController : MonoBehaviour {
 	}
 
 	public IEnumerator timedVibration(float left, float right, float s){
-		GamePad.SetVibration(0, left, right);
-		yield return new WaitForSeconds(s);
-		GamePad.SetVibration(0, 0.0f, 0.0f);
+		GamePad.SetVibration (0, left, right);
+		yield return new WaitForSeconds (s);
+		GamePad.SetVibration (0, 0.0f, 0.0f);
 	}
 
 	public void displayInGameMenu(bool b){

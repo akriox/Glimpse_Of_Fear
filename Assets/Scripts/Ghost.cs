@@ -53,6 +53,7 @@ public class Ghost : MonoBehaviour {
 
 	private AudioClip sonPointage;
 	private AudioClip _voice;
+	private AudioClip _voiceWalk;
 	private AudioSource _audioSource;
 
 	public void Start () {
@@ -67,6 +68,7 @@ public class Ghost : MonoBehaviour {
 		else {
 			_voice = (AudioClip)Resources.Load("Audio/Ghost/Spirit_femalevoice01", typeof(AudioClip));
 		}
+		_voiceWalk = (AudioClip)Resources.Load("Audio/Ghost/Spirit_femalevoice02", typeof(AudioClip));
 		if(pathToFollow == null){
 			Debug.LogError("Un GameObject 'pathGhost' doit etre renseigné dans le script 'Ghost.cs'.");
 		} else {
@@ -198,6 +200,8 @@ public class Ghost : MonoBehaviour {
 	}
 	
 	public void Walk(){
+		_audioSource.clip = _voiceWalk;
+		_audioSource.Play();
 		_anim.SetBool(point,false);
 		_anim.SetBool(moving, true);
 	}

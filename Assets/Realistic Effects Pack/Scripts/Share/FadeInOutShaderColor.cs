@@ -45,10 +45,12 @@ public class FadeInOutShaderColor : MonoBehaviour
   private void Start()
   {
     GetEffectSettingsComponent(transform);
-    if (effectSettings!=null)
+
+	if (effectSettings!=null)
       effectSettings.CollisionEnter += prefabSettings_CollisionEnter;
 
     InitMaterial();
+
   }
 
   private void InitMaterial()

@@ -2,24 +2,10 @@
 using System.Collections;
 
 
-	
-	
-[RequireComponent (typeof(Animator))]
 public class ScriptWraith : MonoBehaviour {
 		
-	public enum MovementTypes { Follow, Random}
-	public enum AnimationTypes {Random, ShakeHead, Turn, Idle, Point}
 		
-	public bool gazeContact;
-	public float fadeSpeed = 2.0f;
-		
-	public MovementTypes _movementType = MovementTypes.Follow;
-	public AnimationTypes _animationTypes = AnimationTypes.Random;
-		
-	[SerializeField][Range(0.1F, 5.0F)] public float speed;
-
-		
-	public Animator _anim;
+	private Animator _anim;
 		
 	private int _IdleDiff = Animator.StringToHash("IdleDiff");
 	private int _CatchDiff = Animator.StringToHash("CatchDiff");
@@ -30,32 +16,40 @@ public class ScriptWraith : MonoBehaviour {
 	private int _Walk = Animator.StringToHash("Walk");
 	private int _Run = Animator.StringToHash("Run");
 	private int _Catch = Animator.StringToHash("Catch");
-	private int _CatchFinal = Animator.StringToHash("CatchFinal");
+	private int _CatchFinal1 = Animator.StringToHash("CatchFinal1");
+	private int _CatchFinal2 = Animator.StringToHash("CatchFinal2");
 	private int _Look = Animator.StringToHash("Look");
 	private int _LookBehind = Animator.StringToHash("LookBehind");
 	private int _Crawl = Animator.StringToHash("Crawl");
 	private int _WalkAround = Animator.StringToHash("WalkAround");
 		
-		
-	private Vector3 direction;
-	private Quaternion rotation;
-	private GameObject _player;
-		
-	private Material _material;
-		
 	void Start () {
-		_material = GetComponentInChildren<Renderer>().material;
+		_anim = GetComponentInParent<Animator> ();
 	}
 		
 	void Update () {
+		if (Input.GetKeyDown (KeyCode.A))
+			Walk ();
+		if (Input.GetKeyDown (KeyCode.Z))
+			Idle ();
+		if (Input.GetKeyDown (KeyCode.E))
+			WalkAround ();
+		if (Input.GetKeyDown (KeyCode.R))
+			Run ();
+		if (Input.GetKeyDown (KeyCode.T))
+			Crawl ();
+		if (Input.GetKeyDown (KeyCode.Y))
+			Look ();
+		if (Input.GetKeyDown (KeyCode.U))
+			LookBehind ();
+		if (Input.GetKeyDown (KeyCode.I))
+			Catch ();
+		if (Input.GetKeyDown (KeyCode.O))
+			CatchFinal ();
+		if (Input.GetKeyDown (KeyCode.P))
+			CatchFinalEnd ();
 
-	}
-		
-	//face the target
-	private void faceTarget(Vector3 to){
-		direction = (to - transform.position).normalized;
-		rotation = Quaternion.LookRotation (new Vector3 (direction.x, 0, direction.z));
-		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, 2 * Time.deltaTime);
+
 	}
 		
 	public void Idle(){
@@ -65,6 +59,7 @@ public class ScriptWraith : MonoBehaviour {
 	public void Walk(){
 		_anim.SetBool(_Walk, true);
 		_anim.SetBool(_Run, false);
+		_anim.SetBool(_WalkAround, false);
 	}
 
 	public void WalkAround(){
@@ -96,7 +91,11 @@ public class ScriptWraith : MonoBehaviour {
 	}
 		
 	public void CatchFinal(){
-		_anim.SetTrigger(_CatchFinal);
+		_anim.SetTrigger(_CatchFinal1);
+	}
+
+	public void CatchFinalEnd(){
+		_anim.SetTrigger(_CatchFinal2);
 	}
 
 	public void ChooseIdle(float f){
@@ -121,17 +120,5 @@ public class ScriptWraith : MonoBehaviour {
 	public void ChooseRun(float f){
 		_anim.SetFloat(_RunDiff, f);
 		Run ();
-	}
-
-	private void Appear(){
-		if(_material.color != Color.white){
-			_material.color = Color.Lerp (_material.color, Color.white, 0.8f*fadeSpeed * Time.deltaTime);
-		}
-	}
-		
-	private void Disappear(){
-		if(_material.color != Color.black){
-			_material.color = Color.Lerp (_material.color, Color.black, fadeSpeed * Time.deltaTime);
-		}
-	}
+	}	
 } 
