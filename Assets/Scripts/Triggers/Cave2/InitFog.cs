@@ -4,8 +4,6 @@ using System.Collections;
 public class InitFog : MonoBehaviour {
 
 	public GameObject activFog;
-	public GameObject otherSpecter;
-	public GameObject desactivRealSpecter;
 
 	private static bool jumpScare;
 
@@ -18,8 +16,7 @@ public class InitFog : MonoBehaviour {
 		if (other.gameObject.tag == "Player") {
 			activFog.SetActive (true);
 			if (!jumpScare){
-				otherSpecter.SetActive(true);
-				desactivRealSpecter.SetActive(false);
+				Spirit.setNewPosition();
 			}
 			yield return new WaitForSeconds(1f);
 			this.enabled = false;

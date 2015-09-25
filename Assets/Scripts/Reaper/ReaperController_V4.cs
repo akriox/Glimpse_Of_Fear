@@ -13,16 +13,15 @@ public class ReaperController_V4 : MonoBehaviour {
 	private UserPresenceComponent _userPresenceComponent;
 	private GameObject targetPlayer;
 	private GameObject _parent;
-	public GameObject pointToLook;
-	public GameObject _test;
-	private float angleYOrigine;
-	
+
 	private List<Transform> listPaths = new List<Transform>();
 	private Vector3 direction;
+	private Vector3 direction2;
 	private Vector3 currentTarget;
 
 	private Vector3 posPlayer;
 	private Quaternion rotation;
+	private Quaternion rotation2;
 
 	private float stayCloseToThePlayer;
 	private float delayToHaveSomething;
@@ -37,26 +36,30 @@ public class ReaperController_V4 : MonoBehaviour {
 
 	private NavMeshAgent _wraith;
 	private Animator _animator;
+
+	private int angleLookWraith;
+	private int positionPlayerWraith;
+
+	private Vector3 _positionPlayerEntrance = new Vector3 (-122.23f, -14.6f, 2.78f);
+	private Vector3 _positionPlayerTablet = new Vector3 (-195.46f, -6.586f, 2.78f);
 	
 	[SerializeField] private Transform pathToFollow;
+	[SerializeField] private Transform pathToFollow2;
 	[SerializeField][Range(0.1F, 5.0F)] private float lumThreshold;
 	[SerializeField][Range(1.0F, 10.0F)] private float initSpeedReaper;
-	[SerializeField][Range(0.1F, 3.0F)] private float rotationSpeed;
 	[SerializeField][Range(8.0F, 15.0F)] private float areaMaxPlayerDetection;
 	[SerializeField][Range(0.1F, 5.0F)] private float minWaitTime;
 	[SerializeField][Range(0.1F, 10.0F)] private float maxWaitTime;
-	[SerializeField][Range(0.5F, 1.0F)] private float timeDropPathPlayer;
-	private float timeStayCloseToThePlayer = 12f;
-	[SerializeField][Range(0.01F, 0.1F)] private float increamentSpeedOfTheReaper;
-	[SerializeField] private AudioSource m_LookSound;          // the sound when the player had look the reaper
-	[SerializeField] private AudioSource m_ReaperClose;        // the sound when the reaper is close to the player
-	[SerializeField] private AudioSource atmosphere;        
-	[SerializeField] private GameObject jumpScare;
+	[SerializeField][Range(0.01F, 0.1F)] private float increamentSpeedOfTheReaper;      
 	[SerializeField] private bool randomMove;
-	[SerializeField] private GameObject newPositionPlayer;
+
+	private float rotationSpeed = 6f;
+	private float timeStayCloseToThePlayer = 12f;
+
+	private AudioSource _audio; 
+	private GameObject jumpScare;
 	
-	
-	private enum State{moveWraith, PlayerIsLooking, FollowPlayer, PlayerInArea, PlayerClose, BeNothing, WraithCatchPlayer};
+	private enum State{moveWraith, PlayerIsLooking, FollowPlayer, PlayerInArea, PlayerClose, BeNothing, WraithCatchPlayer, PlayerLost, comeBack, Wait, No};
 	private State _state;
 	
 	private int _IdleDiff = Animator.StringToHash("IdleDiff");
@@ -74,6 +77,12 @@ public class ReaperController_V4 : MonoBehaviour {
 	private int _LookBehind = Animator.StringToHash("LookBehind");
 	private int _Crawl = Animator.StringToHash("Crawl");
 	private int _WalkAround = Animator.StringToHash("WalkAround");
+	
+	private AudioClip _walkSound;
+	private AudioClip _runSound;
+	private AudioClip _turnAroundSound;
+	private AudioClip _goAwaySound;
+	private AudioClip _lookSound;
 
 	public void Start(){
 		//get component for eye tracker
@@ -85,10 +94,19 @@ public class ReaperController_V4 : MonoBehaviour {
 		_wraith = GetComponentInParent<NavMeshAgent> ();
 		_parent = transform.parent.gameObject;
 		_wraith.speed = initSpeedReaper;
-		angleYOrigine = _test.transform.eulerAngles.y;
 		_animator = GetComponentInParent<Animator> ();
-		LoadingScreen.Instance.fadeToClear ();
-		
+		jumpScare = GameObject.FindGameObjectWithTag("WraithJumpScare");
+		jumpScare.GetComponentInChildren<SkinnedMeshRenderer> ().enabled = true;
+		jumpScare.SetActive (false);
+		//LoadingScreen.Instance.fadeToClear ();
+		_audio = GetComponent<AudioSource> ();
+
+		_walkSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_faraway", typeof(AudioClip));
+		_runSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_catch02", typeof(AudioClip));
+		_turnAroundSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_turnaround01_loop", typeof(AudioClip));
+		_goAwaySound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_disappear01", typeof(AudioClip));
+		_lookSound = (AudioClip)Resources.Load ("Audio/Wraith/Giant_SE17", typeof(AudioClip));
+
 		
 		//test if the field is not empty
 		if(pathToFollow == null){
@@ -101,10 +119,13 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 	
 	public void Update(){
+
 		_playerOpenEyes = _userPresenceComponent.GazeTracking == EyeXGazeTracking.GazeTracked ? true : false;
 
 		if (_playerOpenEyes && AreaJumpScare.isPlayerInAreaForJumpScare && !_jumpScare) {
 			_jumpScare = true; 
+			StopAllCoroutines ();
+			_state = State.No;
 			playJumpScare();
 		}
 		/*
@@ -115,10 +136,11 @@ public class ReaperController_V4 : MonoBehaviour {
 		switch(_state){
 		case State.moveWraith:
 			//Initial state of the wraith (patrol)
-			Walk();
 			if (_gazeAwareComponent.HasGaze) {
 				_wraith.Stop();
+				chooseTheCorrectLook();
 				StartCoroutine(WaitBeforeAttak());
+				EventSound.playClip(_lookSound);
 				_state = State.PlayerIsLooking;
 			}
 			StartWalk (currentTarget);
@@ -126,15 +148,52 @@ public class ReaperController_V4 : MonoBehaviour {
 			break;
 
 		case State.PlayerIsLooking:
-			//Initial state of the wraith (patrol)
-			Look();
-			if (!_gazeAwareComponent.HasGaze) {
+			if (!_playerOpenEyes) {
 				_wraith.Resume();
 				StopAllCoroutines();
+				Walk ();
 				_state = State.moveWraith;
 			}
-
 			break;
+
+
+		case State.PlayerLost:
+			flyTowardTarget(currentTarget, true);
+			if( closeToTheTarget(4f, currentTarget)){
+				StartCoroutine(Wait());
+				ChooseIdle(1f);
+				_state = State.Wait;
+			}
+			if (_gazeAwareComponent.HasGaze) {
+				ChooseRun();
+				_state = State.FollowPlayer;
+			}
+
+		break;
+
+		case State.Wait:
+			if (_gazeAwareComponent.HasGaze) {
+				StopAllCoroutines();
+				ChooseRun();
+				_state = State.FollowPlayer;
+			}
+			break;
+
+		case State.comeBack:
+			flyTowardTarget(currentTarget, false);
+			if( closeToTheTarget(1f, currentTarget)){
+				_wraith.transform.position = currentTarget;
+				GetNewPosition();
+				_wraith.enabled = true;
+				Walk();
+				_state = State.moveWraith;
+			}
+			if (_gazeAwareComponent.HasGaze) {
+				ChooseRun();
+				_state = State.FollowPlayer;
+			}
+			break;
+
 		case State.FollowPlayer:
 			//State where the wraith is following the player
 			if (_gazeAwareComponent.HasGaze) {
@@ -145,9 +204,10 @@ public class ReaperController_V4 : MonoBehaviour {
 			if (!_playerOpenEyes) {
 				_wraith.speed = initSpeedReaper;
 				currentTarget = targetPlayer.transform.position;
-				_state = State.moveWraith;
+				Walk ();
+				_state = State.PlayerLost;
 			}
-			moveTowardTarget(targetPlayer.transform.position);
+			flyTowardTarget(targetPlayer.transform.position, true);
 
 			break;
 
@@ -191,17 +251,13 @@ public class ReaperController_V4 : MonoBehaviour {
 
 			//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.INC);
 			jumpScare.SetActive (false);
-			setPlayerTransform(newPositionPlayer.transform.position);
-				
+			jumpScare.GetComponent<AudioSource> ().Stop ();
+			if(Inventory.Instance.hasTablet)
+				setPlayerTransform(_positionPlayerTablet);
+			else{
+				setPlayerTransform(_positionPlayerEntrance);
+			}
 			_state = State.BeNothing;
-			/*
-			_wraith.transform.position = (listPaths.Single (p => p.name == "Path" + index)).position;
-			_wraith.transform.position = new Vector3(_wraith.transform.position.x,0.0f,_wraith.transform.position.z);
-			myRenderer.enabled = true;
-			setInitialInformation();
-			_state = State.moveWraith;
-			*/
-
 			break;
 
 		case State.BeNothing:
@@ -212,10 +268,15 @@ public class ReaperController_V4 : MonoBehaviour {
 			myRenderer.enabled = true;
 			_jumpScare = false; 
 			_wraith.speed = initSpeedReaper;
+			EyeLook.isActive = true;
+			FirstPersonController.canMove = true;
 			LoadingScreen.Instance.fadeToClear();
+			Walk();
 			_state = State.moveWraith;
 			break;
 
+		case State.No:
+			break;
 		}
 	}
 
@@ -226,7 +287,10 @@ public class ReaperController_V4 : MonoBehaviour {
 
 	private void playJumpScare(){
 		//launch the jumpscare
+		EyeLook.isActive = false;
+		FirstPersonController.canMove = false;
 		jumpScare.SetActive (true);
+		jumpScare.GetComponent<AudioSource> ().Play ();
 		ChooseCatch ();
 		StartCoroutine (WaitAfterCatch ());
 		myRenderer.enabled = false;
@@ -243,6 +307,7 @@ public class ReaperController_V4 : MonoBehaviour {
 		jumpScare.SetActive(false);
 		isPlayerInArea = false;
 		GetNewPosition();
+		Walk();
 		//StopCloseSound();
 		//StopLookSound();
 	}
@@ -255,28 +320,17 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 
 
-	/*
-	private void PlayLookSound(){
-		if(!m_LookSound.isPlaying)
-			m_LookSound.Play();
-	}
-	private void StopLookSound(){
-		m_LookSound.Stop ();
-	}
-	private void PlayCloseSound(){
-		if(!m_ReaperClose.isPlaying){
-			m_ReaperClose.Play();
-			m_LookSound.volume = 0.1f;
-			atmosphere.volume = 0.2f;
-		}
-	}
-	private void StopCloseSound(){
-		m_ReaperClose.Stop ();
-		m_LookSound.volume = 1f;
-		atmosphere.volume = 1f;
+	private void playSound(AudioClip _clip, bool _loop){
+		if (_audio.isPlaying)
+			StopSound ();
+		_audio.clip = _clip;
+		_audio.loop = _loop;
+		_audio.Play ();
 	}
 
-	*/
+	private void StopSound(){
+		_audio.Stop ();
+	}
 
 	//walk forward the target
 	private void StartWalk(Vector3 targ){
@@ -300,16 +354,20 @@ public class ReaperController_V4 : MonoBehaviour {
 
 	//the monster can take time before walk to the next step
 	IEnumerator WaitBeforeAttak(){
-		yield return new WaitForSeconds(0.5f);
-		_wraith.Resume();
+		yield return new WaitForSeconds(0.7f);
+		//_wraith.Resume();
+		_wraith.enabled = false;
 		ChooseRun();
 		_state = State.FollowPlayer;
 	}
 
 	//the monster can take time before walk to the next step
 	IEnumerator Wait(){
-		float time = Random.Range(minWaitTime, maxWaitTime);
-		yield return new WaitForSeconds(time);
+		yield return new WaitForSeconds(6.4f);
+		Walk ();
+		GetNewPosition();
+		EventSound.playClip (_goAwaySound);
+		_state = State.comeBack;
 	}
 	
 	//get the next step of the path
@@ -325,7 +383,37 @@ public class ReaperController_V4 : MonoBehaviour {
 				currentTarget = listPaths[index].position;
 			}
 		}
-		StartCoroutine (Wait ());
+	}
+
+	public void chooseTheCorrectLook(){
+		angleLookWraith = Mathf.FloorToInt(rotation.eulerAngles.y);
+		direction2 = (_wraith.transform.position -targetPlayer.transform.position).normalized;
+		rotation2 = Quaternion.LookRotation (direction2);
+		positionPlayerWraith = Mathf.FloorToInt((rotation2.eulerAngles.y +180f));
+		positionPlayerWraith %= 360;
+		positionPlayerWraith += (360 -angleLookWraith);
+		positionPlayerWraith %= 360;
+		if (positionPlayerWraith > 30) {
+			if(positionPlayerWraith > 120){
+				if(positionPlayerWraith > 180){
+					if(positionPlayerWraith > 240){
+						if(positionPlayerWraith > 330){
+							ChooseIdle(0f);
+							return;
+						}
+						ChooseLook(0f);
+						return;
+					}
+					ChooseLookBehind(0f);
+					return;
+				}
+				ChooseLookBehind(1f);
+				return;
+			}
+			ChooseLook(1f);
+			return;
+		}
+		ChooseIdle(0f);
 	}
 	
 	//return true if the monster is close to the target 
@@ -350,6 +438,16 @@ public class ReaperController_V4 : MonoBehaviour {
 		//_parent.transform.position = Vector3.MoveTowards(_wraith.transform.position, new Vector3(to.x, to.y, to.z), moveSpeed* Time.deltaTime);
 		_wraith.SetDestination(to);
 	}
+	//move forward and face the position of the "vector3 to"
+	private void flyTowardTarget(Vector3 to, bool up){
+		faceTarget (to);
+		if (up)
+			_parent.transform.position = Vector3.MoveTowards (_parent.transform.position, new Vector3 (to.x, to.y - 2f, to.z), _wraith.speed * Time.deltaTime);
+		else {
+			_parent.transform.position = Vector3.MoveTowards (_parent.transform.position, new Vector3 (to.x, to.y, to.z), _wraith.speed * Time.deltaTime);
+		}
+	}
+
 
 	public void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Player"){
@@ -368,19 +466,21 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 	
 	public void Walk(){
+		playSound (_walkSound, true);
 		_animator.SetBool(_Walk, true);
 		_animator.SetBool(_Run, false);
 		_animator.SetBool(_WalkAround, false);
 	}
 	
 	public void WalkAround(){
+		playSound (_turnAroundSound, true);
 		_animator.SetBool(_WalkAround, true);
 		_animator.SetBool(_Run, false);
 		
 	}
 	
 	public void Run(){
-		print ("coucou");
+		playSound (_runSound, true);
 		_animator.SetBool(_Walk, true);
 		_animator.SetBool(_Run, true);
 	}
@@ -391,10 +491,12 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 	
 	public void LookBehind(){
+		_animator.SetBool(_Walk, false);
 		_animator.SetTrigger(_LookBehind);
 	}
 	
 	public void Look(){
+		_animator.SetBool(_Walk, false);
 		_animator.SetTrigger(_Look);
 	}
 	
@@ -412,6 +514,7 @@ public class ReaperController_V4 : MonoBehaviour {
 	
 	public void ChooseIdle(float f){
 		_animator.SetFloat(_IdleDiff, f);
+		Idle ();
 	}
 
 	public void ChooseCatch(){
@@ -430,6 +533,7 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 	
 	public void ChooseRun(){
+		_wraith.speed = 7f;
 		_animator.SetFloat(_RunDiff, giveRandomAnim());
 		Run ();
 	}

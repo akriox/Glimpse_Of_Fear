@@ -12,84 +12,90 @@ public class Spirit : MonoBehaviour {
 	private List<Transform> listPosition = new List<Transform>();
 	private Transform currentTarget;
 	private NavMeshAgent agent;
-	private GameObject targetPlayer;
 	private Vector3 direction;
 	private Quaternion rotation;
 	
 	[SerializeField] private Transform PositionSpirit;
-	[SerializeField] private GameObject _texture;
-	[SerializeField] private GameObject _smoke;
-	[SerializeField][Range(1.5F, 3.5F)] private float timeForFollowPlayer = 2f;
-	[SerializeField][Range(2f, 12f)] private float distDetection = 5f;
-	
-	private float timeFollowPlayer;
-	private float timeToNotAppear;
-	private enum State{NotAppear, Appear, FollowPlayer};
+	[SerializeField] private Transform PositionSpirit2;
+
+	private float timeToAppear = 0.7f;
+
+	private enum State{NotAppear, Appear};
 	private State _state;
+	private GameObject jumpScare;
+
+	private static bool notSeen = false;
 
 	public void Start(){
 		_gazeAwareComponent = GetComponent<GazeAwareComponent>();
 		_audioSource = GetComponent<AudioSource>();
-		targetPlayer = GameObject.FindGameObjectWithTag("Player");
 		agent = GetComponent<NavMeshAgent> ();
+
+		jumpScare = GameObject.FindGameObjectWithTag("GhostGirl");
+		//jumpScare.GetComponentInChildren<MeshRenderer> ().enabled = true;
+		jumpScare.GetComponentInChildren<SkinnedMeshRenderer> ().enabled = true;
+		jumpScare.SetActive (false);
+
 		if(PositionSpirit == null){
 			Debug.Log("Spirit position null");
 		} else {
-			GetPaths();
+			GetPaths(PositionSpirit);
 			if(listPosition.Count > 0) GetNewPosition();
 		}
 		_state = State.Appear;
 	}
 
 	public void Update(){
+		if (notSeen) {
+			agent.enabled =false;
+			transform.position = new Vector3(110.77f,7f,-22.84f);
+			GetPaths(PositionSpirit2);
+			GetNewPosition();
+			notSeen = false;
+		}
 		switch(_state){
 		case State.NotAppear:	
-			if (Time.time > timeToNotAppear){
-				_state = State.Appear;
-				GetNewPosition();
-			}
 
 			break;
 		case State.Appear:
-			if (_gazeAwareComponent.HasGaze && nearPlayer(distDetection)) {
+			if (_gazeAwareComponent.HasGaze) {
 				if (!_audioSource.isPlaying)_audioSource.Play ();
 				CameraController.Instance.setVortexState (CameraController.VortexState.INC);
 				//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.INC);
 				GameController.Instance.startVibration (0.8f, 0.8f);
-				faceTarget (targetPlayer.transform.position);
 				StartCoroutine (CameraController.Instance.Shake (2.0f, 0.05f, 10.0f));
-				timeFollowPlayer = Time.time + Random.Range (timeForFollowPlayer - 0.5f, timeForFollowPlayer + 0.5f);
-				_smoke.SetActive (true);
-				_texture.SetActive (true);
+				StartCoroutine (Appear());
+				jumpScare.SetActive(true);
 				HeartBeat.playLoop();
 				InitFog.specterSeen();
-				_state = State.FollowPlayer;
+				_state = State.NotAppear;
 			} 
 			else {
 				WalkAround ();
 			}
 			break;
-		case State.FollowPlayer:
-			faceTarget (targetPlayer.transform.position);
-			StartWalk ();
-			if (Time.time > timeFollowPlayer) {
-				CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
-				//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
-				GameController.Instance.stopVibration ();
-				switchPosition ();
-				_smoke.SetActive (false);
-				_texture.SetActive (false);
-				timeToNotAppear = Time.time + Random.Range (4f, 6f);
-				_state = State.NotAppear;
-			}
-			break;
+	
 		}
 	}
 
-	void GetPaths(){
-		foreach(Transform temp in PositionSpirit){
+	IEnumerator Appear(){
+		yield return new WaitForSeconds(timeToAppear);
+		CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
+		//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
+		GameController.Instance.stopVibration ();
+		switchPosition ();
+		jumpScare.SetActive(false);
+		yield return new WaitForSeconds(Random.Range (4f, 6f));
+		_state = State.Appear;
+		GetNewPosition();
+	}
+
+	void GetPaths(Transform _PositionSpirit){
+		listPosition.Clear ();
+		foreach(Transform temp in _PositionSpirit){
 			listPosition.Add(temp);
 		}
+		agent.enabled = true;
 	}
 	
 	void GetNewPosition(){
@@ -110,21 +116,8 @@ public class Spirit : MonoBehaviour {
 		}
 	}
 
-	void StartWalk(){
-		if(!nearPlayer(4f)){
-			agent.SetDestination(targetPlayer.transform.position);
-		}
-	}
-
-	//face the target
-	private void faceTarget(Vector3 to){
-		direction = (to - transform.position).normalized;
-		rotation = Quaternion.LookRotation (new Vector3 (direction.x, 0, direction.z));
-		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, 1000 * Time.deltaTime);
-	}
-	private bool nearPlayer(float dist){
-		if (CheckDistance (targetPlayer.transform.position) < dist) return true;
-		return false;	
+	public static void setNewPosition(){
+		notSeen = true;
 	}
 
 	private float CheckDistance(Vector3 v){

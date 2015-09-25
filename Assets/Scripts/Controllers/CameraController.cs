@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour {
 	public enum VortexState {INC, DEC, MAX, OFF};
 	private VortexState _vortexState = VortexState.OFF;
 	[SerializeField][Range(0.0f, 10.0f)] private float _vortexSpeed = 1.0f;
-	[SerializeField][Range(0.0f, 1.0f)] private float _vortexMaxRadius = 0.6f;
+	[SerializeField][Range(0.0f, 1.0f)] private float _vortexMaxRadius = 0.4f;
 
 	public enum NoiseAndScratchesState {INC, DEC, MAX, OFF};
 	private NoiseAndScratchesState _noiseAndScratchesState = NoiseAndScratchesState.OFF;

@@ -54,6 +54,7 @@ public class FirstPersonController : MonoBehaviour
 	public static GameObject rightHand;
 	public static bool ableToMove = true;
 	private static bool lamp;
+	public static bool canMove = true;
 	
 	// Use this for initialization
 	private void Start()
@@ -79,22 +80,22 @@ public class FirstPersonController : MonoBehaviour
 	// Update is called once per frame
 	private void Update()
 	{
-		/* DEBUG FLASHLIGHT */
-		if(Input.GetKeyDown(KeyCode.F)) rightHand.SetActive(!rightHand.activeSelf);
+			/* DEBUG FLASHLIGHT */
+			if (Input.GetKeyDown (KeyCode.F))
+				rightHand.SetActive (!rightHand.activeSelf);
 		
-		if(Input.GetButtonUp("Duck")){
-			TipsTracker.Instance.displayTip(TipsTracker.Tips.Crouch);
-			m_Duck = !m_Duck;
-		}
+			if (Input.GetButtonUp ("Duck")) {
+				TipsTracker.Instance.displayTip (TipsTracker.Tips.Crouch);
+				m_Duck = !m_Duck;
+			}
 		
-		if(m_Duck && m_CharacterController.height > m_DuckingHeight){
-			m_CharacterController.height -= m_StickToGroundForce * Time.deltaTime;
-		}
-		else if(m_Duck == false && m_CharacterController.height < m_StandingHeight){
-			m_CharacterController.height +=  m_StickToGroundForce * Time.deltaTime;
-		}
+			if (m_Duck && m_CharacterController.height > m_DuckingHeight) {
+				m_CharacterController.height -= m_StickToGroundForce * Time.deltaTime;
+			} else if (m_Duck == false && m_CharacterController.height < m_StandingHeight) {
+				m_CharacterController.height += m_StickToGroundForce * Time.deltaTime;
+			}
 		
-		/*
+			/*
         // the jump state needs to read here to make sure it is not missed
         if (!m_Jump)
         {
@@ -102,21 +103,20 @@ public class FirstPersonController : MonoBehaviour
         }
         */
 		
-		if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
-		{
-			StartCoroutine(m_JumpBob.DoBobCycle());
-			//PlayLandingSound();
-			m_MoveDir.y = 0f;
-			//m_Jumping = false;
-		}
-		/*
+			if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) {
+				StartCoroutine (m_JumpBob.DoBobCycle ());
+				//PlayLandingSound();
+				m_MoveDir.y = 0f;
+				//m_Jumping = false;
+			}
+			/*
         if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
         {
             m_MoveDir.y = 0f;
         }
 
 		*/
-		m_PreviouslyGrounded = m_CharacterController.isGrounded;
+			m_PreviouslyGrounded = m_CharacterController.isGrounded;
 	}
 	
 	
@@ -130,32 +130,35 @@ public class FirstPersonController : MonoBehaviour
 	
 	private void FixedUpdate()
 	{
-		float speed;
+		if (canMove) {
+			float speed;
 		
-		if(ableToMove) GetInput(out speed);
-		else speed = 0.0f;
+			if (ableToMove)
+				GetInput (out speed);
+			else
+				speed = 0.0f;
 		
-		// reduce movement speed if the player is ducking
-		if(m_Duck) speed  = speed/2.0f;
+			// reduce movement speed if the player is ducking
+			if (m_Duck)
+				speed = speed / 2.0f;
 		
-		// always move along the camera forward as it is the direction that it being aimed at
-		Vector3 desiredMove = transform.forward*m_Input.y + transform.right*m_Input.x;
+			// always move along the camera forward as it is the direction that it being aimed at
+			Vector3 desiredMove = transform.forward * m_Input.y + transform.right * m_Input.x;
 		
-		// get a normal for the surface that is being touched to move along it
-		RaycastHit hitInfo;
-		Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
-		                   m_CharacterController.height/2f);
-		desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
+			// get a normal for the surface that is being touched to move along it
+			RaycastHit hitInfo;
+			Physics.SphereCast (transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
+		                   m_CharacterController.height / 2f);
+			desiredMove = Vector3.ProjectOnPlane (desiredMove, hitInfo.normal).normalized;
 		
-		m_MoveDir.x = desiredMove.x*speed;
-		m_MoveDir.z = desiredMove.z*speed;
+			m_MoveDir.x = desiredMove.x * speed;
+			m_MoveDir.z = desiredMove.z * speed;
 		
 		
-		if (m_CharacterController.isGrounded)
-		{
-			m_MoveDir.y = -m_StickToGroundForce;
+			if (m_CharacterController.isGrounded) {
+				m_MoveDir.y = -m_StickToGroundForce;
 			
-			/*
+				/*
             if (m_Jump)
             {
                 m_MoveDir.y = m_JumpSpeed;
@@ -164,15 +167,14 @@ public class FirstPersonController : MonoBehaviour
                 m_Jumping = true;
             }
             */
-		}
-		else
-		{
-			m_MoveDir += Physics.gravity*m_GravityMultiplier*Time.fixedDeltaTime;
-		}
-		m_CollisionFlags = m_CharacterController.Move(m_MoveDir*Time.fixedDeltaTime);
+			} else {
+				m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+			}
+			m_CollisionFlags = m_CharacterController.Move (m_MoveDir * Time.fixedDeltaTime);
 		
-		ProgressStepCycle(speed);
-		UpdateCameraPosition(speed);
+			ProgressStepCycle (speed);
+			UpdateCameraPosition (speed);
+		}
 	}
 	
 	
@@ -287,7 +289,7 @@ public class FirstPersonController : MonoBehaviour
 			StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
 		}
 	}
-	
+
 	private void RotateView()
 	{
 		m_MouseLook.LookRotation (transform, m_Camera.transform);

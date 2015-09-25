@@ -49,9 +49,9 @@ public class Ghost : MonoBehaviour {
 	private GameObject _player;
 
 	private GazeAwareComponent _gazeAwareComponent;
-	private Material _material;
+    private Material _material;
 
-	private AudioClip sonPointage;
+    private AudioClip sonPointage;
 	private AudioClip _voice;
 	private AudioClip _voiceWalk;
 	private AudioSource _audioSource;
@@ -59,8 +59,9 @@ public class Ghost : MonoBehaviour {
 	public void Start () {
 		_anim = GetComponent<Animator>();
 		_gazeAwareComponent = GetComponentInChildren<GazeAwareComponent>();
-		_material = GetComponentInChildren<Renderer>().material;
-		_player = GameObject.FindGameObjectWithTag("Player");
+		_material = GetComponentInChildren<Renderer>().materials[0];
+        //_materials = GetComponent<SkinnedMeshRenderer>().materials;
+        _player = GameObject.FindGameObjectWithTag("Player");
 		_audioSource = GetComponent<AudioSource> ();
 		sonPointage = (AudioClip)Resources.Load("Audio/Ghost/Spirit_wander01", typeof(AudioClip));
 		if (_sexType == Sex.homme)
@@ -222,20 +223,20 @@ public class Ghost : MonoBehaviour {
 		_anim.SetBool(point,true);
 	}
 
-	private void Appear(){
-		/*
-		if(_material.color != Color.white){
-			_material.color = Color.Lerp (_material.color, Color.white, 0.8f*fadeSpeed * Time.deltaTime);
-		}
-		*/
+    private void Appear(){
+        /*
+        if (_material.color != Color.white){
+            _material.color = Color.Lerp(_material.color, Color.white, 0.8f * fadeSpeed * Time.deltaTime);
+        }
+        */
 	}
 	
 	private void Disappear(){
-		/*
+        /*
 		if(_material.color != Color.black){
 			_material.color = Color.Lerp (_material.color, Color.black, fadeSpeed * Time.deltaTime);
 		}
-		*/
+        */
 	}
 
 } 

@@ -19,7 +19,7 @@ public class SwitchMusic : MonoBehaviour {
 			_soundtrackToPlay.GetComponent<FadingAudioSource> ().Fade (soundToPlay, volume, loop);
 			_soundtrackToStop.GetComponent<FadingAudioSource> ().Fade (_audioClip, 0.0f, false);
 			thisTrigger.SetActive(false);
-			otherTrigger.SetActive(true);
+			if(otherTrigger != null)otherTrigger.SetActive(true);
 		}
 	}
 }
