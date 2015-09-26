@@ -10,13 +10,14 @@ public class Inventory : MonoBehaviour {
 	public bool hasTablet;
 
 	public void Start(){
-		/*
-		hasPentacle = true;
-		hasTablet = true;
-		*/
-	}
+        /*
+      hasPentacle = true;
+      hasTablet = true;
 
-	public void Awake(){
+      */
+    }
+
+    public void Awake(){
 		Instance = this;
 		FlareStickStash = 5;
 	}
