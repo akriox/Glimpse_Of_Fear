@@ -54,7 +54,6 @@ public class ReaperController_V4 : MonoBehaviour {
 	[SerializeField] private bool randomMove;
 
 	private float rotationSpeed = 6f;
-	private float timeStayCloseToThePlayer = 12f;
 
 	private AudioSource _audio; 
 	private GameObject jumpScare;
@@ -135,25 +134,30 @@ public class ReaperController_V4 : MonoBehaviour {
 		*/
 		switch(_state){
 		case State.moveWraith:
-			//Initial state of the wraith (patrol)
-			if (_gazeAwareComponent.HasGaze) {
-				_wraith.Stop();
-				chooseTheCorrectLook();
-				StartCoroutine(WaitBeforeAttak());
-				EventSound.playClip(_lookSound);
-				_state = State.PlayerIsLooking;
-			}
-			StartWalk (currentTarget);
-			if (isPlayerInArea)_state = State.PlayerInArea;
+			    //Initial state of the wraith (patrol)
+			    if (_gazeAwareComponent.HasGaze) {
+				    _wraith.Stop();
+				    chooseTheCorrectLook();
+				    StartCoroutine(WaitBeforeAttak());
+				    EventSound.playClip(_lookSound);
+				    _state = State.PlayerIsLooking;
+			    }
+			    StartWalk (currentTarget);
+                if (isPlayerInArea)
+                {
+                    Walk();
+                    _wraith.enabled = false;
+                    _state = State.PlayerInArea;
+                }
 			break;
 
 		case State.PlayerIsLooking:
-			if (!_playerOpenEyes) {
-				_wraith.Resume();
-				StopAllCoroutines();
-				Walk ();
-				_state = State.moveWraith;
-			}
+			    if (!_playerOpenEyes) {
+				    _wraith.Resume();
+				    StopAllCoroutines();
+				    Walk ();
+				    _state = State.moveWraith;
+			    }
 			break;
 
 
@@ -216,14 +220,13 @@ public class ReaperController_V4 : MonoBehaviour {
 			if (_gazeAwareComponent.HasGaze) {
 				_state = State.FollowPlayer;
 			}
-			Walk();
-			moveTowardTarget(targetPlayer.transform.position);
-			//PlayCloseSound ();
-			if (AreaJumpScare.isPlayerInAreaForJumpScare) {
-				posPlayer = targetPlayer.transform.position;
-				stayCloseToThePlayer = Time.time + timeStayCloseToThePlayer;
-				_wraith.enabled = false;
-				_state = State.PlayerClose;
+            flyTowardTarget(targetPlayer.transform.position, true);
+            //PlayCloseSound ();
+            if (AreaJumpScare.isPlayerInAreaForJumpScare) {
+		        posPlayer = targetPlayer.transform.position;
+                StartCoroutine(Wait());
+			    _wraith.enabled = false;
+			    _state = State.PlayerClose;
 			} 
 
 
@@ -232,17 +235,10 @@ public class ReaperController_V4 : MonoBehaviour {
 		case State.PlayerClose:
 			//the wraith has detected the player so he stop and stay close to him during a amount of time
 			//faceTarget (targetPlayer.transform.position);
-			WalkAround();
 			turnAround ();
 			if (!AreaJumpScare.isPlayerInAreaForJumpScare) {
-				_wraith.enabled = true;
+                StopAllCoroutines();
 				_state = State.PlayerInArea;
-			}
-
-			if (Time.time > stayCloseToThePlayer) {
-				_wraith.enabled = true;
-				setInitialInformation ();
-				_state = State.moveWraith;
 			}
 			break;
 
@@ -298,8 +294,9 @@ public class ReaperController_V4 : MonoBehaviour {
 
 
 	private void turnAround(){
-		//the wraith is turning around the player
-		_parent.transform.RotateAround (posPlayer, Vector3.down, 30 * Time.deltaTime);
+        //the wraith is turning around the player
+        WalkAround();
+        _parent.transform.RotateAround (posPlayer, Vector3.down, 90 * Time.deltaTime);
 	}
 	
 	//put initial information for the reaper
@@ -337,8 +334,8 @@ public class ReaperController_V4 : MonoBehaviour {
 		moveTowardTarget(targ);
 		//the target is met
 		if( closeToTheTarget(3f, targ)){
-			GetNewPosition();
-		}
+            GetNewPosition();
+        }
 	}
 
 	//the monster can take time before walk to the next step
@@ -363,7 +360,7 @@ public class ReaperController_V4 : MonoBehaviour {
 
 	//the monster can take time before walk to the next step
 	IEnumerator Wait(){
-		yield return new WaitForSeconds(6.4f);
+		yield return new WaitForSeconds(3.2f);
 		Walk ();
 		GetNewPosition();
 		EventSound.playClip (_goAwaySound);
