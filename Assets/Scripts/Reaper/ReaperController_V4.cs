@@ -106,9 +106,9 @@ public class ReaperController_V4 : MonoBehaviour {
 		_goAwaySound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_disappear01", typeof(AudioClip));
 		_lookSound = (AudioClip)Resources.Load ("Audio/Wraith/Giant_SE17", typeof(AudioClip));
 
-		
-		//test if the field is not empty
-		if(pathToFollow == null){
+
+        //test if the field is not empty
+        if (pathToFollow == null){
 			Debug.LogError("A GameObject 'Path' needed in 'FollowPath.cs'.");
 		} else {
 			GetPaths();
@@ -226,7 +226,8 @@ public class ReaperController_V4 : MonoBehaviour {
 		        posPlayer = targetPlayer.transform.position;
                 StartCoroutine(Wait());
 			    _wraith.enabled = false;
-			    _state = State.PlayerClose;
+                playSound(_turnAroundSound, true);
+                _state = State.PlayerClose;
 			} 
 
 
@@ -253,7 +254,8 @@ public class ReaperController_V4 : MonoBehaviour {
 			else{
 				setPlayerTransform(_positionPlayerEntrance);
 			}
-			_state = State.BeNothing;
+            TipsTracker.Instance.displayTip(TipsTracker.Tips.AvoidWraith);
+            _state = State.BeNothing;
 			break;
 
 		case State.BeNothing:
@@ -470,7 +472,6 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 	
 	public void WalkAround(){
-		playSound (_turnAroundSound, true);
 		_animator.SetBool(_WalkAround, true);
 		_animator.SetBool(_Run, false);
 		

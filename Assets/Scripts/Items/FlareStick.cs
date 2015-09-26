@@ -5,8 +5,9 @@ using UnityEngine.UI;
 public class FlareStick : Collectible {
 
 	private Vector3 rotation;
-	
-	public new void Awake(){
+    private AudioClip clip;
+
+    public new void Awake(){
 		base.Awake();
 		// Ignore collisions with guardrail colliders
 		Physics.IgnoreLayerCollision(10, 11);
@@ -16,7 +17,8 @@ public class FlareStick : Collectible {
 
 	public new void Start(){
 		base.Start ();
-		rotation = new Vector3(Random.Range(100,360),Random.Range(100,360),Random.Range(100,360));
+        clip = (AudioClip)Resources.Load("Audio/Objets/pickup_glowstick", typeof(AudioClip));
+        rotation = new Vector3(Random.Range(100,360),Random.Range(100,360),Random.Range(100,360));
 		transform.Rotate(rotation);
 	}
 
@@ -27,7 +29,8 @@ public class FlareStick : Collectible {
 		if(pickedUp && Inventory.Instance.canTake()){
 			GameController.Instance.displayWidget(false);
 			Inventory.Instance.addFlareStick(1);
-			Destroy(this.gameObject);
+            if (!VoiceOver._audioSource.isPlaying) VoiceOver.Talk(clip);
+            Destroy(this.gameObject);
 		}
 	}
 }
