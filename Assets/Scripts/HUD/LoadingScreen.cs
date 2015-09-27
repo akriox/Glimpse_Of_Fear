@@ -93,7 +93,40 @@ public class LoadingScreen : MonoBehaviour {
 			resetCameraTransform();
 			setPlayerTransform(new Vector3(0.0f, 2.0f, -8.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
 		}
-	}
+        //FogRoom
+        if (level == 5)
+        {
+            resetCameraTransform();
+            setPlayerTransform(new Vector3(106f, 9.4f, -24.3f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
+        }
+        //SkullRoom
+        if (level == 6)
+        {
+            resetCameraTransform();
+            setPlayerTransform(new Vector3(-3.6f, 1.65f, -42.5f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
+        }
+        //Spirit&Ghost
+        if (level == 7)
+        {
+            resetCameraTransform();
+            setPlayerTransform(new Vector3(71f, 1.58f, 3.04f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
+        }
+        //ThrowingRocks
+        if (level == 8)
+        {
+            resetCameraTransform();
+            setPlayerTransform(new Vector3(-62f, -5.3f, 1.47f), new Quaternion(0.0f, -1f, 0.0f, 1.0f));
+        }
+        //Wraith
+        if (level == 9)
+        {
+            resetCameraTransform();
+            setPlayerTransform(new Vector3(-101f, -6.6f, 2.95f), new Quaternion(0.0f, -1f, 0.0f, 1.0f));
+        }
+
+
+
+    }
 
 	private void fadeIn(){
 		if(fade.color.a >= 0.05f){ 

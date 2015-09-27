@@ -1,0 +1,121 @@
+fileFormatVersion: 2
+guid: 72e52aa16ed95cb4e8833f29328ccb62
+timeCreated: 1443372477
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Tomb002
+    100004: Tomb003
+    100006: Tomb004
+    100008: Tomb005
+    100010: Tomb1
+    100012: TombSupport002
+    100014: TombSupport003
+    100016: TombSupport004
+    100018: TombSupport005
+    100020: TombSupport1
+    400000: //RootNode
+    400002: Tomb002
+    400004: Tomb003
+    400006: Tomb004
+    400008: Tomb005
+    400010: Tomb1
+    400012: TombSupport002
+    400014: TombSupport003
+    400016: TombSupport004
+    400018: TombSupport005
+    400020: TombSupport1
+    2300000: Tomb002
+    2300002: Tomb003
+    2300004: Tomb004
+    2300006: Tomb005
+    2300008: Tomb1
+    2300010: TombSupport002
+    2300012: TombSupport003
+    2300014: TombSupport004
+    2300016: TombSupport005
+    2300018: TombSupport1
+    3300000: Tomb002
+    3300002: Tomb003
+    3300004: Tomb004
+    3300006: Tomb005
+    3300008: Tomb1
+    3300010: TombSupport002
+    3300012: TombSupport003
+    3300014: TombSupport004
+    3300016: TombSupport005
+    3300018: TombSupport1
+    4300000: Tomb1
+    4300002: TombSupport1
+    4300004: Tomb002
+    4300006: TombSupport002
+    4300008: Tomb003
+    4300010: TombSupport003
+    4300012: Tomb004
+    4300014: TombSupport004
+    4300016: Tomb005
+    4300018: TombSupport005
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

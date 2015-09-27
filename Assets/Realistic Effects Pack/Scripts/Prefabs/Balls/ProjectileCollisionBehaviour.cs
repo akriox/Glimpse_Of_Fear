@@ -124,7 +124,6 @@ public class ProjectileCollisionBehaviour : MonoBehaviour
       frameDroped = true;
       return;
     }
-
     if ((!effectSettings.UseMoveVector && tTarget==null || onCollision) && frameDroped)
       return;
 

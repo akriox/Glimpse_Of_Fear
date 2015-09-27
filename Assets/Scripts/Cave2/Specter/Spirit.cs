@@ -30,9 +30,9 @@ public class Spirit : MonoBehaviour {
 		agent = GetComponent<NavMeshAgent> ();
 
 		jumpScare = GameObject.FindGameObjectWithTag("GhostGirl");
-		//jumpScare.GetComponentInChildren<MeshRenderer> ().enabled = true;
-		jumpScare.GetComponentInChildren<SkinnedMeshRenderer> ().enabled = true;
-		jumpScare.SetActive (false);
+        //jumpScare.GetComponentInChildren<MeshRenderer> ().enabled = true;
+        jumpScare.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+        jumpScare.SetActive (false);
 
 		if(PositionSpirit == null){
 			Debug.Log("Spirit position null");
