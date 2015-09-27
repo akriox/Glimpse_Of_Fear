@@ -88,7 +88,7 @@ public class GameController : MonoBehaviour {
 		FirstPersonController.ableToMove = false;
 		EventSound.playClip(rockSlideClip);
 		yield return new WaitForSeconds(2.0f);
-		CameraController.Instance.setFadeState(CameraController.FadeState.IN, 0.8f);
+		CameraController.Instance.fadeToClear(0.8f);
 		yield return new WaitForSeconds(2.5f);
 		VoiceOver.Talk(whereAmIClip);
 		if(Settings.subtitles) displayDebug("Where am I ? I need to find a way out.");

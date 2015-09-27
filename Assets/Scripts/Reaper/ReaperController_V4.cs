@@ -97,7 +97,6 @@ public class ReaperController_V4 : MonoBehaviour {
 		jumpScare = GameObject.FindGameObjectWithTag("WraithJumpScare");
 		jumpScare.GetComponentInChildren<SkinnedMeshRenderer> ().enabled = true;
 		jumpScare.SetActive (false);
-		//LoadingScreen.Instance.fadeToClear ();
 		_audio = GetComponent<AudioSource> ();
 
 		_walkSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_faraway", typeof(AudioClip));
@@ -266,7 +265,7 @@ public class ReaperController_V4 : MonoBehaviour {
 			_wraith.speed = initSpeedReaper;
 			EyeLook.isActive = true;
 			FirstPersonController.canMove = true;
-			LoadingScreen.Instance.fadeToClear();
+			CameraController.Instance.fadeToClear(2.0f);
 			Walk();
 			_state = State.moveWraith;
 			break;
@@ -343,8 +342,7 @@ public class ReaperController_V4 : MonoBehaviour {
 		StartCoroutine (CameraController.Instance.Shake (1.0f, 0.5f, 1.5f));
 		StartCoroutine (GameController.Instance.timedVibration (0.6f, 0.6f, 1.0f));
 		yield return new WaitForSeconds(0.5f);
-		LoadingScreen.Instance.fadeBlack ();
-		//CameraController.Instance.setFadeState (CameraController.FadeState.OUT, 10f);
+		CameraController.Instance.fadeToBlack(2.0f);
 		yield return new WaitForSeconds(1.2f);
 		_state = State.WraithCatchPlayer;
 	}

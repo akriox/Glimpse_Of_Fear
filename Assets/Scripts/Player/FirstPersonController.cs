@@ -84,7 +84,7 @@ public class FirstPersonController : MonoBehaviour
 			if (Input.GetKeyDown (KeyCode.F))
 				rightHand.SetActive (!rightHand.activeSelf);
 		
-			if (Input.GetButtonUp ("Duck")) {
+			if (Input.GetButtonUp ("Duck") && groundType != GroundType.DEEPWATER) {
 				TipsTracker.Instance.displayTip (TipsTracker.Tips.Crouch);
 				m_Duck = !m_Duck;
 			}
@@ -215,12 +215,12 @@ public class FirstPersonController : MonoBehaviour
 		}
 		
 		switch(groundType){
-		case GroundType.SAND: m_FootstepSounds = m_FootstepSand; break;
-		case GroundType.ROCK: m_FootstepSounds = m_FootstepRock; break;
-		case GroundType.WOOD: m_FootstepSounds = m_FootstepWood; break;
-		case GroundType.WATER: m_FootstepSounds = m_FootstepWater; break;
-		case GroundType.DEEPWATER: m_FootstepSounds = m_FootstepDeepWater; break;
-		case GroundType.FOG: m_FootstepSounds = m_FootstepRock; break;
+			case GroundType.SAND: m_FootstepSounds = m_FootstepSand; break;
+			case GroundType.ROCK: m_FootstepSounds = m_FootstepRock; break;
+			case GroundType.WOOD: m_FootstepSounds = m_FootstepWood; break;
+			case GroundType.WATER: m_FootstepSounds = m_FootstepWater; break;
+			case GroundType.DEEPWATER: m_FootstepSounds = m_FootstepDeepWater; break;
+			case GroundType.FOG: m_FootstepSounds = m_FootstepRock; break;
 		}
 		// pick & play a random footstep sound from the array,
 		// excluding sound at index 0
@@ -270,8 +270,8 @@ public class FirstPersonController : MonoBehaviour
 		// set the desired speed to be walking or running
 		speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
 		
-		// cannot run on wooden bridge
-		if(groundType == GroundType.WOOD || groundType == GroundType.FOG) speed = m_WalkSpeed;
+		// cannot run on bridge, in fog or in deep water
+		if(groundType == GroundType.WOOD || groundType == GroundType.FOG || groundType == GroundType.DEEPWATER) speed = m_WalkSpeed;
 		
 		m_Input = new Vector2(horizontal, vertical);
 		
@@ -302,7 +302,7 @@ public class FirstPersonController : MonoBehaviour
 		case "Rock": groundType = GroundType.ROCK; break;
 		case "Sand": groundType = GroundType.SAND; break;
 		case "Water": groundType = GroundType.WATER; break;
-		case "DeepWater": groundType = GroundType.DEEPWATER; break;
+		case "DeepWater": groundType = GroundType.DEEPWATER; m_Duck = false; break;
 		case "Fog": groundType = GroundType.FOG; break;
 		}
 		

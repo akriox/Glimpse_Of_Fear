@@ -11,8 +11,7 @@ public class Ghost : MonoBehaviour {
 	public enum AnimationTypes {Random, ShakeHead, Turn, Idle, Point, PentacleRoom}
 	public enum Sex {homme, femme}
 
-
-	private float fadeSpeed = 4.0f;
+	private float _fadeSpeed = 4.0f;
 
 	public bool gazeContact;
 	public MovementTypes _movementType = MovementTypes.Follow;
@@ -49,7 +48,8 @@ public class Ghost : MonoBehaviour {
 	private GameObject _player;
 
 	private GazeAwareComponent _gazeAwareComponent;
-    private Material _material;
+
+	private Material _PlainAdditive;
 
     private AudioClip sonPointage;
 	private AudioClip _voice;
@@ -59,8 +59,9 @@ public class Ghost : MonoBehaviour {
 	public void Start () {
 		_anim = GetComponent<Animator>();
 		_gazeAwareComponent = GetComponentInChildren<GazeAwareComponent>();
-		_material = GetComponentInChildren<Renderer>().materials[0];
-        //_materials = GetComponent<SkinnedMeshRenderer>().materials;
+
+		getMaterials();
+
         _player = GameObject.FindGameObjectWithTag("Player");
 		_audioSource = GetComponent<AudioSource> ();
 		sonPointage = (AudioClip)Resources.Load("Audio/Ghost/Spirit_wander01", typeof(AudioClip));
@@ -224,19 +225,27 @@ public class Ghost : MonoBehaviour {
 	}
 
     private void Appear(){
-        /*
-        if (_material.color != Color.white){
-            _material.color = Color.Lerp(_material.color, Color.white, 0.8f * fadeSpeed * Time.deltaTime);
-        }
-        */
+		if(_PlainAdditive != null){
+			if (_PlainAdditive.color != Color.white){
+				_PlainAdditive.color = Color.Lerp(_PlainAdditive.color, Color.white, _fadeSpeed * Time.deltaTime);
+			}
+		}
 	}
 	
 	private void Disappear(){
-        /*
-		if(_material.color != Color.black){
-			_material.color = Color.Lerp (_material.color, Color.black, fadeSpeed * Time.deltaTime);
+		if(_PlainAdditive != null){
+			if (_PlainAdditive.color != Color.black){
+				_PlainAdditive.color = Color.Lerp(_PlainAdditive.color, Color.black, _fadeSpeed * Time.deltaTime);
+			}
 		}
-        */
 	}
 
+	private void getMaterials(){
+		Material[] materials = GetComponentInChildren<SkinnedMeshRenderer>().materials;
+		foreach(Material m in materials){
+			if(m.shader.name == "MatCap/Vertex/Plain Additive"){
+				_PlainAdditive = m;
+			}
+		}
+	}
 } 
