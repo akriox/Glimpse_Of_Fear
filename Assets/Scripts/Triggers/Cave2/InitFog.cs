@@ -8,7 +8,8 @@ public class InitFog : MonoBehaviour {
 	public IEnumerator OnTriggerEnter(Collider other) {
 		
 		if (other.gameObject.tag == "Player") {
-			activFog.SetActive (true);
+            if(activFog != null)
+                activFog.SetActive (true);
 			Spirit.setNewPosition();
 			yield return new WaitForSeconds(1f);
 			this.enabled = false;

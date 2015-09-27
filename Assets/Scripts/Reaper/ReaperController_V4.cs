@@ -101,7 +101,7 @@ public class ReaperController_V4 : MonoBehaviour {
 
 		_walkSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_faraway", typeof(AudioClip));
 		_runSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_catch02", typeof(AudioClip));
-		_turnAroundSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_turnaround01_loop", typeof(AudioClip));
+		_turnAroundSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_turnaround02_loop", typeof(AudioClip));
 		_goAwaySound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_disappear01", typeof(AudioClip));
 		_lookSound = (AudioClip)Resources.Load ("Audio/Wraith/Giant_SE17", typeof(AudioClip));
 

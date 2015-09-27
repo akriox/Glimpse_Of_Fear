@@ -25,6 +25,7 @@ public class BridgeInterruptor : MonoBehaviour {
 				smoke.SetActive(true);
 				StartCoroutine(removeCollider());
 				bridge.GetComponent<Animation>().Play();
+                bridge.GetComponent<AudioSource>().Play();
 				alreadyActive = true;
 			}
 		}
