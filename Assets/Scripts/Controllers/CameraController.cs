@@ -38,11 +38,13 @@ public class CameraController : MonoBehaviour {
 	}
 
 	public void Start(){
+		fade = GameObject.FindGameObjectWithTag("FadeIO").GetComponent<Image>();
 		_camera = Camera.main;
 		initCamera = Camera.main.transform.localRotation;
 		_animator = _camera.GetComponent<Animator>();
 
 		_vortexScript = _camera.GetComponent<Vortex>();
+
 		_noiseAndScratchesScript = _camera.GetComponent<NoiseAndScratches>();
 		_vertigoScript = _camera.GetComponent<VertigoEffect>();
 	}
@@ -61,9 +63,19 @@ public class CameraController : MonoBehaviour {
 		_noiseAndScratchesState = state;
 	}
 
-	public void setFadeState(FadeState state, float speed){
-		_fadeState = state;
+	public void fadeToBlack(float speed){
+		fade.enabled = true;
+		fade.color = Color.clear;
+		_fadeState = FadeState.OUT;
 		_fadeSpeed = speed;
+	}
+
+	public void fadeToClear(float speed){
+		fade.enabled = true;
+		fade.color = Color.black;
+		_fadeState = FadeState.IN;
+		_fadeSpeed = speed;
+
 	}
 
 	public void setVertigoEffect(bool b){
@@ -205,5 +217,9 @@ public class CameraController : MonoBehaviour {
 		FirstPersonController.ableToMove = !b;
 		EyeLook.isActive = !b;
 		_animator.applyRootMotion = !b;
+	}
+
+	public void OnLevelWasLoaded(int level){
+		fade = GameObject.FindGameObjectWithTag("FadeIO").GetComponent<Image>();
 	}
 }
