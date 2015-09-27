@@ -12,13 +12,11 @@ public class Spirit : MonoBehaviour {
 	private List<Transform> listPosition = new List<Transform>();
 	private Transform currentTarget;
 	private NavMeshAgent agent;
-	private Vector3 direction;
-	private Quaternion rotation;
 	
 	[SerializeField] private Transform PositionSpirit;
 	[SerializeField] private Transform PositionSpirit2;
 
-	private float timeToAppear = 0.7f;
+	private float timeToAppear = 0.9f;
 
 	private enum State{NotAppear, Appear};
 	private State _state;
@@ -67,7 +65,6 @@ public class Spirit : MonoBehaviour {
 				StartCoroutine (Appear());
 				jumpScare.SetActive(true);
 				HeartBeat.playLoop();
-				InitFog.specterSeen();
 				_state = State.NotAppear;
 			} 
 			else {
@@ -83,11 +80,7 @@ public class Spirit : MonoBehaviour {
 		CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
 		//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
 		GameController.Instance.stopVibration ();
-		switchPosition ();
 		jumpScare.SetActive(false);
-		yield return new WaitForSeconds(Random.Range (4f, 6f));
-		_state = State.Appear;
-		GetNewPosition();
 	}
 
 	void GetPaths(Transform _PositionSpirit){
@@ -100,11 +93,6 @@ public class Spirit : MonoBehaviour {
 	
 	void GetNewPosition(){
 		currentTarget = listPosition[Random.Range (0, listPosition.Count)];
-	}
-
-	void switchPosition(){
-		transform.position = listPosition[Random.Range (0, listPosition.Count)].position;
-		GetNewPosition ();
 	}
 
 	void WalkAround(){

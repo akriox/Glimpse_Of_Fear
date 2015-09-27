@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TriggerGhostBridge : MonoBehaviour {
-	
-	private bool alreadyCall;
-	[SerializeField] private AudioClip _audioClip;
-	[SerializeField] private GameObject _ghost;
-	[SerializeField] private GameObject _blackTrail;
-		
-	public void Start(){
-		alreadyCall = false;
-	}
-		
+public class TriggerGhostBridge : MonoBehaviour
+{
+
+    private bool alreadyCall;
+    [SerializeField]
+    private AudioClip _audioClip;
+    [SerializeField]
+    private GameObject _ghost;
+    [SerializeField]
+    private GameObject _blackTrail;
+
+    public void Start()
+    {
+        alreadyCall = false;
+    }
+  
 	public IEnumerator OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Player" && !alreadyCall) {
 			alreadyCall = true;

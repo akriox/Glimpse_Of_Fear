@@ -11,10 +11,10 @@ public class Inventory : MonoBehaviour {
 
 	public void Start(){
         /*
-      hasPentacle = true;
-      hasTablet = true;
+    hasPentacle = true;
+    hasTablet = true;
 
-      */
+   */
     }
 
     public void Awake(){
