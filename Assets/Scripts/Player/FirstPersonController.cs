@@ -54,7 +54,6 @@ public class FirstPersonController : MonoBehaviour
 	public static GameObject rightHand;
 	public static bool ableToMove = true;
 	private static bool lamp;
-	public static bool canMove = true;
 	
 	// Use this for initialization
 	private void Start()
@@ -130,14 +129,11 @@ public class FirstPersonController : MonoBehaviour
 	
 	private void FixedUpdate()
 	{
-		if (canMove) {
+		if (ableToMove) {
 			float speed;
 		
-			if (ableToMove)
-				GetInput (out speed);
-			else
-				speed = 0.0f;
-		
+			GetInput (out speed);
+	
 			// reduce movement speed if the player is ducking
 			if (m_Duck)
 				speed = speed / 2.0f;

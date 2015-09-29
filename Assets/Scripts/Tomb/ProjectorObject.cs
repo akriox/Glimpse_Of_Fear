@@ -22,7 +22,6 @@ public class ProjectorObject : MonoBehaviour
         {
             count += 1;
             _light.intensity -= Random.value * _initIntensity;
-            print(_light.intensity);
             yield return new WaitForSeconds(_flickerFrequency);
             _light.intensity = _initIntensity;
         }

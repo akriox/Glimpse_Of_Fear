@@ -23,7 +23,7 @@ public class TeleportScene : MonoBehaviour {
         if (other.gameObject.tag == "Player")
         {
             if(!_playerOpenEyes)
-                LoadingScreen.Instance.fadeToBlack(sceneIndex, FirstPersonController.haveFlashLight());
+                LoadingScreen.Instance.fadeToBlack(sceneIndex);
         }
     }
 }

@@ -220,6 +220,6 @@ public class CameraController : MonoBehaviour {
 	}
 
 	public void OnLevelWasLoaded(int level){
-		fade = GameObject.FindGameObjectWithTag("FadeIO").GetComponent<Image>();
+		if(level != 4) fade = GameObject.FindGameObjectWithTag("FadeIO").GetComponent<Image>();
 	}
 }

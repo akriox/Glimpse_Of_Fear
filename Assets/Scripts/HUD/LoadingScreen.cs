@@ -16,8 +16,6 @@ public class LoadingScreen : MonoBehaviour {
 	private bool levelLoaded;
 	private int sceneTransition = 0;
 
-	private bool _lamp = true;
-
 	public void Awake(){
 		Instance = this;
 		DontDestroyOnLoad(this.gameObject);
@@ -69,11 +67,9 @@ public class LoadingScreen : MonoBehaviour {
 
 		//MainMenu
 		if(level == 0){
-			GameObject player = GameObject.FindGameObjectWithTag("Player");
-			Destroy(player);
+			DestroyPlayer();
 			Destroy(this.gameObject);
 		}
-
 		//Cave1
 		if(level == 1){
 			StartCoroutine(GameController.Instance.OpeningScene());
@@ -88,10 +84,12 @@ public class LoadingScreen : MonoBehaviour {
 		}
 		//Tomb1
 		if(level == 3){
-			if(_lamp)
-				FirstPersonController.enableRightHand(true);
 			resetCameraTransform();
 			setPlayerTransform(new Vector3(0.0f, 2.0f, -8.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+		}
+		//FinalScene
+		if(level == 4){
+			DestroyPlayer();
 		}
         //FogRoom
         if (level == 5)
@@ -155,23 +153,10 @@ public class LoadingScreen : MonoBehaviour {
 	}
 
 	public void fadeToBlack(int sceneIndex){
-		fadeSpeed = 2f;
 		sceneTransition = sceneIndex;
 		fade.color = Color.clear;
 		fading = Fading.OUT;
 		fade.gameObject.SetActive(true);
-	}
-
-	public void fadeBlack(){
-		fadeSpeed = 10f;
-		fade.color = Color.clear;
-		fading = Fading.OUT;
-		fade.gameObject.SetActive(true);
-	}
-
-	public void fadeToBlack(int sceneIndex, bool _bool){
-		fadeToBlack (sceneIndex);
-		_lamp = _bool;
 	}
 
 	public void fadeToClear(){
@@ -189,5 +174,10 @@ public class LoadingScreen : MonoBehaviour {
 	private void resetCameraTransform(){
 		Camera.main.transform.localPosition = Vector3.zero;
 		Camera.main.transform.localRotation = Quaternion.identity;
+	}
+
+	private void DestroyPlayer(){
+		GameObject player = GameObject.FindGameObjectWithTag("Player");
+		Destroy(player);
 	}
 }

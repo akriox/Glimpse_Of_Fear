@@ -56,7 +56,7 @@ public class ReaperController_V4 : MonoBehaviour {
 	private float rotationSpeed = 6f;
 
 	private AudioSource _audio; 
-	private GameObject jumpScare;
+	private SkinnedMeshRenderer jumpScare;
 	
 	private enum State{moveWraith, PlayerIsLooking, FollowPlayer, PlayerInArea, PlayerClose, BeNothing, WraithCatchPlayer, PlayerLost, comeBack, Wait, No};
 	private State _state;
@@ -94,9 +94,8 @@ public class ReaperController_V4 : MonoBehaviour {
 		_parent = transform.parent.gameObject;
 		_wraith.speed = initSpeedReaper;
 		_animator = GetComponentInParent<Animator> ();
-		jumpScare = GameObject.FindGameObjectWithTag("WraithJumpScare");
-		jumpScare.GetComponentInChildren<SkinnedMeshRenderer> ().enabled = true;
-		jumpScare.SetActive (false);
+		jumpScare = GameObject.FindGameObjectWithTag("WraithJumpScare").GetComponentInChildren<SkinnedMeshRenderer>();
+		//jumpScare.SetActive (false);
 		_audio = GetComponent<AudioSource> ();
 
 		_walkSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_faraway", typeof(AudioClip));
@@ -246,8 +245,8 @@ public class ReaperController_V4 : MonoBehaviour {
 			//the wraith caught the player so after a certain amount of time reset the position and state of the wraith
 
 			//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.INC);
-			jumpScare.SetActive (false);
-			jumpScare.GetComponent<AudioSource> ().Stop ();
+			jumpScare.enabled = false;
+			jumpScare.GetComponentInParent<AudioSource> ().Stop ();
 			if(Inventory.Instance.hasTablet)
 				setPlayerTransform(_positionPlayerTablet);
 			else{
@@ -256,7 +255,7 @@ public class ReaperController_V4 : MonoBehaviour {
             TipsTracker.Instance.displayTip(TipsTracker.Tips.AvoidWraith);
             _state = State.BeNothing;
 			break;
-
+			
 		case State.BeNothing:
 			//the wraith do nothing
 			GetNewPosition();
@@ -266,7 +265,7 @@ public class ReaperController_V4 : MonoBehaviour {
 			_jumpScare = false; 
 			_wraith.speed = initSpeedReaper;
 			EyeLook.isActive = true;
-			FirstPersonController.canMove = true;
+			FirstPersonController.ableToMove = true;
 			CameraController.Instance.fadeToClear(2.0f);
 			Walk();
 			_state = State.moveWraith;
@@ -285,9 +284,9 @@ public class ReaperController_V4 : MonoBehaviour {
 	private void playJumpScare(){
 		//launch the jumpscare
 		EyeLook.isActive = false;
-		FirstPersonController.canMove = false;
-		jumpScare.SetActive (true);
-		jumpScare.GetComponent<AudioSource> ().Play ();
+		FirstPersonController.ableToMove = false;
+		jumpScare.enabled = true;
+		jumpScare.GetComponentInParent<AudioSource> ().Play ();
 		ChooseCatch ();
 		StartCoroutine (WaitAfterCatch ());
 		myRenderer.enabled = false;
@@ -302,7 +301,7 @@ public class ReaperController_V4 : MonoBehaviour {
 	
 	//put initial information for the reaper
 	void setInitialInformation(){
-		jumpScare.SetActive(false);
+		jumpScare.enabled = false;
 		isPlayerInArea = false;
 		GetNewPosition();
 		Walk();
@@ -497,7 +496,7 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 	
 	public void Catch(){
-		jumpScare.GetComponent<Animator> ().SetTrigger(_Catch);
+		jumpScare.GetComponentInParent<Animator> ().SetTrigger(_Catch);
 	}
 	
 	public void CatchFinal(){
@@ -514,7 +513,7 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 
 	public void ChooseCatch(){
-		jumpScare.GetComponent<Animator> ().SetFloat(_CatchDiff, giveRandomAnim());
+		jumpScare.GetComponentInParent<Animator> ().SetFloat(_CatchDiff, giveRandomAnim());
 		Catch ();
 	}
 	

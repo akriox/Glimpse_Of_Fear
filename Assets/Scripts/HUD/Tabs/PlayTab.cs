@@ -14,7 +14,7 @@ public class PlayTab : MonoBehaviour {
 	public void RestartLevel(){
 		MainMenu.playClip(MainMenu.submit);
 
-		// Avoid the presence of 2 players in the scene
+		// Avoid the presence of 2 players in the scene cave1
 		int currentLevel = Application.loadedLevel;
 		if(currentLevel == 1){
 			GameObject player = GameObject.FindGameObjectWithTag("Player");
