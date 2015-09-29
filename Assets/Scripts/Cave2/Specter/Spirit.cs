@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityStandardAssets.ImageEffects;
+using UnityEngine.UI;
 
 [RequireComponent (typeof (GazeAwareComponent))]
 public class Spirit : MonoBehaviour {
@@ -20,7 +21,7 @@ public class Spirit : MonoBehaviour {
 
 	private enum State{NotAppear, Appear};
 	private State _state;
-	private GameObject jumpScare;
+	private SkinnedMeshRenderer jumpScare;
 
 	private static bool notSeen = false;
 
@@ -29,12 +30,10 @@ public class Spirit : MonoBehaviour {
 		_audioSource = GetComponent<AudioSource>();
 		agent = GetComponent<NavMeshAgent> ();
 
-		jumpScare = GameObject.FindGameObjectWithTag("GhostGirl");
-        //jumpScare.GetComponentInChildren<MeshRenderer> ().enabled = true;
-        jumpScare.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
-        jumpScare.SetActive (false);
+		jumpScare = GameObject.FindGameObjectWithTag("GhostGirl").GetComponentInChildren<SkinnedMeshRenderer>();
+        //jumpScare.SetActive (false);
 
-		if(PositionSpirit == null){
+        if (PositionSpirit == null){
 			Debug.Log("Spirit position null");
 		} else {
 			GetPaths(PositionSpirit);
@@ -63,7 +62,7 @@ public class Spirit : MonoBehaviour {
 				GameController.Instance.startVibration (0.8f, 0.8f);
 				StartCoroutine (CameraController.Instance.Shake (2.0f, 0.05f, 10.0f));
 				StartCoroutine (Appear());
-				jumpScare.SetActive(true);
+				jumpScare.enabled = true;
 				HeartBeat.playLoop();
 				_state = State.NotAppear;
 			} 
@@ -80,7 +79,7 @@ public class Spirit : MonoBehaviour {
 		CameraController.Instance.setVortexState (CameraController.VortexState.DEC);
 		//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.DEC);
 		GameController.Instance.stopVibration ();
-		jumpScare.SetActive(false);
+		jumpScare.enabled = false;
 	}
 
 	void GetPaths(Transform _PositionSpirit){
