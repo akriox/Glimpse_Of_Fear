@@ -8,7 +8,7 @@ public class Stash : Collectible {
     public new void Start()
     {
         base.Start();
-        clip = (AudioClip)Resources.Load("Audio/Objets/pickup_glowstick", typeof(AudioClip));
+		clip = (AudioClip)Resources.Load("Audio/Objects/pickup_glowstick", typeof(AudioClip));
     }
 
     public new void Update(){

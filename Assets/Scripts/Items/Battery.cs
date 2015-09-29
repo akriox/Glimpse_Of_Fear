@@ -7,7 +7,8 @@ public class Battery : Collectible {
 
 	public new void Start(){
 		base.Start();
-		clip = (AudioClip) Resources.Load ("Audio/VoiceOver/pickUpItem", typeof(AudioClip));
+		//clip = (AudioClip) Resources.Load ("Audio/VoiceOver/pickUpItem", typeof(AudioClip));
+		clip = (AudioClip) Resources.Load ("Audio/Objects/pickup_battery", typeof(AudioClip));
 	}
 
 	public new void Update(){

@@ -17,7 +17,7 @@ public class FlareStick : Collectible {
 
 	public new void Start(){
 		base.Start ();
-        clip = (AudioClip)Resources.Load("Audio/Objets/pickup_glowstick", typeof(AudioClip));
+        clip = (AudioClip)Resources.Load("Audio/Objects/pickup_glowstick", typeof(AudioClip));
         rotation = new Vector3(Random.Range(100,360),Random.Range(100,360),Random.Range(100,360));
 		transform.Rotate(rotation);
 	}
