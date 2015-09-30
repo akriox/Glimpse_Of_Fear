@@ -19,6 +19,7 @@ public class lookPathReaper : MonoBehaviour {
 	
 	public void Start(){
 		_gazeAwareComponent = GetComponent<GazeAwareComponent> ();
+		EventSound.volume(1f);
 	}
 	void Update () {
 		if (_gazeAwareComponent.HasGaze && !alreadyCall) {
@@ -46,6 +47,7 @@ public class lookPathReaper : MonoBehaviour {
 		yield return new WaitForSeconds(1.5f);
 		if(Settings.subtitles) GameController.Instance.displayDebug("");
 		bigRoomTrigger.isUnActif();
+		EventSound.volume(0.5f);
 		yield return new WaitForSeconds(0.5f);
 		Destroy(_thisPath);
 	}
