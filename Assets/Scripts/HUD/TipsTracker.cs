@@ -7,7 +7,7 @@ public class TipsTracker : MonoBehaviour {
 
 	public static TipsTracker Instance {get; private set;}
 
-	public enum Tips {UseFlashlight, SwitchOffFlashlight, UseFlareStick, Sprint, Crouch, AvoidWraith};
+	public enum Tips {UseFlashlight, SwitchOffFlashlight, UseFlareStick, Sprint, Crouch, Rotate, AvoidWraith};
 
 	private float tipDuration = 3.0f;
 
@@ -16,6 +16,7 @@ public class TipsTracker : MonoBehaviour {
 	private bool useFlareStickTip = true;
 	private bool sprintTip = true;
     private bool crouchTip = true;
+	private bool rotateTip = true;
     private bool avoidWraithTip = true;
 
     public Image keyboardTip;
@@ -26,6 +27,7 @@ public class TipsTracker : MonoBehaviour {
 	public Sprite[] useFlareStickSprites;
 	public Sprite[] sprintSprites;
 	public Sprite[] crouchSprites;
+	public Sprite[] rotateSprites;
     public Sprite avoidWraithSprite;
 
 	public void Awake(){
@@ -65,6 +67,12 @@ public class TipsTracker : MonoBehaviour {
 					setTipSprite(crouchSprites[0], crouchSprites[1]);
 				}
 				break;
+			case Tips.Rotate:
+			if(rotateTip){
+				rotateTip = false; 
+				setTipSprite(rotateSprites[0], rotateSprites[1]);
+			}
+			break;
             case Tips.AvoidWraith:
                 if (avoidWraithTip){
                     avoidWraithTip = false;
