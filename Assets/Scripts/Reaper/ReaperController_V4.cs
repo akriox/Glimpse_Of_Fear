@@ -245,8 +245,6 @@ public class ReaperController_V4 : MonoBehaviour {
 			//the wraith caught the player so after a certain amount of time reset the position and state of the wraith
 
 			//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.INC);
-			jumpScare.enabled = false;
-			jumpScare.GetComponentInParent<AudioSource> ().Stop ();
 			if(Inventory.Instance.hasTablet)
 				setPlayerTransform(_positionPlayerTablet);
 			else{
@@ -258,16 +256,9 @@ public class ReaperController_V4 : MonoBehaviour {
 			
 		case State.BeNothing:
 			//the wraith do nothing
-			GetNewPosition();
 			_wraith.transform.position = currentTarget;
-			_wraith.enabled = true;
-			myRenderer.enabled = true;
-			_jumpScare = false; 
-			_wraith.speed = initSpeedReaper;
-			EyeLook.isActive = true;
-			FirstPersonController.ableToMove = true;
+			setInitialInformation();
 			CameraController.Instance.fadeToClear(2.0f);
-			Walk();
 			_state = State.moveWraith;
 			break;
 
@@ -305,8 +296,14 @@ public class ReaperController_V4 : MonoBehaviour {
 		isPlayerInArea = false;
 		GetNewPosition();
 		Walk();
-		//StopCloseSound();
-		//StopLookSound();
+		jumpScare.GetComponentInParent<AudioSource> ().Stop ();
+		_wraith.enabled = true;
+		AreaJumpScare.isPlayerInAreaForJumpScare = false;
+		myRenderer.enabled = true;
+		_jumpScare = false; 
+		_wraith.speed = initSpeedReaper;
+		EyeLook.isActive = true;
+		FirstPersonController.ableToMove = true;
 	}
 	
 	//get the normal path of the reaper

@@ -76,6 +76,7 @@ public class TipsTracker : MonoBehaviour {
             case Tips.AvoidWraith:
                 if (avoidWraithTip){
                     avoidWraithTip = false;
+					tipDuration = 99f;
                     setTipSprite(avoidWraithSprite,avoidWraithSprite);
                 }
                 break;

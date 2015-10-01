@@ -7,6 +7,7 @@ public class Cinematic : MonoBehaviour {
 	private Animator _animCamera;
 	public GameObject wraith;
 	public GameObject portal;
+	public GameObject plane;
 
 	private AudioSource _audioSource;
 	public AudioClip[] playerVoice;
@@ -14,6 +15,7 @@ public class Cinematic : MonoBehaviour {
 
 	private int lookAround = Animator.StringToHash("LookAround");
 	private int turnAround = Animator.StringToHash("TurnAround");
+	private int LookEnd = Animator.StringToHash("LookEnd");
 
 	public void Start () {
 		//LoadingScreen.Instance.fadeToClear ();
@@ -30,6 +32,10 @@ public class Cinematic : MonoBehaviour {
 		portal.SetActive (true);
 		yield return new WaitForSeconds(3);
 		wraith.SetActive (true);
+		yield return new WaitForSeconds(13);
+		_animCamera.SetTrigger(LookEnd);
+		plane.SetActive (true);
+
 
 	}
 

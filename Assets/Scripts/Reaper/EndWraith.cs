@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using XInputDotNetPure;
 
 public class EndWraith : MonoBehaviour {
 
@@ -11,6 +13,8 @@ public class EndWraith : MonoBehaviour {
 	private float rotationSpeed = 6f;
 	private float speed = 3f;
 	private Animator _animator;
+	
+	public Image titleTip;
 
 	private bool move;
 	private int _CatchFinal = Animator.StringToHash("CatchFinal");
@@ -41,14 +45,20 @@ public class EndWraith : MonoBehaviour {
 		LoadingScreen.Instance.fadeEndGame();
 		yield return new WaitForSeconds(4.1f);
 		CatchFinalEnd ();
-		yield return new WaitForSeconds(2.3f);
-		/*
-		 * 
-		 * 
-		 *lancer le générique 
-		 * 
-		 * 
-		 */
+		yield return new WaitForSeconds(5f);
+		LoadingScreen.Instance.fadeToClear ();
+		titleTip.enabled = true;
+		yield return new WaitForSeconds(1f);
+		StartCoroutine (DisplayTitle ());
+		yield return new WaitForSeconds(14f);
+		Application.LoadLevel (0);
+	}
+
+	IEnumerator DisplayTitle(){
+		while (titleTip.fillAmount < 1f) {
+			titleTip.fillAmount += Random.value * 0.05f;
+			yield return new WaitForSeconds(Random.Range(0.1f,0.2f));
+		}
 	}
 
 	public void CatchFinal(){

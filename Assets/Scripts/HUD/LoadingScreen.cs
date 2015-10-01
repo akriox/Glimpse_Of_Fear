@@ -158,7 +158,7 @@ public class LoadingScreen : MonoBehaviour {
 		fading = Fading.OUT;
 		fade.gameObject.SetActive(true);
 	}
-
+	
 	public void fadeEndGame(){
 		fadeSpeed = 0.4f;
 		fade.color = Color.clear;
