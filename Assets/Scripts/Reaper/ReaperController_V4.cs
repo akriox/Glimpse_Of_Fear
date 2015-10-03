@@ -97,7 +97,7 @@ public class ReaperController_V4 : MonoBehaviour {
 		jumpScare = GameObject.FindGameObjectWithTag("WraithJumpScare").GetComponentInChildren<SkinnedMeshRenderer>();
 		//jumpScare.SetActive (false);
 		_audio = GetComponent<AudioSource> ();
-
+		_state = State.moveWraith;
 		_walkSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_faraway", typeof(AudioClip));
 		_runSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_catch02", typeof(AudioClip));
 		_turnAroundSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_turnaround02_loop", typeof(AudioClip));
@@ -121,7 +121,7 @@ public class ReaperController_V4 : MonoBehaviour {
 
 		if (_playerOpenEyes && AreaJumpScare.isPlayerInAreaForJumpScare && !_jumpScare) {
 			_jumpScare = true; 
-			StopAllCoroutines ();
+			//StopAllCoroutines ();
 			_state = State.No;
 			playJumpScare();
 		}
@@ -152,7 +152,7 @@ public class ReaperController_V4 : MonoBehaviour {
 		case State.PlayerIsLooking:
 			    if (!_playerOpenEyes) {
 				    _wraith.Resume();
-				    StopAllCoroutines();
+				    //StopAllCoroutines();
 				    Walk ();
 				    _state = State.moveWraith;
 			    }
@@ -175,7 +175,7 @@ public class ReaperController_V4 : MonoBehaviour {
 
 		case State.Wait:
 			if (_gazeAwareComponent.HasGaze) {
-				StopAllCoroutines();
+				//StopAllCoroutines();
 				ChooseRun();
 				_state = State.FollowPlayer;
 			}
@@ -236,7 +236,7 @@ public class ReaperController_V4 : MonoBehaviour {
 			//faceTarget (targetPlayer.transform.position);
 			turnAround ();
 			if (!AreaJumpScare.isPlayerInAreaForJumpScare) {
-                StopAllCoroutines();
+                //StopAllCoroutines();
 				_state = State.PlayerInArea;
 			}
 			break;
