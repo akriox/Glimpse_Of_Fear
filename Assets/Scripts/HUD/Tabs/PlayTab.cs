@@ -29,8 +29,4 @@ public class PlayTab : MonoBehaviour {
 		MainMenu.playClip(MainMenu.submit);
 		GameController.Instance.displayInGameMenu(false);
 	}
-
-	public void Load(){
-
-	}
 }

@@ -315,8 +315,7 @@ public class ReaperController_V4 : MonoBehaviour {
 
 
 	private void playSound(AudioClip _clip, bool _loop){
-		if (_audio.isPlaying)
-			StopSound ();
+		if (_audio.isPlaying) StopSound ();
 		_audio.clip = _clip;
 		_audio.loop = _loop;
 		_audio.Play ();
@@ -336,11 +335,12 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 
 	//the monster can take time before walk to the next step
-	IEnumerator WaitAfterCatch(){
+	private IEnumerator WaitAfterCatch(){
 		StartCoroutine (CameraController.Instance.Shake (1.0f, 0.5f, 1.5f));
 		StartCoroutine (GameController.Instance.timedVibration (0.6f, 0.6f, 1.0f));
 		yield return new WaitForSeconds(0.5f);
 		CameraController.Instance.fadeToBlack(2.0f);
+		playSound(_goAwaySound, false);
 		yield return new WaitForSeconds(1.2f);
 		_state = State.WraithCatchPlayer;
 	}

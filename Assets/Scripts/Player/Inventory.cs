@@ -9,17 +9,9 @@ public class Inventory : MonoBehaviour {
 	public bool hasPentacle;
 	public bool hasTablet;
 
-	public void Start(){
-        /*
-    hasPentacle = true;
-    hasTablet = true;
-
-   */
-    }
-
     public void Awake(){
 		Instance = this;
-		FlareStickStash = 5;
+		FlareStickStash = 0;
 	}
 	
 	public bool canTake(){

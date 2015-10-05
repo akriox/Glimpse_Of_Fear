@@ -35,12 +35,7 @@ public struct ProjectedRect
     /// <returns>The projection.</returns>
     public static ProjectedRect GetProjectedRect(Bounds bounds, Camera camera, bool allowOverlap)
     {
-		if(camera != null){
-        	return GetProjectedRect(GetBoundingCornerPoints(bounds), camera, allowOverlap);
-		}
-		else{
-			return new ProjectedRect();
-		}
+        return GetProjectedRect(GetBoundingCornerPoints(bounds), camera, allowOverlap);
     }
 
     /// <summary>
@@ -52,12 +47,7 @@ public struct ProjectedRect
     /// <returns>The projection.</returns>
     public static ProjectedRect GetProjectedRect(BoxCollider boxCollider, Camera camera, bool allowOverlap)
     {
-		if(camera != null){
-        	return GetProjectedRect(GetBoundingCornerPoints(boxCollider), camera, allowOverlap);
-		}
-		else{
-			return new ProjectedRect();
-		}
+        return GetProjectedRect(GetBoundingCornerPoints(boxCollider), camera, allowOverlap);
     }
 
     /// <summary>
