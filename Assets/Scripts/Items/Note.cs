@@ -7,6 +7,7 @@ public class Note : Collectible {
 	public AudioClip contentAudio;
 	private AudioClip pickUpNote;
 	private Shader defaultShader;
+	public GameObject _activ;
 
 	public new void Start(){
 		base.Start();
@@ -24,6 +25,8 @@ public class Note : Collectible {
 			GetComponent<Collider>().enabled = false;
 			GameController.Instance.displayWidget(false);
 			StartCoroutine(ReadNote(1.0f));
+			if(_activ != null)
+				_activ.SetActive(true);
 			this.enabled = false;
 		}
 	}

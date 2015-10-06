@@ -525,7 +525,7 @@ public class ReaperController_V4 : MonoBehaviour {
 	}
 	
 	public void ChooseRun(){
-		_wraith.speed = 10f;
+		_wraith.speed = 11f;
 		_animator.SetFloat(_RunDiff, giveRandomAnim());
 		Run ();
 	}
