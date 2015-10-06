@@ -11,7 +11,7 @@ public class Inventory : MonoBehaviour {
 
     public void Awake(){
 		Instance = this;
-		FlareStickStash = 0;
+		FlareStickStash = 1000000;
 	}
 	
 	public bool canTake(){

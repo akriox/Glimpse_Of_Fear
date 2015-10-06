@@ -79,8 +79,9 @@ public class FirstPersonController : MonoBehaviour
 	// Update is called once per frame
 	private void Update()
 	{
-			/* DEBUG FLASHLIGHT
+			
 			if (Input.GetKeyDown (KeyCode.F)) rightHand.SetActive (!rightHand.activeSelf);
+		/* DEBUG FLASHLIGHT
 			*/
 		
 			if (Input.GetButtonUp ("Duck") && groundType != GroundType.DEEPWATER) {
