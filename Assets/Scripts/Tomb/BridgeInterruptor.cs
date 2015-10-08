@@ -13,7 +13,7 @@ public class BridgeInterruptor : MonoBehaviour {
 	private Material activMat;
 
 	public void Start(){
-		activMat = (Material) Resources.Load("Materials/CaveObjects/Pillar2", typeof(Material));
+		activMat = (Material) Resources.Load("Materials/CaveObjects/BridgePillar", typeof(Material));
 	}
 
 	public void OnCollisionEnter(Collision co){

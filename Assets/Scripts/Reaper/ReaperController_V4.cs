@@ -45,28 +45,25 @@ public class ReaperController_V4 : MonoBehaviour {
 	
 	[SerializeField] private Transform pathToFollow;
 	[SerializeField] private Transform pathToFollow2;
-	[SerializeField][Range(0.1F, 5.0F)] private float lumThreshold;
+	//[SerializeField][Range(0.1F, 5.0F)] private float lumThreshold;
 	[SerializeField][Range(1.0F, 10.0F)] private float initSpeedReaper;
 	[SerializeField][Range(8.0F, 15.0F)] private float areaMaxPlayerDetection;
-	[SerializeField][Range(0.1F, 5.0F)] private float minWaitTime;
-	[SerializeField][Range(0.1F, 10.0F)] private float maxWaitTime;
 	[SerializeField][Range(0.01F, 0.1F)] private float increamentSpeedOfTheReaper;      
 	[SerializeField] private bool randomMove;
 
 	private float rotationSpeed = 6f;
-
-	private AudioSource _audio; 
+	
 	private SkinnedMeshRenderer jumpScare;
 	
 	private enum State{moveWraith, PlayerIsLooking, FollowPlayer, PlayerInArea, PlayerClose, BeNothing, WraithCatchPlayer, PlayerLost, comeBack, Wait, No};
 	private State _state;
-	
+
+	//animator
 	private int _IdleDiff = Animator.StringToHash("IdleDiff");
 	private int _CatchDiff = Animator.StringToHash("CatchDiff");
 	private int _LookDiff = Animator.StringToHash("LookDiff");
 	private int _LookBehindDiff = Animator.StringToHash("LookBehindDiff");
 	private int _RunDiff = Animator.StringToHash("RunDiff");
-	
 	private int _Walk = Animator.StringToHash("Walk");
 	private int _Run = Animator.StringToHash("Run");
 	private int _Catch = Animator.StringToHash("Catch");
@@ -77,6 +74,7 @@ public class ReaperController_V4 : MonoBehaviour {
 	private int _Crawl = Animator.StringToHash("Crawl");
 	private int _WalkAround = Animator.StringToHash("WalkAround");
 	
+	private AudioSource _audio; 
 	private AudioClip _walkSound;
 	private AudioClip _runSound;
 	private AudioClip _turnAroundSound;
@@ -94,10 +92,10 @@ public class ReaperController_V4 : MonoBehaviour {
 		_parent = transform.parent.gameObject;
 		_wraith.speed = initSpeedReaper;
 		_animator = GetComponentInParent<Animator> ();
+		//get component jumpscare who was on the player
 		jumpScare = GameObject.FindGameObjectWithTag("WraithJumpScare").GetComponentInChildren<SkinnedMeshRenderer>();
 		//jumpScare.SetActive (false);
 		_audio = GetComponent<AudioSource> ();
-		_state = State.moveWraith;
 		_walkSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_faraway", typeof(AudioClip));
 		_runSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_catch02", typeof(AudioClip));
 		_turnAroundSound = (AudioClip)Resources.Load ("Audio/Wraith/Reaper_turnaround02_loop", typeof(AudioClip));
@@ -110,7 +108,9 @@ public class ReaperController_V4 : MonoBehaviour {
 			Debug.LogError("A GameObject 'Path' needed in 'FollowPath.cs'.");
 		} else {
 			GetPaths();
-			if(listPaths.Count > 0) GetNewPosition();
+			if(listPaths.Count > 0){ 
+				GetNewPosition();
+			}
 			setInitialInformation ();
 		}
 	}
@@ -121,7 +121,7 @@ public class ReaperController_V4 : MonoBehaviour {
 
 		if (_playerOpenEyes && AreaJumpScare.isPlayerInAreaForJumpScare && !_jumpScare) {
 			_jumpScare = true; 
-			//StopAllCoroutines ();
+			StopAllCoroutines ();
 			_state = State.No;
 			playJumpScare();
 		}
@@ -150,9 +150,10 @@ public class ReaperController_V4 : MonoBehaviour {
 			break;
 
 		case State.PlayerIsLooking:
+			//stat when the player has look the wraith
 			    if (!_playerOpenEyes) {
 				    _wraith.Resume();
-				    //StopAllCoroutines();
+				    StopAllCoroutines();
 				    Walk ();
 				    _state = State.moveWraith;
 			    }
@@ -160,6 +161,7 @@ public class ReaperController_V4 : MonoBehaviour {
 
 
 		case State.PlayerLost:
+			//state when th eplayer close is eye after has seen the wraith
 			flyTowardTarget(currentTarget, true);
 			if( closeToTheTarget(4f, currentTarget)){
 				StartCoroutine(Wait());
@@ -175,13 +177,14 @@ public class ReaperController_V4 : MonoBehaviour {
 
 		case State.Wait:
 			if (_gazeAwareComponent.HasGaze) {
-				//StopAllCoroutines();
+				StopAllCoroutines();
 				ChooseRun();
 				_state = State.FollowPlayer;
 			}
 			break;
 
 		case State.comeBack:
+			//the wraith return to is initial position then i will go in normal state of patrol
 			flyTowardTarget(currentTarget, false);
 			if( closeToTheTarget(1f, currentTarget)){
 				_wraith.transform.position = currentTarget;
@@ -233,18 +236,15 @@ public class ReaperController_V4 : MonoBehaviour {
 
 		case State.PlayerClose:
 			//the wraith has detected the player so he stop and stay close to him during a amount of time
-			//faceTarget (targetPlayer.transform.position);
 			turnAround ();
 			if (!AreaJumpScare.isPlayerInAreaForJumpScare) {
-                //StopAllCoroutines();
+                StopAllCoroutines();
 				_state = State.PlayerInArea;
 			}
 			break;
 
 		case State.WraithCatchPlayer:
 			//the wraith caught the player so after a certain amount of time reset the position and state of the wraith
-
-			//CameraController.Instance.setNoiseAndScratches (CameraController.NoiseAndScratchesState.INC);
 			if(Inventory.Instance.hasTablet)
 				setPlayerTransform(_positionPlayerTablet);
 			else{
@@ -304,6 +304,7 @@ public class ReaperController_V4 : MonoBehaviour {
 		_wraith.speed = initSpeedReaper;
 		EyeLook.isActive = true;
 		FirstPersonController.ableToMove = true;
+		_state = State.moveWraith;
 	}
 	
 	//get the normal path of the reaper
@@ -330,11 +331,14 @@ public class ReaperController_V4 : MonoBehaviour {
 		moveTowardTarget(targ);
 		//the target is met
 		if( closeToTheTarget(3f, targ)){
+			_wraith.enabled = false;
+			_wraith.transform.position = currentTarget;
+			_wraith.enabled = true;
             GetNewPosition();
         }
 	}
 
-	//the monster can take time before walk to the next step
+	//put a black screen after th wraith has catch the player 
 	private IEnumerator WaitAfterCatch(){
 		StartCoroutine (CameraController.Instance.Shake (1.0f, 0.5f, 1.5f));
 		StartCoroutine (GameController.Instance.timedVibration (0.6f, 0.6f, 1.0f));
@@ -345,7 +349,7 @@ public class ReaperController_V4 : MonoBehaviour {
 		_state = State.WraithCatchPlayer;
 	}
 
-	//the monster can take time before walk to the next step
+	//the monster wait a little before attack the player
 	IEnumerator WaitBeforeAttak(){
 		yield return new WaitForSeconds(0.7f);
 		//_wraith.Resume();
@@ -354,7 +358,7 @@ public class ReaperController_V4 : MonoBehaviour {
 		_state = State.FollowPlayer;
 	}
 
-	//the monster can take time before walk to the next step
+	//the monster wait before come back
 	IEnumerator Wait(){
 		yield return new WaitForSeconds(3.2f);
 		Walk ();
@@ -378,6 +382,7 @@ public class ReaperController_V4 : MonoBehaviour {
 		}
 	}
 
+	// choose the correct look about the position of th eplayer around the wraith
 	public void chooseTheCorrectLook(){
 		angleLookWraith = Mathf.FloorToInt(rotation.eulerAngles.y);
 		direction2 = (_wraith.transform.position -targetPlayer.transform.position).normalized;
@@ -425,13 +430,13 @@ public class ReaperController_V4 : MonoBehaviour {
 		_wraith.transform.rotation = Quaternion.Slerp (_wraith.transform.rotation, rotation, rotationSpeed * Time.deltaTime);
 	}
 	
-	//move forward and face the position of the "vector3 to"
+	//move forward and face the position of the "vector3 to" the nav mesh was used
 	private void moveTowardTarget(Vector3 to){
 		faceTarget (to);
 		//_parent.transform.position = Vector3.MoveTowards(_wraith.transform.position, new Vector3(to.x, to.y, to.z), moveSpeed* Time.deltaTime);
 		_wraith.SetDestination(to);
 	}
-	//move forward and face the position of the "vector3 to"
+	//move forward and face the position of the "vector3 to" without nav mesh
 	private void flyTowardTarget(Vector3 to, bool up){
 		faceTarget (to);
 		if (up)
