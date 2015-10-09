@@ -65,65 +65,60 @@ public class LoadingScreen : MonoBehaviour {
 		fading = Fading.OUT;
 		levelLoaded = true;
 
-		//MainMenu
-		if(level == 0){
-			DestroyPlayer();
-			Destroy(this.gameObject);
-		}
-		//Cave1
-		if(level == 1){
-			StartCoroutine(GameController.Instance.OpeningScene());
-			setPlayerTransform(new Vector3(38.0f, 2.0f, -55.0f), new Quaternion(0.0f, -1.0f, 0.0f, 1.0f));
-		}
-		//Cave2
-		if(level == 2){
-			FirstPersonController.enableRightHand(false);
-			resetCameraTransform();
-			setPlayerTransform(new Vector3(-36.0f, 4.0f, 46.0f), new Quaternion(0.0f, 1.0f, 0.0f, 1.0f));
-			CameraController.Instance.GettingUpAnimation();
-		}
-		//Tomb1
-		if(level == 3){
-			resetCameraTransform();
-			setPlayerTransform(new Vector3(0.0f, 2.0f, -8.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
-		}
-		//FinalScene
-		if(level == 4){
-			DestroyPlayer();
-		}
-        //FogRoom
-        if (level == 5)
-        {
-            resetCameraTransform();
-            setPlayerTransform(new Vector3(106f, 9.4f, -24.3f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
-        }
-        //SkullRoom
-        if (level == 6)
-        {
-            resetCameraTransform();
-            setPlayerTransform(new Vector3(-3.6f, 1.65f, -42.5f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
-        }
-        //Spirit&Ghost
-        if (level == 7)
-        {
-            resetCameraTransform();
-            setPlayerTransform(new Vector3(71f, 1.58f, 3.04f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
-        }
-        //ThrowingRocks
-        if (level == 8)
-        {
-            resetCameraTransform();
-            setPlayerTransform(new Vector3(-62f, -5.3f, 1.47f), new Quaternion(0.0f, -1f, 0.0f, 1.0f));
-        }
-        //Wraith
-        if (level == 9)
-        {
-            resetCameraTransform();
-            setPlayerTransform(new Vector3(-101f, -6.6f, 2.95f), new Quaternion(0.0f, -1f, 0.0f, 1.0f));
-        }
+		switch (level){
+			// Main Menu
+			case 0: DestroyPlayer();
+					Destroy(this.gameObject);
+					break;
+			
+			// Cave 1
+			case 1: FirstPersonController.enableRightHand(false);
+					StartCoroutine(GameController.Instance.OpeningScene());
+					setPlayerTransform(new Vector3(38.0f, 2.0f, -55.0f), new Quaternion(0.0f, -1.0f, 0.0f, 1.0f));
+					break;
 
+			// Cave 2
+			case 2: FirstPersonController.enableRightHand(false);
+					resetCameraTransform();
+					setPlayerTransform(new Vector3(-36.0f, 4.0f, 46.0f), new Quaternion(0.0f, 1.0f, 0.0f, 1.0f));
+					CameraController.Instance.GettingUpAnimation();
+					break;
 
+			// Tomb
+			case 3: resetCameraTransform();
+					setPlayerTransform(new Vector3(0.0f, 2.0f, -8.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+					break;
+			
+			// Final Scene
+			case 4: DestroyPlayer();
+					break;
 
+			// Demo Fog Room
+			case 5: FirstPersonController.enableRightHand(true);
+					resetCameraTransform();
+					setPlayerTransform(new Vector3(106f, 9.4f, -24.3f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
+					break;
+
+			// Demo Skull Room
+			case 6: resetCameraTransform();
+					setPlayerTransform(new Vector3(-3.6f, 1.65f, -42.5f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
+					break;
+
+			// Demo Spirits & ghosts
+			case 7: resetCameraTransform();
+					setPlayerTransform(new Vector3(71f, 1.58f, 3.04f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
+					break;
+			
+			// Demo Throw rocks
+			case 8: resetCameraTransform();
+					setPlayerTransform(new Vector3(-62f, -5.3f, 1.47f), new Quaternion(0.0f, -1f, 0.0f, 1.0f));
+					break;
+			
+			// Demo Wraith
+			case 9: resetCameraTransform();
+					setPlayerTransform(new Vector3(-101f, -6.6f, 2.95f), new Quaternion(0.0f, -1f, 0.0f, 1.0f));
+					break;
+		}
     }
 
 	private void fadeIn(){

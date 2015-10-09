@@ -11,7 +11,8 @@ public class Inventory : MonoBehaviour {
 
     public void Awake(){
 		Instance = this;
-		FlareStickStash = 1000000;
+		FlareStickStash = 0;
+		if(Application.loadedLevel == 5) FlareStickStash = 100;
 	}
 	
 	public bool canTake(){

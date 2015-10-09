@@ -54,9 +54,13 @@ public class FirstPersonController : MonoBehaviour
 	public static GameObject rightHand;
 	public static bool ableToMove = true;
 	private static bool lamp;
-	
+
+	public void Awake(){
+		rightHand = GameObject.FindGameObjectWithTag("RightHand");
+	}
+
 	// Use this for initialization
-	private void Start()
+	public void Start()
 	{
 		m_CharacterController = GetComponent<CharacterController>();
 		m_Camera = Camera.main;
@@ -71,17 +75,13 @@ public class FirstPersonController : MonoBehaviour
 		m_StandingHeight = m_CharacterController.height;
 		m_DuckingHeight = m_StandingHeight/2.0f;
 		groundType = GroundType.SAND;
-		
-		rightHand = GameObject.FindGameObjectWithTag("RightHand");
-		rightHand.SetActive(false);
 	}
 	
 	// Update is called once per frame
-	private void Update()
+	public void Update()
 	{
-			
-			if (Input.GetKeyDown (KeyCode.F)) rightHand.SetActive (!rightHand.activeSelf);
-		/* DEBUG FLASHLIGHT
+			/* DEBUG FLASHLIGHT
+		 	if (Input.GetKeyDown (KeyCode.F)) rightHand.SetActive (!rightHand.activeSelf);
 			*/
 		
 			if (Input.GetButtonUp ("Duck") && groundType != GroundType.DEEPWATER) {
@@ -319,10 +319,5 @@ public class FirstPersonController : MonoBehaviour
 	
 	public static void enableRightHand(bool b){
 		rightHand.SetActive(b);
-		lamp = b;
-	}
-
-	public static bool haveFlashLight(){
-		return lamp;
 	}
 }
