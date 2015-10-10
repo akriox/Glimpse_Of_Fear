@@ -41,6 +41,7 @@ public class MainMenu: MonoBehaviour {
 
 	public void ExitGame(){
 		GameController.Instance.displayInGameMenu(false);
+		Cursor.visible = true;
 		Application.LoadLevel(0);
 	}
 
