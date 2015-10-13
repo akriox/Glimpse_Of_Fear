@@ -93,31 +93,38 @@ public class LoadingScreen : MonoBehaviour {
 			case 4: DestroyPlayer();
 					break;
 
+			// Demo Free look
+			case 5: FirstPersonController.enableRightHand(false);
+					StartCoroutine(GameController.Instance.OpeningScene());
+					setPlayerTransform(new Vector3(38.0f, 2.0f, -55.0f), new Quaternion(0.0f, -1.0f, 0.0f, 1.0f));
+					break;
+
+			// Demo Spirits & ghosts
+			case 6: FirstPersonController.enableRightHand(false);
+					resetCameraTransform();
+					setPlayerTransform(new Vector3(71f, 1.58f, 3.04f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
+					break;
+
 			// Demo Fog Room
-			case 5: FirstPersonController.enableRightHand(true);
+			case 7: FirstPersonController.enableRightHand(true);
 					resetCameraTransform();
 					setPlayerTransform(new Vector3(106f, 9.4f, -24.3f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
 					break;
 
 			// Demo Skull Room
-			case 6: resetCameraTransform();
+			case 8: resetCameraTransform();
 					setPlayerTransform(new Vector3(-3.6f, 1.65f, -42.5f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
 					break;
-
-			// Demo Spirits & ghosts
-			case 7: resetCameraTransform();
-					setPlayerTransform(new Vector3(71f, 1.58f, 3.04f), new Quaternion(0.0f, 1f, 0.0f, 1.0f));
-					break;
-			
+		
 			// Demo Throw rocks
-			case 8: resetCameraTransform();
+			case 9: resetCameraTransform();
 					setPlayerTransform(new Vector3(-62f, -5.3f, 1.47f), new Quaternion(0.0f, -1f, 0.0f, 1.0f));
 					break;
 			
 			// Demo Wraith
-			case 9: resetCameraTransform();
-					setPlayerTransform(new Vector3(-101f, -6.6f, 2.95f), new Quaternion(0.0f, -1f, 0.0f, 1.0f));
-					break;
+			case 10: resetCameraTransform();
+					 setPlayerTransform(new Vector3(-101f, -6.6f, 2.95f), new Quaternion(0.0f, -1f, 0.0f, 1.0f));
+					 break;
 		}
     }
 
