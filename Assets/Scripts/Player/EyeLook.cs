@@ -47,8 +47,8 @@ public class EyeLook : MonoBehaviour {
 		lastRotation = player.transform.rotation;
 
 		GamePadState state = GamePad.GetState(PlayerIndex.One);
-		if(state.IsConnected) speedFactor = (state.Triggers.Left*2.0f) + 1.0f;
-		if(Input.GetKeyDown(KeyCode.R)) speedFactor = 3.0f;
+		if(state.IsConnected) speedFactor = state.Triggers.Left + 1.0f;
+		if(Input.GetKeyDown(KeyCode.R)) speedFactor = 2.0f;
 		if(Input.GetKeyUp(KeyCode.R)) speedFactor = 1.0f;
 	}
 	
@@ -68,7 +68,6 @@ public class EyeLook : MonoBehaviour {
 		gazePointWorld = Camera.main.ScreenToWorldPoint(gazePointScreen);
 		targetRotation = Quaternion.LookRotation(gazePointWorld - transform.position);
 		player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * velocity * speedFactor);
-
 		player.transform.rotation = ClampRotationXAxis(player.transform.rotation);
 	}
 

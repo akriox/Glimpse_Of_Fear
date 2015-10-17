@@ -11,6 +11,7 @@ public class TriggerTip : MonoBehaviour {
 				case "Sprint": TipsTracker.Instance.displayTip(TipsTracker.Tips.Sprint); break;
 				case "Crouch": TipsTracker.Instance.displayTip(TipsTracker.Tips.Crouch); break;
 				case "LightOff": TipsTracker.Instance.displayTip(TipsTracker.Tips.SwitchOffFlashlight); break;
+				case "Teleport": TipsTracker.Instance.displayTip(TipsTracker.Tips.Teleport); break;
 			}
 		}
 	}

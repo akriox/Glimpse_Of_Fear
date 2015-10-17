@@ -7,7 +7,7 @@ public class TipsTracker : MonoBehaviour {
 
 	public static TipsTracker Instance {get; private set;}
 
-	public enum Tips {UseFlashlight, SwitchOffFlashlight, UseFlareStick, Sprint, Crouch, Rotate, AvoidWraith};
+	public enum Tips {UseFlashlight, SwitchOffFlashlight, UseFlareStick, Sprint, Crouch, Rotate, AvoidWraith, Teleport};
 
 	private float tipDuration = 3.0f;
 
@@ -29,6 +29,7 @@ public class TipsTracker : MonoBehaviour {
 	public Sprite[] crouchSprites;
 	public Sprite[] rotateSprites;
     public Sprite avoidWraithSprite;
+	public Sprite teleportSprite;
 
 	public void Awake(){
 		Instance = this;
@@ -61,24 +62,27 @@ public class TipsTracker : MonoBehaviour {
 					setTipSprite(sprintSprites[0], sprintSprites[1]);
 				}
 				break;
-			case Tips.Crouch: 
-				if(crouchTip){
-					crouchTip = false; 
-					setTipSprite(crouchSprites[0], crouchSprites[1]);
-				}
-				break;
-			case Tips.Rotate:
-			if(rotateTip){
-				rotateTip = false; 
-				setTipSprite(rotateSprites[0], rotateSprites[1]);
-			}
-			break;
-            case Tips.AvoidWraith:
-                if (avoidWraithTip){
-                    avoidWraithTip = false;
-                    setTipSprite(avoidWraithSprite,avoidWraithSprite);
-                }
-                break;
+
+			case Tips.Crouch: if(crouchTip){
+							  		crouchTip = false; 
+									setTipSprite(crouchSprites[0], crouchSprites[1]);
+							  }
+							  break;
+
+			case Tips.Rotate:	if(rotateTip){
+									rotateTip = false; 
+									setTipSprite(rotateSprites[0], rotateSprites[1]);
+								}
+								break;
+
+            case Tips.AvoidWraith:	if (avoidWraithTip){
+                    					avoidWraithTip = false;
+                    					setTipSprite(avoidWraithSprite,avoidWraithSprite);
+                					}
+                					break;
+
+			case Tips.Teleport: setTipSprite(teleportSprite, teleportSprite);
+								break;
 		}
 	}
 

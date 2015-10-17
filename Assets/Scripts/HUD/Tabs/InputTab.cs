@@ -10,7 +10,7 @@ public class InputTab : MonoBehaviour {
 	public Toggle toggleSubtitles;
 	
 	public void Start(){
-		sliderEyeX.value = PlayerPrefs.HasKey("EyeXSensitivity") ? PlayerPrefs.GetFloat("EyeXSensitivity") : 1.0f;
+		sliderEyeX.value = PlayerPrefs.HasKey("EyeXSensitivity") ? PlayerPrefs.GetFloat("EyeXSensitivity") : 2.5f;
 		sliderEyeX.minValue = Settings.EyeXSensitivityMinValue;
 		sliderEyeX.maxValue = Settings.EyeXSensitivityMaxValue;
 		UpdateEyeXSensitivity();
