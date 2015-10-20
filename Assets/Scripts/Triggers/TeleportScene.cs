@@ -16,6 +16,10 @@ public class TeleportScene : MonoBehaviour {
 		alreadyCall = false;
     }
 
+	public void Update(){
+		if(Input.GetButtonUp("BackGamepad")) LoadingScreen.Instance.fadeToBlack(sceneIndex);
+	}
+
     public void OnTriggerStay(Collider other){
         if (other.gameObject.tag == "Player"){
 			if(_userPresenceComponent.GazeTracking == EyeXGazeTracking.GazeNotTracked && !alreadyCall){
